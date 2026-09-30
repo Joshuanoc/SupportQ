@@ -3,6 +3,7 @@ import{motion,AnimatePresence,useReducedMotion}from'framer-motion';
 import{ArrowUpRight,Check,ChevronRight,Mail,Code2,Cloud,TestTube2,Wrench,Database,Network,Menu,X}from'lucide-react';
 import{scenarios,categoryCounts}from'./data.js';
 import{getActionGuide}from'./guidance.js';
+import{getNode,initialHypotheses,applyBoosts,parseDiagnosticText,calculatePriority}from'./diagnosticEngine.js';
 
 const icons={Wifi:Network,Shield:TestTube2,KeyRound:Wrench,Mail,MonitorCog:Code2,Printer:Wrench,TriangleAlert:TestTube2,CloudOff:Cloud,AppWindow:Code2,VideoOff:Code2,CloudCog:Cloud,HardDrive:Database};
 const pct=n=>`${Math.max(0,Math.min(100,Math.round(n)))}%`;
@@ -192,7 +193,7 @@ ${result.actions.map(a=>`- ${a}`).join('\n')}`;
     <main className="content">
       {view==='dashboard'&&<Dashboard intake={intake} setIntake={setIntake} submitIntake={submitIntake} suggestions={suggestions} onStart={start} setView={setView}/>}
       {view==='scenarios'&&<ScenarioLibrary query={query} setQuery={setQuery} filtered={filtered} onStart={start}/>}
-      {view==='diagnose'&&scenario&&<Diagnostic scenario={scenario} step={step} answers={answers} result={result} phase={phase} actionIndex={actionIndex} actionLog={actionLog} hypotheses={hypotheses} topCause={topCause} answer={answer} resolutionResponse={resolutionResponse} reset={reset} copyTicket={copyTicket} reduceMotion={reduceMotion} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} beginDiagnosis={beginDiagnosis}/>}
+      {view==='diagnose'&&scenario&&<Diagnostic scenario={scenario} step={step} answers={answers} result={result} phase={phase} actionIndex={actionIndex} actionLog={actionLog} hypotheses={hypotheses} topCause={topCause} answer={answer} resolutionResponse={resolutionResponse} reset={reset} copyTicket={copyTicket} reduceMotion={reduceMotion} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} beginDiagnosis={beginDiagnosis} onDeepComplete={incident=>setHistory(h=>[{id:Date.now(),...incident},...h].slice(0,25))}/>}
       {view==='history'&&<HistoryView history={history} onStart={s=>start(scenarios.find(x=>x.title===s.scenario)||scenarios[0],s.reportedIssue)}/>}
       {view==='analytics'&&<Analytics history={history}/>}
     </main>
@@ -212,7 +213,8 @@ function ScenarioCard({s,onStart}){const Icon=icons[s.icon]||Network;return <but
 
 function ScenarioLibrary({query,setQuery,filtered,onStart}){return <><div className="libraryHead"><div className="search"><Code2/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search Wi-Fi, VPN, Outlook, Azure..."/></div><span>{filtered.length} scenarios</span></div><div className="scenarioGrid">{filtered.map(s=><ScenarioCard key={s.id} s={s} onStart={onStart}/>)}</div></>}
 
-function Diagnostic({scenario,step,answers,result,phase,actionIndex,actionLog,hypotheses,topCause,answer,resolutionResponse,reset,copyTicket,reduceMotion,reportedIssue,supportContext,setSupportContext,beginDiagnosis}){
+function Diagnostic({scenario,step,answers,result,phase,actionIndex,actionLog,hypotheses,topCause,answer,resolutionResponse,reset,copyTicket,reduceMotion,reportedIssue,supportContext,setSupportContext,beginDiagnosis,onDeepComplete}){
+ if(scenario.id==='wifi-no-internet')return <DeepWifiDiagnostic scenario={scenario} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} reduceMotion={reduceMotion} onComplete={onDeepComplete}/>;
  const actionGuide=result&&phase==='resolve'?getActionGuide(result.actions[actionIndex],supportContext.os,scenario.id):null;
  const node=scenario.steps[step];
  const progress=phase==='resolved'||phase==='escalated'?100:phase==='resolve'?80:phase==='triage'?15:Math.min(70,Math.round(((step+1)/scenario.steps.length)*65));
@@ -227,6 +229,90 @@ function Diagnostic({scenario,step,answers,result,phase,actionIndex,actionLog,hy
  </AnimatePresence></div></section>
  <aside className="diagnosticSide"><div className="sidePanel"><span>INCIDENT STATE</span><dl><div><dt>Category</dt><dd>{scenario.category}</dd></div><div><dt>Severity</dt><dd>{scenario.severity}</dd></div><div><dt>Priority</dt><dd>{scenario.priority}</dd></div><div><dt>Status</dt><dd>{phase==='triage'?'Gathering context':phase==='diagnose'?'Diagnosing':phase==='resolve'?'Applying fix':phase==='resolved'?'Resolved':'Escalated'}</dd></div><div><dt>Device / OS</dt><dd>{supportContext.device||'—'}{supportContext.os?` · ${supportContext.os}`:''}</dd></div><div><dt>Environment</dt><dd>{supportContext.environment||'—'}</dd></div><div><dt>Scope</dt><dd>{supportContext.scope||'—'}</dd></div><div><dt>Checks</dt><dd>{answers.length}</dd></div><div><dt>Fix attempts</dt><dd>{actionLog.length}</dd></div></dl></div><div className="sidePanel"><span>LIKELY CAUSES</span><div className="hypotheses">{hypotheses.map((h,i)=><div key={h.name}><div><span>{h.name}</span><b>{pct(h.score)}</b></div><i><em style={{width:pct(h.score)}}/></i>{i===0&&phase==='diagnose'&&<small>Current lead</small>}</div>)}</div></div>{topCause&&phase==='diagnose'&&<div className="reasonPanel"><TestTube2/><div><b>Decision logic</b><p>Each answer changes the hypothesis ranking. The next question is chosen to separate the most likely causes.</p></div></div>}</aside></div>
 }
+
+function DeepWifiDiagnostic({scenario,reportedIssue,supportContext,setSupportContext,reduceMotion,onComplete}){
+ const[nodeId,setNodeId]=useState('start');
+ const[hypotheses,setHypotheses]=useState(initialHypotheses());
+ const[evidence,setEvidence]=useState([]);
+ const[attempts,setAttempts]=useState([]);
+ const[input,setInput]=useState('');
+ const[status,setStatus]=useState('diagnosing');
+ const[finalResult,setFinalResult]=useState(null);
+ const[showHelp,setShowHelp]=useState(false);
+ const node=getNode(nodeId);
+ const priority=calculatePriority(supportContext,scenario.category);
+ const family=(supportContext.os||'').toLowerCase().includes('windows')?'windows':(supportContext.os||'').toLowerCase().includes('mac')?'macos':'windows';
+
+ const record=(summary,raw='')=>setEvidence(e=>[...e,{time:now(),summary,raw}]);
+ const go=(next,boosts)=>{if(boosts)setHypotheses(h=>applyBoosts(h,boosts));setInput('');setShowHelp(false);setNodeId(next)};
+
+ const finishResolve=(r,summary='')=>{
+   if(summary)record(summary);
+   const out={scenario:scenario.title,category:scenario.category,status:'Resolved',priority:priority.priority,severity:priority.severity,reportedIssue,supportContext,cause:r.cause,confidence:r.confidence,evidence,actionLog:attempts,completedAt:now()};
+   setStatus('resolved');setFinalResult(out);onComplete?.(out);
+ };
+ const finishEscalate=(r,summary='')=>{
+   if(summary)record(summary);
+   const out={scenario:scenario.title,category:scenario.category,status:'Escalated',priority:priority.priority,severity:priority.severity,reportedIssue,supportContext,cause:r.reason,confidence:hypotheses[0]?.score||70,assignment:r.team,evidence,actionLog:attempts,completedAt:now()};
+   setStatus('escalated');setFinalResult(out);onComplete?.(out);
+ };
+ const choose=(opt)=>{
+   record(`${node.prompt} → ${opt.label}`);
+   if(opt.boosts)setHypotheses(h=>applyBoosts(h,opt.boosts));
+   if(opt.resolve)return finishResolve(opt.resolve,`Resolution evidence: ${opt.label}`);
+   if(opt.escalate)return finishEscalate(opt.escalate,`Escalation trigger: ${opt.label}`);
+   go(opt.next);
+ };
+ const submitText=()=>{
+   if(!input.trim())return;
+   const parsed=parseDiagnosticText(node.id,input);
+   record(parsed.summary,input);
+   if(parsed.boosts)setHypotheses(h=>applyBoosts(h,parsed.boosts));
+   if(parsed.resolve)return finishResolve(parsed.resolve,parsed.summary);
+   if(parsed.escalate)return finishEscalate(parsed.escalate,parsed.summary);
+   go(parsed.next);
+ };
+ const actionOutcome=(out)=>{
+   const log={action:node.action,outcome:out.label,time:now()};
+   setAttempts(a=>[...a,log]);
+   record(`${node.action} → ${out.label}`);
+   if(out.boosts)setHypotheses(h=>applyBoosts(h,out.boosts));
+   if(out.resolve)return finishResolve(out.resolve,`${node.action} fixed the issue`);
+   if(out.escalate)return finishEscalate(out.escalate,`${node.action}: ${out.label}`);
+   go(out.next);
+ };
+ const guide=node.type==='action'?getActionGuide(node.action,supportContext.os,scenario.id):null;
+ const copyDeep=async()=>{
+   if(!finalResult)return;
+   const txt=`INCIDENT
+Issue: ${reportedIssue}
+Device/OS: ${supportContext.device||'Unknown'} / ${supportContext.os||'Unknown'}
+Environment: ${supportContext.environment||'Unknown'}
+Scope: ${supportContext.scope||'Unknown'}
+Priority: ${finalResult.priority}
+Status: ${finalResult.status}
+Root cause / escalation reason: ${finalResult.cause}
+Assignment: ${finalResult.assignment||'N/A'}
+Evidence:
+${evidence.map(x=>'- '+x.summary+(x.raw?' | '+x.raw.replace(/\n/g,' '):'')).join('\n')}
+Actions:
+${attempts.map(x=>'- '+x.action+' → '+x.outcome).join('\n')||'- None'}`;
+   try{await navigator.clipboard.writeText(txt)}catch{}
+ };
+ if(status!=='diagnosing')return <div className="diagnosticLayout"><section className="conversation"><div className="chatLog"><div className={status==='resolved'?'resultCard resolved':'resultCard escalated'}><div className="resultIcon">{status==='resolved'?<Check/>:<TestTube2/>}</div><span>{status==='resolved'?'VERIFIED RESOLUTION':'JUSTIFIED ESCALATION'}</span><h3>{status==='resolved'?'Issue resolved':`Escalate to ${finalResult.assignment||'specialist support'}`}</h3><p>{finalResult.cause}</p><div className="confidence"><div><span>Evidence confidence</span><b>{finalResult.confidence}%</b></div><i><em style={{width:pct(finalResult.confidence)}}/></i></div><h5>Evidence collected</h5><ol>{evidence.map((e,i)=><li key={i}>{e.summary}</li>)}</ol><div className="resultActions"><button className="primary" onClick={copyDeep}><Code2/>Copy incident</button></div></div></div></section><aside className="diagnosticSide"><DeepContext supportContext={supportContext} priority={priority} hypotheses={hypotheses} evidence={evidence} attempts={attempts}/></aside></div>;
+
+ return <div className="diagnosticLayout"><section className="conversation"><div className="incidentBanner"><div><span>CONTINUOUS DIAGNOSIS · {priority.priority}</span><h3>{scenario.title}</h3></div><div><b className={`sev ${priority.severity.toLowerCase()}`}>{priority.severity}</b></div></div><div className="progress"><i style={{width:`${Math.min(92,18+evidence.length*9)}%`}}/></div><div className="chatLog"><div className="userMsg first"><p>{reportedIssue}</p></div><div className="assistantMsg"><div className="avatar">SQ</div><div><span>SupportQ</span><p>I’ll use the evidence you give me to choose the next test. I won’t run through a fixed checklist or escalate just because a list ended.</p></div></div>
+ {!supportContext.os||!supportContext.environment||!supportContext.scope?<div className="triageCard"><span>FAST CONTEXT</span><h3>I only need the details that change the diagnosis.</h3><div className="triageGrid"><label>Operating system<select value={supportContext.os} onChange={e=>setSupportContext(x=>({...x,os:e.target.value}))}><option value="">Select</option><option>Windows 11</option><option>Windows 10</option><option>macOS</option><option>Linux</option><option>iOS / iPadOS</option><option>Android</option></select></label><label>Environment<select value={supportContext.environment} onChange={e=>setSupportContext(x=>({...x,environment:e.target.value}))}><option value="">Select</option><option>Office</option><option>Home</option><option>Remote / VPN</option><option>Public / Guest network</option></select></label><label>Who is affected?<select value={supportContext.scope} onChange={e=>setSupportContext(x=>({...x,scope:e.target.value}))}><option value="">Select</option><option>Only me / one device</option><option>Several users</option><option>Whole team / department</option><option>Everyone / site-wide</option><option>Not sure</option></select></label><label>Work impact<input value={supportContext.impact||''} onChange={e=>setSupportContext(x=>({...x,impact:e.target.value}))} placeholder="Optional: blocked, workaround available..."/></label></div></div>:null}
+ {supportContext.os&&supportContext.environment&&supportContext.scope&&<AnimatePresence mode="wait"><motion.div key={nodeId} className={node.type==='action'?'resolutionCard':'questionCard'} initial={reduceMotion?false:{opacity:0,y:10}} animate={{opacity:1,y:0}}>
+   <span>{node.type==='action'?'NEXT CORRECTIVE ACTION':'NEXT BEST TEST'}</span><h4>{node.prompt}</h4>{node.why&&<p>{node.why}</p>}
+   {node.type==='choice'&&<div className="choiceStack">{node.options.map(o=><button key={o.value} onClick={()=>choose(o)}>{o.label}<ChevronRight/></button>)}</div>}
+   {node.type==='text'&&<><textarea className="evidenceInput" value={input} onChange={e=>setInput(e.target.value)} placeholder="Paste the exact output or describe what happened..."/>{node.help&&<button className="textLink" onClick={()=>setShowHelp(v=>!v)}>{showHelp?'Hide instructions':'Show me how to check'}</button>}{showHelp&&node.help&&<div className="howTo"><b>How to collect this evidence</b><ol>{(node.help[family]||node.help.windows||[]).map((s,i)=><li key={i}><code>{s}</code></li>)}</ol></div>}<button className="primary submitEvidence" onClick={submitText}>Analyze this result <ArrowUpRight/></button></>}
+   {node.type==='action'&&guide&&<><div className="howTo"><b>How to do it on {supportContext.os}</b><ol>{guide.steps.map((s,i)=><li key={i}><code>{s}</code></li>)}</ol></div><div className="expected"><b>Expected result</b><p>{node.expected||guide.expected}</p></div>{guide.warning&&<div className="warningBox"><TestTube2/><div><b>Important</b><span>{guide.warning}</span></div></div>}<div className="choiceStack">{node.outcomes.map(o=><button key={o.value} onClick={()=>actionOutcome(o)}>{o.label}<ChevronRight/></button>)}</div></>}
+ </motion.div></AnimatePresence>}
+ </div></section><aside className="diagnosticSide"><DeepContext supportContext={supportContext} priority={priority} hypotheses={hypotheses} evidence={evidence} attempts={attempts}/></aside></div>
+}
+
+function DeepContext({supportContext,priority,hypotheses,evidence,attempts}){return <><div className="sidePanel"><span>LIVE INCIDENT</span><dl><div><dt>Priority</dt><dd>{priority.priority}</dd></div><div><dt>Reason</dt><dd>{priority.reason}</dd></div><div><dt>OS</dt><dd>{supportContext.os||'—'}</dd></div><div><dt>Environment</dt><dd>{supportContext.environment||'—'}</dd></div><div><dt>Scope</dt><dd>{supportContext.scope||'—'}</dd></div><div><dt>Evidence</dt><dd>{evidence.length}</dd></div><div><dt>Fix attempts</dt><dd>{attempts.length}</dd></div></dl></div><div className="sidePanel"><span>HYPOTHESIS MODEL</span><div className="hypotheses">{hypotheses.map((h,i)=><div key={h.name}><div><span>{h.name}</span><b>{pct(h.score)}</b></div><i><em style={{width:pct(h.score)}}/></i>{i===0&&<small>Current lead</small>}</div>)}</div></div>{evidence.length>0&&<div className="sidePanel"><span>RECENT EVIDENCE</span><div className="evidenceMini">{evidence.slice(-4).reverse().map((e,i)=><p key={i}>{e.summary}</p>)}</div></div>}</>}
 
 function HistoryView({history,onStart}){if(!history.length)return <div className="empty"><Database/><h3>No completed incidents yet</h3><p>An incident is saved only after it is resolved or escalated.</p></div>;return <div className="historyList">{history.map(h=><article key={h.id}><div><span>{h.category} · {h.status}</span><h3>{h.scenario}</h3><p>{h.reportedIssue||h.cause}</p></div><div className="historyMeta"><b>{h.priority}</b><span>{h.confidence}% RCA confidence</span><span>{h.completedAt}</span><button onClick={()=>onStart(h)}>Re-run</button></div></article>)}</div>}
 
