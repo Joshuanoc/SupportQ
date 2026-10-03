@@ -2,8 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { scenarios as itScenarios } from '../src/data.js';
 import { sapScenarios } from '../src/sapData.js';
+import { extendedItScenarios, extendedSapScenarios } from '../src/coverageScenarios.js';
 
-const scenarios=[...itScenarios,...sapScenarios];
+const scenarios=[...itScenarios,...sapScenarios,...extendedItScenarios,...extendedSapScenarios];
 const keywordMap={
  'wifi-no-internet':['wifi','wi-fi','internet','dns','website','websites','connected no internet','network'],
  'vpn-failure':['vpn','remote access','tunnel','internal resource'],
@@ -30,6 +31,8 @@ function classify(text){
  }).sort((a,b)=>b.score-a.score).filter(x=>x.score>0);
 }
 
+const isSap=s=>s.category.startsWith('SAP');
+
 const itCases=[
 'Wi-Fi connected but no internet','Laptop cannot connect to office Wi-Fi','DNS lookup fails for websites','Internet works on phone but not laptop','No IP address from DHCP','VPN will not connect','VPN connects but internal resources unavailable','Remote access tunnel keeps dropping','Cannot reach company network from home','VPN authentication fails after password change','User account locked','Password reset required','MFA code not received','SSO login fails','Account says invalid credentials','Outlook cannot send email','Email stuck in Outbox','Outlook keeps asking for password','Exchange mailbox not syncing','Email delivery delayed','Computer is very slow','High CPU usage','Memory usage is constantly high','Windows freezes randomly','Laptop takes too long to start','Printer shows offline','Print jobs stuck in queue','Cannot print to network printer','Printer spooler keeps stopping','Wrong printer is selected','Suspicious phishing email received','Clicked a phishing link','Repeated MFA prompts not initiated by user','Possible malware infection','Browser redirects to suspicious sites','OneDrive not syncing files','OneDrive stuck on processing changes','Files missing from OneDrive','OneDrive sign-in error','Cloud files show sync conflict','Application crashes at launch','Software will not open','Application closes unexpectedly','Program freezes during use','Application update caused crashes','Teams camera not working','Webcam not detected','Camera is black in Teams','Microphone works but camera does not','Camera permission denied','Azure resource access denied','Azure 403 authorization error','Missing Azure RBAC permission','Cannot access Azure storage account','PIM role not active','System disk critically full','C drive has no free space','Low disk warning','Temporary files consuming disk','Logs filling system drive','Bluetooth device will not pair','USB device not recognized','External monitor not detected','Keyboard stopped working','Mouse disconnects randomly','Blue screen error on Windows','Windows update failed','Windows stuck on restart','PC will not boot','BitLocker recovery screen appears','RDP connection fails','Remote Desktop black screen','Domain join fails','Cannot access shared network drive','File share permission denied','Mapped drive disappeared','Browser cannot open one specific site','Chrome keeps crashing','Certificate warning in browser','Proxy settings block internet','Firewall blocks application traffic','Teams microphone not working','Teams calls keep dropping','Zoom audio not working','Cannot install approved software','Software installation fails with permissions error','Windows service will not start','Device driver error in Device Manager','Laptop battery not charging','Docking station not detected','Ethernet says unidentified network','Network adapter missing','DNS cache appears corrupted','Default gateway unreachable','Office application activation failed','Excel file will not open','PowerPoint crashes','Cannot open PDF file','User profile is corrupted','Local admin rights missing'
 ];
@@ -45,14 +48,14 @@ test('audit contains exactly top 100 IT and 100 SAP problems',()=>{
 
 test('top 100 IT problems are recognized as IT scenarios',()=>{
  const unmatched=[];const misrouted=[];
- for(const prompt of itCases){const matches=classify(prompt);if(!matches.length)unmatched.push(prompt);else if(matches[0].s.category==='SAP MM')misrouted.push(`${prompt} -> ${matches[0].s.title}`)}
+ for(const prompt of itCases){const matches=classify(prompt);if(!matches.length)unmatched.push(prompt);else if(isSap(matches[0].s))misrouted.push(`${prompt} -> ${matches[0].s.title}`)}
  assert.equal(unmatched.length,0,`Unmatched IT (${unmatched.length}/100):\n${unmatched.join('\n')}`);
  assert.equal(misrouted.length,0,`Misrouted IT (${misrouted.length}/100):\n${misrouted.join('\n')}`);
 });
 
 test('top 100 SAP problems are recognized as SAP scenarios',()=>{
  const unmatched=[];const misrouted=[];
- for(const prompt of sapCases){const matches=classify(prompt);if(!matches.length)unmatched.push(prompt);else if(matches[0].s.category!=='SAP MM')misrouted.push(`${prompt} -> ${matches[0].s.category}: ${matches[0].s.title}`)}
+ for(const prompt of sapCases){const matches=classify(prompt);if(!matches.length)unmatched.push(prompt);else if(!isSap(matches[0].s))misrouted.push(`${prompt} -> ${matches[0].s.category}: ${matches[0].s.title}`)}
  assert.equal(unmatched.length,0,`Unmatched SAP (${unmatched.length}/100):\n${unmatched.join('\n')}`);
  assert.equal(misrouted.length,0,`Misrouted SAP (${misrouted.length}/100):\n${misrouted.join('\n')}`);
 });
