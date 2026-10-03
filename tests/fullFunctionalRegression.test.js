@@ -7,6 +7,7 @@ import { routingScenarios } from '../src/routingScenarios.js';
 import { classifyIssue } from '../src/issueClassifier.js';
 import { getActionGuide } from '../src/guidance.js';
 import { requiresDeviceContext } from '../src/diagnosticPolicy.js';
+import { inferSapContext, sapRequiredEvidence, evidenceStrength } from '../src/supportContext.js';
 
 const scenarios=[...itScenarios,...sapScenarios,...extendedItScenarios,...extendedSapScenarios,...routingScenarios];
 const byId=new Map(scenarios.map(s=>[s.id,s]));
@@ -158,4 +159,22 @@ test('IT diagnostics retain device context where OS can change troubleshooting',
  for(const id of ids){
   const s=byId.get(id); assert.ok(s,\`Missing scenario ${id}\`); assert.equal(requiresDeviceContext(s),true,\`${id}: expected device context\`);
  }
+});
+
+
+test('SAP context extracts transaction, system and message evidence without OS',()=>{
+ const s=byId.get('sap-material-document-reversal');
+ const ctx=inferSapContext('MIGO in PRD fails with M7 021 and material document cannot be cancelled',s);
+ assert.equal(ctx.transaction,'MIGO'); assert.equal(ctx.system,'PRD'); assert.equal(ctx.messageClass,'M'); assert.equal(ctx.messageNumber,'7021'); assert.equal(ctx.module,'MM');
+ assert.equal('os' in ctx,false);
+});
+
+test('SAP MM requires business evidence instead of device evidence',()=>{
+ const s=byId.get('sap-material-document-reversal'); const fields=sapRequiredEvidence(s);
+ for(const f of ['system','transaction','message','documentNumber','fiscalYear','movementType','plant']) assert.ok(fields.includes(f),\`missing ${f}\`);
+ assert.equal(fields.includes('os'),false); assert.equal(fields.includes('device'),false);
+});
+
+test('diagnostic scores are presented as evidence strength, not probability',()=>{
+ assert.equal(evidenceStrength(90),'High'); assert.equal(evidenceStrength(70),'Medium'); assert.equal(evidenceStrength(40),'Low');
 });
