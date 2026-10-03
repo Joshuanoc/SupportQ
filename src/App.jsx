@@ -8,6 +8,7 @@ import{profileFor,profileHypotheses,interpretGeneric}from'./scenarioEngines.js';
 import{classifyIssue}from'./issueClassifier.js';
 import{requiresDeviceContext}from'./diagnosticPolicy.js';
 import{emptySapContext,inferSapContext,evidenceStrength}from'./supportContext.js';
+import{verificationPlan,escalationPackage,formatEscalationTicket}from'./caseManagement.js';
 
 const icons={Wifi:Network,Shield:TestTube2,KeyRound:Wrench,Mail,MonitorCog:Code2,Printer:Wrench,TriangleAlert:TestTube2,CloudOff:Cloud,AppWindow:Code2,VideoOff:Code2,CloudCog:Cloud,HardDrive:Database};
 const pct=n=>`${Math.max(0,Math.min(100,Math.round(n)))}%`;
@@ -55,6 +56,7 @@ function App(){
  const[phase,setPhase]=useState('diagnose');
  const[actionIndex,setActionIndex]=useState(0);
  const[actionLog,setActionLog]=useState([]);
+ const[verification,setVerification]=useState([]);
  const[supportContext,setSupportContext]=useState({device:'',os:'',environment:'',onset:'',previous:'',scope:'',recentChanges:'',impact:''});
  const[sapContext,setSapContext]=useState(emptySapContext);
  const[reportedIssue,setReportedIssue]=useState('');
@@ -69,7 +71,7 @@ function App(){
  const filtered=useMemo(()=>scenarios.filter(s=>`${s.title} ${s.category}`.toLowerCase().includes(query.toLowerCase())),[query]);
 
  const start=(s,issue='')=>{
-   setScenario(s);setStep(0);setAnswers([]);setResult(null);setActionIndex(0);setActionLog([]);const inferred=inferContext(issue||s.title);const hasEnough=Boolean(inferred.os&&inferred.environment&&inferred.scope);setSupportContext(inferred);setSapContext(isSapScenario(s)?inferSapContext(issue||s.title,s):emptySapContext());setPhase(isSapScenario(s)||s.severity==='Critical'||hasEnough?'diagnose':'triage');
+   setScenario(s);setStep(0);setAnswers([]);setResult(null);setActionIndex(0);setActionLog([]);setVerification([]);const inferred=inferContext(issue||s.title);const hasEnough=Boolean(inferred.os&&inferred.environment&&inferred.scope);setSupportContext(inferred);setSapContext(isSapScenario(s)?inferSapContext(issue||s.title,s):emptySapContext());setPhase(isSapScenario(s)||s.severity==='Critical'||hasEnough?'diagnose':'triage');
    setReportedIssue(issue||s.title);
    setHypotheses(s.hypotheses.map(([name,score])=>({name,score})).sort((a,b)=>b.score-a.score));
    setSuggestions([]);setView('diagnose');setMobile(false);
@@ -114,7 +116,8 @@ function App(){
    const nextLog=[...actionLog,{action,outcome:resolved?'Resolved issue':'Did not resolve'}];
    setActionLog(nextLog);
    if(resolved){
-     setPhase('resolved');
+     setVerification(verificationPlan(scenario));
+     setPhase('verify');
      const incident={id:Date.now(),...result,status:'Resolved',completedAt:now(),reportedIssue,supportContext,answers,actionLog:nextLog};
      setHistory(h=>[incident,...h].slice(0,25));
      return;
@@ -127,11 +130,14 @@ function App(){
    }
  };
 
+ const confirmVerification=()=>{if(!result)return;setPhase('resolved');const incident={id:Date.now(),...result,status:'Resolved',completedAt:now(),reportedIssue,supportContext,sapContext,answers,actionLog,verification:verificationPlan(scenario)};setHistory(h=>[incident,...h].slice(0,25));};
+
  const reset=()=>scenario&&start(scenario,reportedIssue);
 
  const copyTicket=async()=>{
    if(!result)return;
    const status=phase==='resolved'?'Resolved':phase==='escalated'?'Escalated':'In progress';
+   const pkg=escalationPackage({scenario,reportedIssue,context:supportContext,sapContext,answers,actions:actionLog,cause:result.cause,priority:result.priority,severity:result.severity});
    const txt=`INCIDENT
 Reported issue: ${reportedIssue}
 Device: ${supportContext.device}
@@ -153,7 +159,7 @@ ${answers.map(a=>`- ${a.question} → ${a.answer}`).join('\n')}
 Actions attempted:
 ${actionLog.length?actionLog.map(a=>`- ${a.action} → ${a.outcome}`).join('\n'):'- None yet'}
 Next action / resolution:
-${result.actions.map(a=>`- ${a}`).join('\n')}`;
+${result.actions.map(a=>`- ${a}`).join('\n')}\n\nESCALATION PACKAGE\n${formatEscalationTicket(pkg)}`;
    try{await navigator.clipboard.writeText(txt)}catch{}
  };
 
@@ -175,7 +181,7 @@ ${result.actions.map(a=>`- ${a}`).join('\n')}`;
     <main className="content">
       {view==='dashboard'&&<Dashboard intake={intake} setIntake={setIntake} submitIntake={submitIntake} suggestions={suggestions} onStart={start} setView={setView}/>}
       {view==='scenarios'&&<ScenarioLibrary query={query} setQuery={setQuery} filtered={filtered} onStart={start}/>}
-      {view==='diagnose'&&scenario&&<Diagnostic scenario={scenario} step={step} answers={answers} result={result} phase={phase} actionIndex={actionIndex} actionLog={actionLog} hypotheses={hypotheses} topCause={topCause} answer={answer} resolutionResponse={resolutionResponse} reset={reset} copyTicket={copyTicket} reduceMotion={reduceMotion} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} sapContext={sapContext} setSapContext={setSapContext} beginDiagnosis={beginDiagnosis} onDeepComplete={incident=>setHistory(h=>[{id:Date.now(),...incident},...h].slice(0,25))}/>}
+      {view==='diagnose'&&scenario&&<Diagnostic scenario={scenario} step={step} answers={answers} result={result} phase={phase} actionIndex={actionIndex} actionLog={actionLog} hypotheses={hypotheses} topCause={topCause} answer={answer} resolutionResponse={resolutionResponse} verification={verification} confirmVerification={confirmVerification} reset={reset} copyTicket={copyTicket} reduceMotion={reduceMotion} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} sapContext={sapContext} setSapContext={setSapContext} beginDiagnosis={beginDiagnosis} onDeepComplete={incident=>setHistory(h=>[{id:Date.now(),...incident},...h].slice(0,25))}/>}
       {view==='history'&&<HistoryView history={history} onStart={s=>start(scenarios.find(x=>x.title===s.scenario)||scenarios[0],s.reportedIssue)}/>}
       {view==='analytics'&&<Analytics history={history}/>}
     </main>
@@ -195,7 +201,7 @@ function ScenarioCard({s,onStart}){const Icon=icons[s.icon]||Network;return <but
 
 function ScenarioLibrary({query,setQuery,filtered,onStart}){return <><div className="libraryHead"><div className="search"><Code2/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search Wi-Fi, VPN, Outlook, Azure..."/></div><span>{filtered.length} scenarios</span></div><div className="scenarioGrid">{filtered.map(s=><ScenarioCard key={s.id} s={s} onStart={onStart}/>)}</div></>}
 
-function Diagnostic({scenario,step,answers,result,phase,actionIndex,actionLog,hypotheses,topCause,answer,resolutionResponse,reset,copyTicket,reduceMotion,reportedIssue,supportContext,setSupportContext,sapContext,setSapContext,beginDiagnosis,onDeepComplete}){
+function Diagnostic({scenario,step,answers,result,phase,actionIndex,actionLog,hypotheses,topCause,answer,resolutionResponse,verification,confirmVerification,reset,copyTicket,reduceMotion,reportedIssue,supportContext,setSupportContext,sapContext,setSapContext,beginDiagnosis,onDeepComplete}){
  if(scenario.id==='wifi-no-internet')return <DeepWifiDiagnostic scenario={scenario} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} reduceMotion={reduceMotion} onComplete={onDeepComplete}/>;
  const deepProfile=profileFor(scenario.id);if(deepProfile)return <DeepScenarioDiagnostic scenario={scenario} profile={deepProfile} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} sapContext={sapContext} setSapContext={setSapContext} reduceMotion={reduceMotion} onComplete={onDeepComplete}/>;
  const actionGuide=result&&phase==='resolve'?getActionGuide(result.actions[actionIndex],supportContext.os,scenario.id):null;
