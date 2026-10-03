@@ -4,34 +4,9 @@ import { scenarios as itScenarios } from '../src/data.js';
 import { sapScenarios } from '../src/sapData.js';
 import { extendedItScenarios, extendedSapScenarios } from '../src/coverageScenarios.js';
 import { routingScenarios } from '../src/routingScenarios.js';
+import { classifyIssue } from '../src/App.jsx';
 
 const scenarios=[...itScenarios,...sapScenarios,...extendedItScenarios,...extendedSapScenarios,...routingScenarios];
-const keywordMap={
- 'wifi-no-internet':['wifi','wi-fi','internet','dns','website','websites','connected no internet','network'],
- 'vpn-failure':['vpn','remote access','tunnel','internal resource'],
- 'locked-account':['locked','password','sign in','login','mfa','account','authentication','sso'],
- 'outlook-send':['outlook','email','mail','outbox','send email','exchange'],
- 'slow-pc':['slow','lag','performance','cpu','memory','windows slow','computer slow','pc slow'],
- 'printer-offline':['printer','printing','print','spooler'],
- 'phishing':['phishing','suspicious email','scam','malware','mfa prompt','clicked link'],
- 'onedrive-sync':['onedrive','sync','files not syncing'],
- 'app-crash':['app crash','application crash','crashes',"won't open",'will not open','software'],
- 'camera-teams':['teams camera','camera','webcam','video'],
- 'azure-access':['azure','rbac','403','cloud access','permission denied'],
- 'disk-full':['disk full','storage full','low disk','drive full','space']
-};
-
-function classify(text){
- const q=text.toLowerCase().trim();
- return scenarios.map(s=>{
-  let score=0;
-  (keywordMap[s.id]||[]).forEach(k=>{if(q.includes(k))score+=k.includes(' ')?4:2});
-  if(q.includes(s.category.toLowerCase()))score+=2;
-  s.symptoms.forEach(x=>{if(q.includes(x.toLowerCase()))score+=3});
-  return{s,score};
- }).sort((a,b)=>b.score-a.score).filter(x=>x.score>0);
-}
-
 const isSap=s=>s.category.startsWith('SAP');
 
 const itCases=[
@@ -49,14 +24,33 @@ test('audit contains exactly top 100 IT and 100 SAP problems',()=>{
 
 test('top 100 IT problems are recognized as IT scenarios',()=>{
  const unmatched=[];const misrouted=[];
- for(const prompt of itCases){const matches=classify(prompt);if(!matches.length)unmatched.push(prompt);else if(isSap(matches[0].s))misrouted.push(`${prompt} -> ${matches[0].s.title}`)}
+ for(const prompt of itCases){const matches=classifyIssue(prompt);if(!matches.length)unmatched.push(prompt);else if(isSap(matches[0].s))misrouted.push(`${prompt} -> ${matches[0].s.title}`)}
  assert.equal(unmatched.length,0,`Unmatched IT (${unmatched.length}/100):\n${unmatched.join('\n')}`);
  assert.equal(misrouted.length,0,`Misrouted IT (${misrouted.length}/100):\n${misrouted.join('\n')}`);
 });
 
 test('top 100 SAP problems are recognized as SAP scenarios',()=>{
  const unmatched=[];const misrouted=[];
- for(const prompt of sapCases){const matches=classify(prompt);if(!matches.length)unmatched.push(prompt);else if(!isSap(matches[0].s))misrouted.push(`${prompt} -> ${matches[0].s.category}: ${matches[0].s.title}`)}
+ for(const prompt of sapCases){const matches=classifyIssue(prompt);if(!matches.length)unmatched.push(prompt);else if(!isSap(matches[0].s))misrouted.push(`${prompt} -> ${matches[0].s.category}: ${matches[0].s.title}`)}
  assert.equal(unmatched.length,0,`Unmatched SAP (${unmatched.length}/100):\n${unmatched.join('\n')}`);
  assert.equal(misrouted.length,0,`Misrouted SAP (${misrouted.length}/100):\n${misrouted.join('\n')}`);
+});
+
+
+test('reported SAP material-document cancellation regression routes to reversal diagnostic',()=>{
+ const prompts=['material document cant be cancelled in sap','Cannot cancel material document in MIGO','material document reversal is blocked'];
+ for(const prompt of prompts){
+  const matches=classifyIssue(prompt);
+  assert.ok(matches.length, `No match for: ${prompt}`);
+  assert.equal(matches[0].s.id,'sap-material-document-reversal', `${prompt} -> ${matches[0].s.id}`);
+ }
+});
+
+test('SAP intent does not fall through to generic IT suggestions',()=>{
+ const prompts=['SAP posting period is closed','MIGO goods receipt cannot be posted','MIRO invoice blocked for payment','SU53 missing authorization','IDoc status 51'];
+ for(const prompt of prompts){
+  const matches=classifyIssue(prompt);
+  assert.ok(matches.length, `No match for: ${prompt}`);
+  assert.ok(isSap(matches[0].s), `${prompt} -> ${matches[0].s.category}: ${matches[0].s.title}`);
+ }
 });
