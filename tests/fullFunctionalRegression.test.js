@@ -151,13 +151,13 @@ test('critical routing regressions never return unrelated support functions',()=
 test('SAP business diagnostics never require operating-system context',()=>{
  const sap=scenarios.filter(s=>s.category.toLowerCase().startsWith('sap'));
  assert.ok(sap.length>0,'No SAP scenarios loaded');
- for(const s of sap) assert.equal(requiresDeviceContext(s),false,\`${s.id}: SAP diagnosis incorrectly requires OS/device context\`);
+ for(const s of sap) assert.equal(requiresDeviceContext(s),false,`${s.id}: SAP diagnosis incorrectly requires OS/device context`);
 });
 
 test('IT diagnostics retain device context where OS can change troubleshooting',()=>{
  const ids=['wifi-no-internet','vpn-failure','outlook-send','slow-pc','camera-teams'];
  for(const id of ids){
-  const s=byId.get(id); assert.ok(s,\`Missing scenario ${id}\`); assert.equal(requiresDeviceContext(s),true,\`${id}: expected device context\`);
+  const s=byId.get(id); assert.ok(s,`Missing scenario ${id}`); assert.equal(requiresDeviceContext(s),true,`${id}: expected device context`);
  }
 });
 
@@ -171,7 +171,7 @@ test('SAP context extracts transaction, system and message evidence without OS',
 
 test('SAP MM requires business evidence instead of device evidence',()=>{
  const s=byId.get('sap-material-document-reversal'); const fields=sapRequiredEvidence(s);
- for(const f of ['system','transaction','message','documentNumber','fiscalYear','movementType','plant']) assert.ok(fields.includes(f),\`missing ${f}\`);
+ for(const f of ['system','transaction','message','documentNumber','fiscalYear','movementType','plant']) assert.ok(fields.includes(f),`missing ${f}`);
  assert.equal(fields.includes('os'),false); assert.equal(fields.includes('device'),false);
 });
 
