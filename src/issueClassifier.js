@@ -19,6 +19,7 @@ export function classifyIssue(text, scenarios){
  const explicitSapIntent=/\bsap\b|\bmigo\b|\bmiro\b|\bme2\w*\b|\bme5\w*\b|\bmmbe\b|\bmbst\b|\bgr\/?ir\b|\bidoc\b|\bst22\b|\bsm37\b|\bfiori\b|material document|purchase order|purchase requisition|goods receipt|invoice receipt|movement type|posting period|obyc/i.test(q);
  const explicitItIntent=/\bazure\b|\bwindows\b|\bwi-?fi\b|\bvpn\b|\boutlook\b|\bonedrive\b|\bteams\b|\bprinter\b|\bdns\b|\bdhcp\b/i.test(q);
  const sapIntent=explicitSapIntent&&!explicitItIntent;
+ const securityIntent=/\bphish(?:ing)?\b|suspicious email|scam|malware|mfa prompt|clicked link/i.test(q);
  const sapSynonyms={
   cancel:['cancel','cancelled','canceled','cancellation','reverse','reversal'],
   reverse:['reverse','reversal','cancel','cancelled','canceled'],
@@ -43,6 +44,8 @@ export function classifyIssue(text, scenarios){
    else if(q.includes(sx)) score+=sx.includes(' ')?10:5;
   });
   if(q===s.title.toLowerCase())score+=35;
+  if(explicitItIntent&&s.category.toLowerCase().startsWith('sap'))score-=20;
+  if(securityIntent&&s.id==='phishing')score+=25;
   expanded.forEach(t=>{if(t.length>2&&hay.includes(t))score+=1});
   if(sapIntent&&s.category.toLowerCase().startsWith('sap'))score+=8;
   if(sapIntent&&!s.category.toLowerCase().startsWith('sap'))score-=8;
