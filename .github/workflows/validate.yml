@@ -1,17 +1,37 @@
-name: Validate SupportQ
+name: SupportQ Functional Regression
+
 on:
+  push:
   pull_request:
     branches: [main]
+
 permissions:
   contents: read
+
+concurrency:
+  group: supportq-regression-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build:
+  regression:
+    name: Full functional regression and production build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 24
-      - run: npm install
-      - run: npm test
-      - run: npm run build
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run complete functional regression suite
+        run: npm test
+
+      - name: Verify production build
+        run: npm run build

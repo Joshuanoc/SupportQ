@@ -5,25 +5,17 @@ import{scenarios,categoryCounts}from'./data.js';
 import{getActionGuide}from'./guidance.js';
 import{getNode,initialHypotheses,applyBoosts,parseDiagnosticText,calculatePriority}from'./diagnosticEngine.js';
 import{profileFor,profileHypotheses,interpretGeneric}from'./scenarioEngines.js';
+import{classifyIssue}from'./issueClassifier.js';
+import{requiresDeviceContext}from'./diagnosticPolicy.js';
+import{emptySapContext,inferSapContext,evidenceStrength}from'./supportContext.js';
+import{verificationPlan,escalationPackage,formatEscalationTicket}from'./caseManagement.js';
 
 const icons={Wifi:Network,Shield:TestTube2,KeyRound:Wrench,Mail,MonitorCog:Code2,Printer:Wrench,TriangleAlert:TestTube2,CloudOff:Cloud,AppWindow:Code2,VideoOff:Code2,CloudCog:Cloud,HardDrive:Database};
 const pct=n=>`${Math.max(0,Math.min(100,Math.round(n)))}%`;
 const now=()=>new Date().toLocaleString();
+const isSapScenario=s=>!requiresDeviceContext(s);
 
-const keywordMap={
- 'wifi-no-internet':['wifi','wi-fi','internet','dns','website','websites','connected no internet','network'],
- 'vpn-failure':['vpn','remote access','tunnel','internal resource'],
- 'locked-account':['locked','password','sign in','login','mfa','account','authentication','sso'],
- 'outlook-send':['outlook','email','mail','outbox','send email','exchange'],
- 'slow-pc':['slow','lag','performance','cpu','memory','windows slow','computer slow','pc slow'],
- 'printer-offline':['printer','printing','print','spooler'],
- 'phishing':['phishing','suspicious email','scam','malware','mfa prompt','clicked link'],
- 'onedrive-sync':['onedrive','sync','files not syncing'],
- 'app-crash':['app crash','application crash','crashes','won\'t open','will not open','software'],
- 'camera-teams':['teams camera','camera','webcam','video'],
- 'azure-access':['azure','rbac','403','cloud access','permission denied'],
- 'disk-full':['disk full','storage full','low disk','drive full','space']
-};
+
 
 function inferContext(text){
  const q=text.toLowerCase();
@@ -51,36 +43,7 @@ function inferContext(text){
  return ctx;
 }
 
-function classifyIssue(text){
- const q=text.toLowerCase().trim();
- const tokens=q.replace(/[^a-z0-9/ -]/g,' ').split(/\s+/).filter(x=>x.length>2);
- const sapIntent=/\bsap\b|\bmigo\b|\bmiro\b|\bme2\w*\b|\bme5\w*\b|\bmmbe\b|\bmbst\b|\bgr\/?ir\b|\bidoc\b|\bst22\b|\bsm37\b|\bfiori\b|material document|purchase order|purchase requisition|goods receipt|invoice receipt|movement type|vendor|supplier|posting period|obyc/i.test(q);
- const sapSynonyms={
-  cancel:['cancel','cancelled','canceled','cancellation','reverse','reversal'],
-  reverse:['reverse','reversal','cancel','cancelled','canceled'],
-  material:['material','stock','inventory'],
-  document:['document','posting'],
-  po:['po','purchase order'],
-  pr:['pr','purchase requisition'],
-  gr:['gr','goods receipt'],
-  invoice:['invoice','miro']
- };
- const expanded=new Set(tokens);
- tokens.forEach(t=>(sapSynonyms[t]||[]).forEach(v=>v.split(' ').forEach(x=>expanded.add(x))));
- const ranked=scenarios.map(s=>{
-  let score=0;
-  const hay=`${s.id} ${s.category} ${s.title} ${s.symptoms.join(' ')}`.toLowerCase();
-  const words=keywordMap[s.id]||[];
-  words.forEach(k=>{if(q.includes(k))score+=k.includes(' ')?7:3});
-  if(q.includes(s.category.toLowerCase()))score+=4;
-  s.symptoms.forEach(x=>{const sx=x.toLowerCase();if(q.includes(sx))score+=sx.includes(' ')?10:5});
-  expanded.forEach(t=>{if(t.length>2&&hay.includes(t))score+=1});
-  if(sapIntent&&s.category.toLowerCase().startsWith('sap'))score+=8;
-  if(sapIntent&&!s.category.toLowerCase().startsWith('sap'))score-=8;
-  return{s,score};
- }).sort((a,b)=>b.score-a.score);
- return ranked.filter(x=>x.score>0);
-}
+
 
 function App(){
  const reduceMotion=useReducedMotion();
@@ -93,7 +56,9 @@ function App(){
  const[phase,setPhase]=useState('diagnose');
  const[actionIndex,setActionIndex]=useState(0);
  const[actionLog,setActionLog]=useState([]);
+ const[verification,setVerification]=useState([]);
  const[supportContext,setSupportContext]=useState({device:'',os:'',environment:'',onset:'',previous:'',scope:'',recentChanges:'',impact:''});
+ const[sapContext,setSapContext]=useState(emptySapContext);
  const[reportedIssue,setReportedIssue]=useState('');
  const[intake,setIntake]=useState('');
  const[suggestions,setSuggestions]=useState([]);
@@ -106,7 +71,7 @@ function App(){
  const filtered=useMemo(()=>scenarios.filter(s=>`${s.title} ${s.category}`.toLowerCase().includes(query.toLowerCase())),[query]);
 
  const start=(s,issue='')=>{
-   setScenario(s);setStep(0);setAnswers([]);setResult(null);setActionIndex(0);setActionLog([]);const inferred=inferContext(issue||s.title);const hasEnough=Boolean(inferred.os&&inferred.environment&&inferred.scope);setSupportContext(inferred);setPhase(s.severity==='Critical'||hasEnough?'diagnose':'triage');
+   setScenario(s);setStep(0);setAnswers([]);setResult(null);setActionIndex(0);setActionLog([]);setVerification([]);const inferred=inferContext(issue||s.title);const hasEnough=Boolean(inferred.os&&inferred.environment&&inferred.scope);setSupportContext(inferred);setSapContext(isSapScenario(s)?inferSapContext(issue||s.title,s):emptySapContext());setPhase(isSapScenario(s)||s.severity==='Critical'||hasEnough?'diagnose':'triage');
    setReportedIssue(issue||s.title);
    setHypotheses(s.hypotheses.map(([name,score])=>({name,score})).sort((a,b)=>b.score-a.score));
    setSuggestions([]);setView('diagnose');setMobile(false);
@@ -115,13 +80,13 @@ function App(){
  const submitIntake=()=>{
    const text=intake.trim(); if(!text)return;
    const inferred=inferContext(text);setSupportContext(x=>({...x,...Object.fromEntries(Object.entries(inferred).filter(([,v])=>v))}));
-   const matches=classifyIssue(text);
+   const matches=classifyIssue(text,scenarios);
    if(matches.length===0){setSuggestions(scenarios.slice(0,4));return;}
    if(matches.length===1||matches[0].score>=matches[1].score+3){start(matches[0].s,text);return;}
    setSuggestions(matches.slice(0,3).map(x=>x.s));
  };
 
- const beginDiagnosis=()=>{if(!supportContext.os||!supportContext.environment||!supportContext.scope)return;setPhase('diagnose');};
+ const beginDiagnosis=()=>{if(requiresDeviceContext(scenario)&&(!supportContext.os||!supportContext.environment||!supportContext.scope))return;setPhase('diagnose');};
 
  const updateScores=(boost={})=>setHypotheses(h=>h.map(x=>({...x,score:Math.max(0,Math.min(100,x.score+(boost[x.name]||0)))})).sort((a,b)=>b.score-a.score));
 
@@ -151,7 +116,8 @@ function App(){
    const nextLog=[...actionLog,{action,outcome:resolved?'Resolved issue':'Did not resolve'}];
    setActionLog(nextLog);
    if(resolved){
-     setPhase('resolved');
+     setVerification(verificationPlan(scenario));
+     setPhase('verify');
      const incident={id:Date.now(),...result,status:'Resolved',completedAt:now(),reportedIssue,supportContext,answers,actionLog:nextLog};
      setHistory(h=>[incident,...h].slice(0,25));
      return;
@@ -164,11 +130,14 @@ function App(){
    }
  };
 
+ const confirmVerification=()=>{if(!result)return;setPhase('resolved');const incident={id:Date.now(),...result,status:'Resolved',completedAt:now(),reportedIssue,supportContext,sapContext,answers,actionLog,verification:verificationPlan(scenario)};setHistory(h=>[incident,...h].slice(0,25));};
+
  const reset=()=>scenario&&start(scenario,reportedIssue);
 
  const copyTicket=async()=>{
    if(!result)return;
    const status=phase==='resolved'?'Resolved':phase==='escalated'?'Escalated':'In progress';
+   const pkg=escalationPackage({scenario,reportedIssue,context:supportContext,sapContext,answers,actions:actionLog,cause:result.cause,priority:result.priority,severity:result.severity});
    const txt=`INCIDENT
 Reported issue: ${reportedIssue}
 Device: ${supportContext.device}
@@ -190,7 +159,7 @@ ${answers.map(a=>`- ${a.question} → ${a.answer}`).join('\n')}
 Actions attempted:
 ${actionLog.length?actionLog.map(a=>`- ${a.action} → ${a.outcome}`).join('\n'):'- None yet'}
 Next action / resolution:
-${result.actions.map(a=>`- ${a}`).join('\n')}`;
+${result.actions.map(a=>`- ${a}`).join('\n')}\n\nESCALATION PACKAGE\n${formatEscalationTicket(pkg)}`;
    try{await navigator.clipboard.writeText(txt)}catch{}
  };
 
@@ -212,7 +181,7 @@ ${result.actions.map(a=>`- ${a}`).join('\n')}`;
     <main className="content">
       {view==='dashboard'&&<Dashboard intake={intake} setIntake={setIntake} submitIntake={submitIntake} suggestions={suggestions} onStart={start} setView={setView}/>}
       {view==='scenarios'&&<ScenarioLibrary query={query} setQuery={setQuery} filtered={filtered} onStart={start}/>}
-      {view==='diagnose'&&scenario&&<Diagnostic scenario={scenario} step={step} answers={answers} result={result} phase={phase} actionIndex={actionIndex} actionLog={actionLog} hypotheses={hypotheses} topCause={topCause} answer={answer} resolutionResponse={resolutionResponse} reset={reset} copyTicket={copyTicket} reduceMotion={reduceMotion} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} beginDiagnosis={beginDiagnosis} onDeepComplete={incident=>setHistory(h=>[{id:Date.now(),...incident},...h].slice(0,25))}/>}
+      {view==='diagnose'&&scenario&&<Diagnostic scenario={scenario} step={step} answers={answers} result={result} phase={phase} actionIndex={actionIndex} actionLog={actionLog} hypotheses={hypotheses} topCause={topCause} answer={answer} resolutionResponse={resolutionResponse} verification={verification} confirmVerification={confirmVerification} reset={reset} copyTicket={copyTicket} reduceMotion={reduceMotion} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} sapContext={sapContext} setSapContext={setSapContext} beginDiagnosis={beginDiagnosis} onDeepComplete={incident=>setHistory(h=>[{id:Date.now(),...incident},...h].slice(0,25))}/>}
       {view==='history'&&<HistoryView history={history} onStart={s=>start(scenarios.find(x=>x.title===s.scenario)||scenarios[0],s.reportedIssue)}/>}
       {view==='analytics'&&<Analytics history={history}/>}
     </main>
@@ -232,14 +201,14 @@ function ScenarioCard({s,onStart}){const Icon=icons[s.icon]||Network;return <but
 
 function ScenarioLibrary({query,setQuery,filtered,onStart}){return <><div className="libraryHead"><div className="search"><Code2/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search Wi-Fi, VPN, Outlook, Azure..."/></div><span>{filtered.length} scenarios</span></div><div className="scenarioGrid">{filtered.map(s=><ScenarioCard key={s.id} s={s} onStart={onStart}/>)}</div></>}
 
-function Diagnostic({scenario,step,answers,result,phase,actionIndex,actionLog,hypotheses,topCause,answer,resolutionResponse,reset,copyTicket,reduceMotion,reportedIssue,supportContext,setSupportContext,beginDiagnosis,onDeepComplete}){
+function Diagnostic({scenario,step,answers,result,phase,actionIndex,actionLog,hypotheses,topCause,answer,resolutionResponse,verification,confirmVerification,reset,copyTicket,reduceMotion,reportedIssue,supportContext,setSupportContext,sapContext,setSapContext,beginDiagnosis,onDeepComplete}){
  if(scenario.id==='wifi-no-internet')return <DeepWifiDiagnostic scenario={scenario} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} reduceMotion={reduceMotion} onComplete={onDeepComplete}/>;
- const deepProfile=profileFor(scenario.id);if(deepProfile)return <DeepScenarioDiagnostic scenario={scenario} profile={deepProfile} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} reduceMotion={reduceMotion} onComplete={onDeepComplete}/>;
+ const deepProfile=profileFor(scenario.id);if(deepProfile)return <DeepScenarioDiagnostic scenario={scenario} profile={deepProfile} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} sapContext={sapContext} setSapContext={setSapContext} reduceMotion={reduceMotion} onComplete={onDeepComplete}/>;
  const actionGuide=result&&phase==='resolve'?getActionGuide(result.actions[actionIndex],supportContext.os,scenario.id):null;
  const node=scenario.steps[step];
  const progress=phase==='resolved'||phase==='escalated'?100:phase==='resolve'?80:phase==='triage'?15:Math.min(70,Math.round(((step+1)/scenario.steps.length)*65));
  return <div className="diagnosticLayout"><section className="conversation"><div className="incidentBanner"><div><span>{scenario.category}</span><h3>{scenario.title}</h3></div><div><b className={`sev ${scenario.severity.toLowerCase()}`}>{scenario.severity}</b><b className="priority">{scenario.priority}</b></div></div><div className="progress"><i style={{width:`${progress}%`}}/></div>
- <div className="chatLog"><div className="userMsg first"><p>{reportedIssue}</p></div><div className="assistantMsg"><div className="avatar">SQ</div><div><span>SupportQ</span><p>I’ll diagnose this systematically. I’ll ask one useful question at a time, then we’ll apply and verify corrective actions until it works or the evidence says it needs escalation.</p></div></div>
+ <div className="chatLog"><div className="userMsg first"><p>{reportedIssue}</p></div>{isSap&&<SapContextCard value={sapContext} setValue={setSapContext}/>}<div className="assistantMsg"><div className="avatar">SQ</div><div><span>SupportQ</span><p>I’ll diagnose this systematically. I’ll ask one useful question at a time, then we’ll apply and verify corrective actions until it works or the evidence says it needs escalation.</p></div></div>
  {answers.map((a,i)=><React.Fragment key={i}><div className="assistantMsg"><div className="avatar">SQ</div><div><span>Diagnostic question</span><p>{a.question}</p></div></div><div className="userMsg"><p>{a.answer}</p></div></React.Fragment>)}
  <AnimatePresence mode="wait">
  {phase==='triage'&&<motion.div className="triageCard" initial={reduceMotion?false:{opacity:0,y:12}} animate={{opacity:1,y:0}}><span>BEFORE WE TROUBLESHOOT</span><h3>Let me understand your setup first.</h3><p>I already filled in anything I could infer from your description. Just confirm the missing details so we can move quickly.</p><div className="triageGrid"><label>Device<select value={supportContext.device} onChange={e=>setSupportContext(x=>({...x,device:e.target.value}))}><option value="">Select if known</option><option>Laptop</option><option>Desktop</option><option>Phone</option><option>Tablet</option><option>Thin client</option><option>Other</option></select></label><label>Operating system<select value={supportContext.os} onChange={e=>setSupportContext(x=>({...x,os:e.target.value}))}><option value="">Select</option><option>Windows 11</option><option>Windows 10</option><option>macOS</option><option>Linux</option><option>iOS / iPadOS</option><option>Android</option><option>Other / Unknown</option></select></label><label>Environment<select value={supportContext.environment} onChange={e=>setSupportContext(x=>({...x,environment:e.target.value}))}><option value="">Select</option><option>Office</option><option>Home</option><option>Remote / VPN</option><option>Hybrid</option><option>Public / Guest network</option><option>Cloud-only</option></select></label><label>When did it start?<select value={supportContext.onset} onChange={e=>setSupportContext(x=>({...x,onset:e.target.value}))}><option value="">Not sure / not important yet</option><option>Just now</option><option>Today</option><option>Last few days</option><option>More than a week ago</option><option>After a restart/update/change</option></select></label><label>Has this happened before?<select value={supportContext.previous} onChange={e=>setSupportContext(x=>({...x,previous:e.target.value}))}><option value="">Not sure</option><option>No, first time</option><option>Yes, occasionally</option><option>Yes, frequently</option><option>Yes, same issue was fixed before</option></select></label><label>Who is affected?<select value={supportContext.scope} onChange={e=>setSupportContext(x=>({...x,scope:e.target.value}))}><option value="">Select</option><option>Only me / one device</option><option>Several users</option><option>Whole team / department</option><option>Everyone / site-wide</option><option>Not sure</option></select></label></div><label className="wideField">Any recent change before the issue?<input value={supportContext.recentChanges} onChange={e=>setSupportContext(x=>({...x,recentChanges:e.target.value}))} placeholder="Example: Windows update, password change, new VPN, moved desks, installed software..."/></label><label className="wideField">How is this affecting your work?<input value={supportContext.impact} onChange={e=>setSupportContext(x=>({...x,impact:e.target.value}))} placeholder="Example: I cannot work, workaround available, only one app affected..."/></label><button className="primary startDiag" disabled={!supportContext.os||!supportContext.environment||!supportContext.scope} onClick={beginDiagnosis}>Continue to diagnosis <ArrowUpRight/></button></motion.div>}
@@ -319,22 +288,22 @@ Actions:
 ${attempts.map(x=>'- '+x.action+' → '+x.outcome).join('\n')||'- None'}`;
    try{await navigator.clipboard.writeText(txt)}catch{}
  };
- if(status!=='diagnosing')return <div className="diagnosticLayout"><section className="conversation"><div className="chatLog"><div className={status==='resolved'?'resultCard resolved':'resultCard escalated'}><div className="resultIcon">{status==='resolved'?<Check/>:<TestTube2/>}</div><span>{status==='resolved'?'VERIFIED RESOLUTION':'JUSTIFIED ESCALATION'}</span><h3>{status==='resolved'?'Issue resolved':`Escalate to ${finalResult.assignment||'specialist support'}`}</h3><p>{finalResult.cause}</p><div className="confidence"><div><span>Evidence confidence</span><b>{finalResult.confidence}%</b></div><i><em style={{width:pct(finalResult.confidence)}}/></i></div><h5>Evidence collected</h5><ol>{evidence.map((e,i)=><li key={i}>{e.summary}</li>)}</ol><div className="resultActions"><button className="primary" onClick={copyDeep}><Code2/>Copy incident</button></div></div></div></section><aside className="diagnosticSide"><DeepContext supportContext={supportContext} priority={priority} hypotheses={hypotheses} evidence={evidence} attempts={attempts}/></aside></div>;
+ if(status!=='diagnosing')return <div className="diagnosticLayout"><section className="conversation"><div className="chatLog"><div className={status==='resolved'?'resultCard resolved':'resultCard escalated'}><div className="resultIcon">{status==='resolved'?<Check/>:<TestTube2/>}</div><span>{status==='resolved'?'VERIFIED RESOLUTION':'JUSTIFIED ESCALATION'}</span><h3>{status==='resolved'?'Issue resolved':`Escalate to ${finalResult.assignment||'specialist support'}`}</h3><p>{finalResult.cause}</p><div className="confidence"><div><span>Evidence strength</span><b>{evidenceStrength(finalResult.confidence)}</b></div><i><em style={{width:pct(finalResult.confidence)}}/></i></div><h5>Evidence collected</h5><ol>{evidence.map((e,i)=><li key={i}>{e.summary}</li>)}</ol><div className="resultActions"><button className="primary" onClick={copyDeep}><Code2/>Copy incident</button></div></div></div></section><aside className="diagnosticSide"><DeepContext supportContext={supportContext} priority={priority} hypotheses={hypotheses} evidence={evidence} attempts={attempts}/></aside></div>;
 
  return <div className="diagnosticLayout"><section className="conversation"><div className="incidentBanner"><div><span>CONTINUOUS DIAGNOSIS · {priority.priority}</span><h3>{scenario.title}</h3></div><div><b className={`sev ${priority.severity.toLowerCase()}`}>{priority.severity}</b></div></div><div className="progress"><i style={{width:`${Math.min(92,18+evidence.length*9)}%`}}/></div><div className="chatLog"><div className="userMsg first"><p>{reportedIssue}</p></div><div className="assistantMsg"><div className="avatar">SQ</div><div><span>SupportQ</span><p>I’ll use the evidence you give me to choose the next test. I won’t run through a fixed checklist or escalate just because a list ended.</p></div></div>
  {!supportContext.os||!supportContext.environment||!supportContext.scope?<div className="triageCard"><span>FAST CONTEXT</span><h3>I only need the details that change the diagnosis.</h3><div className="triageGrid"><label>Operating system<select value={supportContext.os} onChange={e=>setSupportContext(x=>({...x,os:e.target.value}))}><option value="">Select</option><option>Windows 11</option><option>Windows 10</option><option>macOS</option><option>Linux</option><option>iOS / iPadOS</option><option>Android</option></select></label><label>Environment<select value={supportContext.environment} onChange={e=>setSupportContext(x=>({...x,environment:e.target.value}))}><option value="">Select</option><option>Office</option><option>Home</option><option>Remote / VPN</option><option>Public / Guest network</option></select></label><label>Who is affected?<select value={supportContext.scope} onChange={e=>setSupportContext(x=>({...x,scope:e.target.value}))}><option value="">Select</option><option>Only me / one device</option><option>Several users</option><option>Whole team / department</option><option>Everyone / site-wide</option><option>Not sure</option></select></label><label>Work impact<input value={supportContext.impact||''} onChange={e=>setSupportContext(x=>({...x,impact:e.target.value}))} placeholder="Optional: blocked, workaround available..."/></label></div></div>:null}
- {supportContext.os&&supportContext.environment&&supportContext.scope&&<AnimatePresence mode="wait"><motion.div key={nodeId} className={node.type==='action'?'resolutionCard':'questionCard'} initial={reduceMotion?false:{opacity:0,y:10}} animate={{opacity:1,y:0}}>
+ {(!needsDeviceContext||(supportContext.os&&supportContext.environment&&supportContext.scope))&&<AnimatePresence mode="wait"><motion.div key={nodeId} className={node.type==='action'?'resolutionCard':'questionCard'} initial={reduceMotion?false:{opacity:0,y:10}} animate={{opacity:1,y:0}}>
    <span>{node.type==='action'?'NEXT CORRECTIVE ACTION':'NEXT BEST TEST'}</span><h4>{node.prompt}</h4>{node.why&&<p>{node.why}</p>}
    {node.type==='choice'&&<div className="choiceStack">{node.options.map(o=><button key={o.value} onClick={()=>choose(o)}>{o.label}<ChevronRight/></button>)}</div>}
    {node.type==='text'&&<><textarea className="evidenceInput" value={input} onChange={e=>setInput(e.target.value)} placeholder="Paste the exact output or describe what happened..."/>{node.help&&<button className="textLink" onClick={()=>setShowHelp(v=>!v)}>{showHelp?'Hide instructions':'Show me how to check'}</button>}{showHelp&&node.help&&<div className="howTo"><b>How to collect this evidence</b><ol>{(node.help[family]||node.help.windows||[]).map((s,i)=><li key={i}><code>{s}</code></li>)}</ol></div>}<button className="primary submitEvidence" onClick={submitText}>Analyze this result <ArrowUpRight/></button></>}
-   {node.type==='action'&&guide&&<><div className="howTo"><b>How to do it on {supportContext.os}</b><ol>{guide.steps.map((s,i)=><li key={i}><code>{s}</code></li>)}</ol></div><div className="expected"><b>Expected result</b><p>{node.expected||guide.expected}</p></div>{guide.warning&&<div className="warningBox"><TestTube2/><div><b>Important</b><span>{guide.warning}</span></div></div>}<div className="choiceStack">{node.outcomes.map(o=><button key={o.value} onClick={()=>actionOutcome(o)}>{o.label}<ChevronRight/></button>)}</div></>}
+   {node.type==='action'&&guide&&<><div className="howTo"><b>{needsDeviceContext?`How to do it on ${supportContext.os}`:'How to perform this SAP check'}</b><ol>{guide.steps.map((s,i)=><li key={i}><code>{s}</code></li>)}</ol></div><div className="expected"><b>Expected result</b><p>{node.expected||guide.expected}</p></div>{guide.warning&&<div className="warningBox"><TestTube2/><div><b>Important</b><span>{guide.warning}</span></div></div>}<div className="choiceStack">{node.outcomes.map(o=><button key={o.value} onClick={()=>actionOutcome(o)}>{o.label}<ChevronRight/></button>)}</div></>}
  </motion.div></AnimatePresence>}
  </div></section><aside className="diagnosticSide"><DeepContext supportContext={supportContext} priority={priority} hypotheses={hypotheses} evidence={evidence} attempts={attempts}/></aside></div>
 }
 
 function DeepContext({supportContext,priority,hypotheses,evidence,attempts}){return <><div className="sidePanel"><span>LIVE INCIDENT</span><dl><div><dt>Priority</dt><dd>{priority.priority}</dd></div><div><dt>Reason</dt><dd>{priority.reason}</dd></div><div><dt>OS</dt><dd>{supportContext.os||'—'}</dd></div><div><dt>Environment</dt><dd>{supportContext.environment||'—'}</dd></div><div><dt>Scope</dt><dd>{supportContext.scope||'—'}</dd></div><div><dt>Evidence</dt><dd>{evidence.length}</dd></div><div><dt>Fix attempts</dt><dd>{attempts.length}</dd></div></dl></div><div className="sidePanel"><span>HYPOTHESIS MODEL</span><div className="hypotheses">{hypotheses.map((h,i)=><div key={h.name}><div><span>{h.name}</span><b>{pct(h.score)}</b></div><i><em style={{width:pct(h.score)}}/></i>{i===0&&<small>Current lead</small>}</div>)}</div></div>{evidence.length>0&&<div className="sidePanel"><span>RECENT EVIDENCE</span><div className="evidenceMini">{evidence.slice(-4).reverse().map((e,i)=><p key={i}>{e.summary}</p>)}</div></div>}</>}
 
-function DeepScenarioDiagnostic({scenario,profile,reportedIssue,supportContext,setSupportContext,reduceMotion,onComplete}){
+function DeepScenarioDiagnostic({scenario,profile,reportedIssue,supportContext,setSupportContext,sapContext,setSapContext,reduceMotion,onComplete}){
  const[nodeId,setNodeId]=useState(profile.start);
  const[hypotheses,setHypotheses]=useState(profileHypotheses(scenario.id));
  const[evidence,setEvidence]=useState([]);
@@ -346,6 +315,8 @@ function DeepScenarioDiagnostic({scenario,profile,reportedIssue,supportContext,s
  const node=profile.nodes[nodeId];
  const priority=calculatePriority(supportContext,scenario.category);
  const family=(supportContext.os||'').toLowerCase().includes('windows')?'windows':(supportContext.os||'').toLowerCase().includes('mac')?'macos':'windows';
+ const needsDeviceContext=requiresDeviceContext(scenario);
+ const isSap=!needsDeviceContext;
 
  const record=(summary,raw='')=>setEvidence(e=>[...e,{time:now(),summary,raw}]);
  const boost=(b)=>{if(b)setHypotheses(h=>applyBoosts(h,b))};
@@ -357,6 +328,7 @@ function DeepScenarioDiagnostic({scenario,profile,reportedIssue,supportContext,s
  const submitText=()=>{if(!input.trim())return;const parsed=interpretGeneric(scenario.id,nodeId,input);record(parsed.summary,input);boost(parsed.boosts);if(parsed.resolve)return finishResolve(parsed.resolve,parsed.summary);if(parsed.escalate)return finishEscalate(parsed.escalate,parsed.summary);go(parsed.next||nodeId)};
  const actionOutcome=(out)=>{const log={action:node.action,outcome:out.label,time:now()};setAttempts(a=>[...a,log]);record(`${node.action} → ${out.label}`);boost(out.boosts);if(out.resolve)return finishResolve(out.resolve,`${node.action} resolved the incident`);if(out.escalate)return finishEscalate(out.escalate,`${node.action}: ${out.label}`);go(out.next)};
  const guide=node?.type==='action'?getActionGuide(node.action,supportContext.os,scenario.id):null;
+ const strength=evidenceStrength(hypotheses[0]?.score||0);
 
  const copyDeep=async()=>{if(!finalResult)return;const txt=`INCIDENT
 Issue: ${reportedIssue}
@@ -378,7 +350,7 @@ ${attempts.map(x=>'- '+x.action+' → '+x.outcome).join('\n')||'- None'}`;try{aw
  if(!node)return <div className="empty"><TestTube2/><h3>Diagnostic node unavailable</h3><p>This scenario needs a profile update.</p></div>;
 
  return <div className="diagnosticLayout"><section className="conversation"><div className="incidentBanner"><div><span>CONTINUOUS DIAGNOSIS · {priority.priority}</span><h3>{scenario.title}</h3></div><div><b className={`sev ${priority.severity.toLowerCase()}`}>{priority.severity}</b></div></div><div className="progress"><i style={{width:`${Math.min(92,18+evidence.length*9)}%`}}/></div><div className="chatLog"><div className="userMsg first"><p>{reportedIssue}</p></div><div className="assistantMsg"><div className="avatar">SQ</div><div><span>SupportQ</span><p>I’ll use your answers, exact errors, and test results to choose the next step. I’ll stop asking questions once the evidence is strong enough.</p></div></div>
- {!supportContext.os||!supportContext.environment||!supportContext.scope?<div className="triageCard"><span>FAST CONTEXT</span><h3>Just the details that change the next decision.</h3><div className="triageGrid"><label>Operating system<select value={supportContext.os} onChange={e=>setSupportContext(x=>({...x,os:e.target.value}))}><option value="">Select</option><option>Windows 11</option><option>Windows 10</option><option>macOS</option><option>Linux</option><option>iOS / iPadOS</option><option>Android</option></select></label><label>Environment<select value={supportContext.environment} onChange={e=>setSupportContext(x=>({...x,environment:e.target.value}))}><option value="">Select</option><option>Office</option><option>Home</option><option>Remote / VPN</option><option>Public / Guest network</option><option>Cloud-only</option></select></label><label>Who is affected?<select value={supportContext.scope} onChange={e=>setSupportContext(x=>({...x,scope:e.target.value}))}><option value="">Select</option><option>Only me / one device</option><option>Several users</option><option>Whole team / department</option><option>Everyone / site-wide</option><option>Not sure</option></select></label><label>Work impact<input value={supportContext.impact||''} onChange={e=>setSupportContext(x=>({...x,impact:e.target.value}))} placeholder="Optional: blocked, workaround available..."/></label></div></div>:null}
+ {needsDeviceContext&&(!supportContext.os||!supportContext.environment||!supportContext.scope)?<div className="triageCard"><span>FAST CONTEXT</span><h3>Just the details that change the next decision.</h3><div className="triageGrid"><label>Operating system<select value={supportContext.os} onChange={e=>setSupportContext(x=>({...x,os:e.target.value}))}><option value="">Select</option><option>Windows 11</option><option>Windows 10</option><option>macOS</option><option>Linux</option><option>iOS / iPadOS</option><option>Android</option></select></label><label>Environment<select value={supportContext.environment} onChange={e=>setSupportContext(x=>({...x,environment:e.target.value}))}><option value="">Select</option><option>Office</option><option>Home</option><option>Remote / VPN</option><option>Public / Guest network</option><option>Cloud-only</option></select></label><label>Who is affected?<select value={supportContext.scope} onChange={e=>setSupportContext(x=>({...x,scope:e.target.value}))}><option value="">Select</option><option>Only me / one device</option><option>Several users</option><option>Whole team / department</option><option>Everyone / site-wide</option><option>Not sure</option></select></label><label>Work impact<input value={supportContext.impact||''} onChange={e=>setSupportContext(x=>({...x,impact:e.target.value}))} placeholder="Optional: blocked, workaround available..."/></label></div></div>:null}
  {supportContext.os&&supportContext.environment&&supportContext.scope&&<AnimatePresence mode="wait"><motion.div key={nodeId} className={node.type==='action'?'resolutionCard':'questionCard'} initial={reduceMotion?false:{opacity:0,y:10}} animate={{opacity:1,y:0}}>
  <span>{node.type==='action'?'NEXT CORRECTIVE ACTION':'NEXT BEST TEST'}</span><h4>{node.prompt}</h4>{node.why&&<p>{node.why}</p>}
  {node.type==='choice'&&<div className="choiceStack">{node.options.map(o=><button key={o.value} onClick={()=>choose(o)}>{o.label}<ChevronRight/></button>)}</div>}
@@ -387,6 +359,8 @@ ${attempts.map(x=>'- '+x.action+' → '+x.outcome).join('\n')||'- None'}`;try{aw
  </motion.div></AnimatePresence>}
  </div></section><aside className="diagnosticSide"><DeepContext supportContext={supportContext} priority={priority} hypotheses={hypotheses} evidence={evidence} attempts={attempts}/></aside></div>
 }
+
+function SapContextCard({value,setValue}){const set=(k,v)=>setValue(x=>({...x,[k]:v}));return <div className="triageCard"><span>SAP BUSINESS CONTEXT</span><h3>Capture the SAP evidence that changes the diagnosis.</h3><p>Operating system is intentionally skipped for SAP business-process issues. Fill only what is known; the diagnostic flow can continue with partial evidence.</p><div className="triageGrid"><label>System<select value={value.system} onChange={e=>set('system',e.target.value)}><option value="">Unknown</option><option>PRD</option><option>QAS</option><option>DEV</option></select></label><label>Module<input value={value.module} onChange={e=>set('module',e.target.value)} placeholder="MM, FI, SD, Basis..."/></label><label>Transaction<input value={value.transaction} onChange={e=>set('transaction',e.target.value)} placeholder="MIGO, MIRO, SU53..."/></label><label>Document number<input value={value.documentNumber} onChange={e=>set('documentNumber',e.target.value)} placeholder="Material/PO/FI document"/></label><label>Fiscal year<input value={value.fiscalYear} onChange={e=>set('fiscalYear',e.target.value)} placeholder="2026"/></label><label>Movement type<input value={value.movementType} onChange={e=>set('movementType',e.target.value)} placeholder="101, 102..."/></label><label>Plant<input value={value.plant} onChange={e=>set('plant',e.target.value)} placeholder="Plant"/></label><label>Company code<input value={value.companyCode} onChange={e=>set('companyCode',e.target.value)} placeholder="Company code"/></label><label>Message class/number<input value={[value.messageClass,value.messageNumber].filter(Boolean).join(' ')} onChange={e=>{const [a,...b]=e.target.value.split(/\s+/);setValue(x=>({...x,messageClass:a||'',messageNumber:b.join(' ')}))}} placeholder="M7 021"/></label><label>Who is affected?<select value={value.scope} onChange={e=>set('scope',e.target.value)}><option value="">Unknown</option><option>One user</option><option>Several users</option><option>Everyone / site-wide</option></select></label></div><label className="wideField">Exact SAP message<input value={value.message} onChange={e=>set('message',e.target.value)} placeholder="Paste the exact SAP error/long text"/></label><label className="wideField">Business impact<input value={value.impact} onChange={e=>set('impact',e.target.value)} placeholder="Example: goods receipt blocked for production"/></label></div>}
 
 function HistoryView({history,onStart}){if(!history.length)return <div className="empty"><Database/><h3>No completed incidents yet</h3><p>An incident is saved only after it is resolved or escalated.</p></div>;return <div className="historyList">{history.map(h=><article key={h.id}><div><span>{h.category} · {h.status}</span><h3>{h.scenario}</h3><p>{h.reportedIssue||h.cause}</p></div><div className="historyMeta"><b>{h.priority}</b><span>{h.confidence}% RCA confidence</span><span>{h.completedAt}</span><button onClick={()=>onStart(h)}>Re-run</button></div></article>)}</div>}
 
