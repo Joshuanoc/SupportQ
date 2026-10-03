@@ -6,12 +6,12 @@ import{getActionGuide}from'./guidance.js';
 import{getNode,initialHypotheses,applyBoosts,parseDiagnosticText,calculatePriority}from'./diagnosticEngine.js';
 import{profileFor,profileHypotheses,interpretGeneric}from'./scenarioEngines.js';
 import{classifyIssue}from'./issueClassifier.js';
+import{requiresDeviceContext}from'./diagnosticPolicy.js';
 
 const icons={Wifi:Network,Shield:TestTube2,KeyRound:Wrench,Mail,MonitorCog:Code2,Printer:Wrench,TriangleAlert:TestTube2,CloudOff:Cloud,AppWindow:Code2,VideoOff:Code2,CloudCog:Cloud,HardDrive:Database};
 const pct=n=>`${Math.max(0,Math.min(100,Math.round(n)))}%`;
 const now=()=>new Date().toLocaleString();
-const isSapScenario=s=>Boolean(s?.category?.toLowerCase().startsWith('sap'));
-export const requiresDeviceContext=s=>!isSapScenario(s);
+const isSapScenario=s=>!requiresDeviceContext(s);
 
 
 
