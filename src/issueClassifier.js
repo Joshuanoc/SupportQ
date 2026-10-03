@@ -16,7 +16,9 @@ const keywordMap={
 export function classifyIssue(text, scenarios){
  const q=text.toLowerCase().trim();
  const tokens=q.replace(/[^a-z0-9/ -]/g,' ').split(/\s+/).filter(x=>x.length>2);
- const sapIntent=/\bsap\b|\bmigo\b|\bmiro\b|\bme2\w*\b|\bme5\w*\b|\bmmbe\b|\bmbst\b|\bgr\/?ir\b|\bidoc\b|\bst22\b|\bsm37\b|\bfiori\b|material document|purchase order|purchase requisition|goods receipt|invoice receipt|movement type|vendor|supplier|posting period|obyc/i.test(q);
+ const explicitSapIntent=/\bsap\b|\bmigo\b|\bmiro\b|\bme2\w*\b|\bme5\w*\b|\bmmbe\b|\bmbst\b|\bgr\/?ir\b|\bidoc\b|\bst22\b|\bsm37\b|\bfiori\b|material document|purchase order|purchase requisition|goods receipt|invoice receipt|movement type|posting period|obyc/i.test(q);
+ const explicitItIntent=/\bazure\b|\bwindows\b|\bwi-?fi\b|\bvpn\b|\boutlook\b|\bonedrive\b|\bteams\b|\bprinter\b|\bdns\b|\bdhcp\b/i.test(q);
+ const sapIntent=explicitSapIntent&&!explicitItIntent;
  const sapSynonyms={
   cancel:['cancel','cancelled','canceled','cancellation','reverse','reversal'],
   reverse:['reverse','reversal','cancel','cancelled','canceled'],
@@ -35,7 +37,12 @@ export function classifyIssue(text, scenarios){
   const words=keywordMap[s.id]||[];
   words.forEach(k=>{if(q.includes(k))score+=k.includes(' ')?7:3});
   if(q.includes(s.category.toLowerCase()))score+=4;
-  s.symptoms.forEach(x=>{const sx=x.toLowerCase();if(q.includes(sx))score+=sx.includes(' ')?10:5});
+  s.symptoms.forEach(x=>{
+   const sx=x.toLowerCase();
+   if(q===sx) score+=30;
+   else if(q.includes(sx)) score+=sx.includes(' ')?10:5;
+  });
+  if(q===s.title.toLowerCase())score+=35;
   expanded.forEach(t=>{if(t.length>2&&hay.includes(t))score+=1});
   if(sapIntent&&s.category.toLowerCase().startsWith('sap'))score+=8;
   if(sapIntent&&!s.category.toLowerCase().startsWith('sap'))score-=8;
