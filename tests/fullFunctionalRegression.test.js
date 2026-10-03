@@ -8,6 +8,7 @@ import { classifyIssue } from '../src/issueClassifier.js';
 import { getActionGuide } from '../src/guidance.js';
 import { requiresDeviceContext } from '../src/diagnosticPolicy.js';
 import { inferSapContext, sapRequiredEvidence, evidenceStrength } from '../src/supportContext.js';
+import { verificationPlan, escalationPackage, formatEscalationTicket } from '../src/caseManagement.js';
 
 const scenarios=[...itScenarios,...sapScenarios,...extendedItScenarios,...extendedSapScenarios,...routingScenarios];
 const byId=new Map(scenarios.map(s=>[s.id,s]));
@@ -177,4 +178,16 @@ test('SAP MM requires business evidence instead of device evidence',()=>{
 
 test('diagnostic scores are presented as evidence strength, not probability',()=>{
  assert.equal(evidenceStrength(90),'High'); assert.equal(evidenceStrength(70),'Medium'); assert.equal(evidenceStrength(40),'Low');
+});
+
+
+test('SAP material reversal has business verification before closure',()=>{
+ const plan=verificationPlan(byId.get('sap-material-document-reversal'));
+ assert.ok(plan.some(x=>/reversal.*document/i.test(x))); assert.ok(plan.some(x=>/stock/i.test(x))); assert.ok(plan.some(x=>/FI|accounting/i.test(x)));
+});
+
+test('escalation package carries SAP evidence and assignment group',()=>{
+ const s=byId.get('sap-material-document-reversal');
+ const pkg=escalationPackage({scenario:s,reportedIssue:'Cannot reverse material document',sapContext:{system:'PRD',transaction:'MIGO',documentNumber:'4900012345',messageClass:'M7',messageNumber:'021',message:'Deficit',impact:'Goods movement blocked'},answers:[{question:'Follow-on document?',answer:'Yes'}],actions:[{action:'Check document flow',outcome:'Did not resolve'}],cause:'Follow-on document',priority:'P2',severity:'High'});
+ assert.equal(pkg.assignmentGroup,'SAP MM Support'); assert.equal(pkg.system,'PRD'); assert.equal(pkg.transaction,'MIGO'); assert.match(formatEscalationTicket(pkg),/4900012345/); assert.match(formatEscalationTicket(pkg),/M7 021/);
 });
