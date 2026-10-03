@@ -1,19 +1,22 @@
-name: SupportQ QA
+name: SupportQ Functional Regression
 
 on:
   push:
-    branches: [main]
   pull_request:
     branches: [main]
 
 permissions:
   contents: read
 
+concurrency:
+  group: supportq-regression-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  functional-tests:
-    name: Functional tests and production build
+  regression:
+    name: Full functional regression and production build
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout repository
@@ -27,7 +30,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run functional tests
+      - name: Run complete functional regression suite
         run: npm test
 
       - name: Verify production build
