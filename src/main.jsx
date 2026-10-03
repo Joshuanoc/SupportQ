@@ -3,13 +3,15 @@ import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import { scenarios, categoryCounts } from './data.js';
 import { sapScenarios } from './sapData.js';
+import { extendedItScenarios, extendedSapScenarios } from './coverageScenarios.js';
+import { routingScenarios } from './routingScenarios.js';
 import './styles.css';
 import './studio-ui.css';
 import './professional-ui.css';
 import './sap-flow.css';
 import './reference-home.css';
 
-sapScenarios.forEach((scenario) => {
+[...sapScenarios,...extendedItScenarios,...extendedSapScenarios,...routingScenarios].forEach((scenario) => {
   if (!scenarios.some((existing) => existing.id === scenario.id)) {
     scenarios.push(scenario);
     categoryCounts[scenario.category] = (categoryCounts[scenario.category] || 0) + 1;
@@ -44,7 +46,7 @@ function UiBridge(){
         if(quickTag)quickTag.textContent='QUICK START';
       }
 
-      const category=[...document.querySelectorAll('.incidentBanner span')].find(el=>el.textContent.trim()==='SAP MM');
+      const category=[...document.querySelectorAll('.incidentBanner span')].find(el=>el.textContent.trim().startsWith('SAP'));
       const isSap=Boolean(category);
       document.body.classList.toggle('sap-diagnostic-mode',isSap);
       if(!isSap)return;
