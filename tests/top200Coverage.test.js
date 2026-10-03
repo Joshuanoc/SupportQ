@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import { scenarios as itScenarios } from '../src/data.js';
 import { sapScenarios } from '../src/sapData.js';
 import { extendedItScenarios, extendedSapScenarios } from '../src/coverageScenarios.js';
+import { routingScenarios } from '../src/routingScenarios.js';
 
-const scenarios=[...itScenarios,...sapScenarios,...extendedItScenarios,...extendedSapScenarios];
+const scenarios=[...itScenarios,...sapScenarios,...extendedItScenarios,...extendedSapScenarios,...routingScenarios];
 const keywordMap={
  'wifi-no-internet':['wifi','wi-fi','internet','dns','website','websites','connected no internet','network'],
  'vpn-failure':['vpn','remote access','tunnel','internal resource'],
