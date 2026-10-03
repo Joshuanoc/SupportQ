@@ -5,25 +5,13 @@ import{scenarios,categoryCounts}from'./data.js';
 import{getActionGuide}from'./guidance.js';
 import{getNode,initialHypotheses,applyBoosts,parseDiagnosticText,calculatePriority}from'./diagnosticEngine.js';
 import{profileFor,profileHypotheses,interpretGeneric}from'./scenarioEngines.js';
+import{classifyIssue}from'./issueClassifier.js';
 
 const icons={Wifi:Network,Shield:TestTube2,KeyRound:Wrench,Mail,MonitorCog:Code2,Printer:Wrench,TriangleAlert:TestTube2,CloudOff:Cloud,AppWindow:Code2,VideoOff:Code2,CloudCog:Cloud,HardDrive:Database};
 const pct=n=>`${Math.max(0,Math.min(100,Math.round(n)))}%`;
 const now=()=>new Date().toLocaleString();
 
-const keywordMap={
- 'wifi-no-internet':['wifi','wi-fi','internet','dns','website','websites','connected no internet','network'],
- 'vpn-failure':['vpn','remote access','tunnel','internal resource'],
- 'locked-account':['locked','password','sign in','login','mfa','account','authentication','sso'],
- 'outlook-send':['outlook','email','mail','outbox','send email','exchange'],
- 'slow-pc':['slow','lag','performance','cpu','memory','windows slow','computer slow','pc slow'],
- 'printer-offline':['printer','printing','print','spooler'],
- 'phishing':['phishing','suspicious email','scam','malware','mfa prompt','clicked link'],
- 'onedrive-sync':['onedrive','sync','files not syncing'],
- 'app-crash':['app crash','application crash','crashes','won\'t open','will not open','software'],
- 'camera-teams':['teams camera','camera','webcam','video'],
- 'azure-access':['azure','rbac','403','cloud access','permission denied'],
- 'disk-full':['disk full','storage full','low disk','drive full','space']
-};
+
 
 function inferContext(text){
  const q=text.toLowerCase();
@@ -51,36 +39,7 @@ function inferContext(text){
  return ctx;
 }
 
-export function classifyIssue(text){
- const q=text.toLowerCase().trim();
- const tokens=q.replace(/[^a-z0-9/ -]/g,' ').split(/\s+/).filter(x=>x.length>2);
- const sapIntent=/\bsap\b|\bmigo\b|\bmiro\b|\bme2\w*\b|\bme5\w*\b|\bmmbe\b|\bmbst\b|\bgr\/?ir\b|\bidoc\b|\bst22\b|\bsm37\b|\bfiori\b|material document|purchase order|purchase requisition|goods receipt|invoice receipt|movement type|vendor|supplier|posting period|obyc/i.test(q);
- const sapSynonyms={
-  cancel:['cancel','cancelled','canceled','cancellation','reverse','reversal'],
-  reverse:['reverse','reversal','cancel','cancelled','canceled'],
-  material:['material','stock','inventory'],
-  document:['document','posting'],
-  po:['po','purchase order'],
-  pr:['pr','purchase requisition'],
-  gr:['gr','goods receipt'],
-  invoice:['invoice','miro']
- };
- const expanded=new Set(tokens);
- tokens.forEach(t=>(sapSynonyms[t]||[]).forEach(v=>v.split(' ').forEach(x=>expanded.add(x))));
- const ranked=scenarios.map(s=>{
-  let score=0;
-  const hay=`${s.id} ${s.category} ${s.title} ${s.symptoms.join(' ')}`.toLowerCase();
-  const words=keywordMap[s.id]||[];
-  words.forEach(k=>{if(q.includes(k))score+=k.includes(' ')?7:3});
-  if(q.includes(s.category.toLowerCase()))score+=4;
-  s.symptoms.forEach(x=>{const sx=x.toLowerCase();if(q.includes(sx))score+=sx.includes(' ')?10:5});
-  expanded.forEach(t=>{if(t.length>2&&hay.includes(t))score+=1});
-  if(sapIntent&&s.category.toLowerCase().startsWith('sap'))score+=8;
-  if(sapIntent&&!s.category.toLowerCase().startsWith('sap'))score-=8;
-  return{s,score};
- }).sort((a,b)=>b.score-a.score);
- return ranked.filter(x=>x.score>0);
-}
+
 
 function App(){
  const reduceMotion=useReducedMotion();
@@ -115,7 +74,7 @@ function App(){
  const submitIntake=()=>{
    const text=intake.trim(); if(!text)return;
    const inferred=inferContext(text);setSupportContext(x=>({...x,...Object.fromEntries(Object.entries(inferred).filter(([,v])=>v))}));
-   const matches=classifyIssue(text);
+   const matches=classifyIssue(text,scenarios);
    if(matches.length===0){setSuggestions(scenarios.slice(0,4));return;}
    if(matches.length===1||matches[0].score>=matches[1].score+3){start(matches[0].s,text);return;}
    setSuggestions(matches.slice(0,3).map(x=>x.s));
