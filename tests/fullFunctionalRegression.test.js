@@ -117,6 +117,7 @@ test('every resolution action returns instructions, purpose and expected result'
     }
    }
   }
+ }
  assert.equal(failures.length,0,`Actions without performable guidance (${failures.length}):\n${failures.join('\n')}`);
 });
 
