@@ -7,6 +7,7 @@ import './styles.css';
 import './studio-ui.css';
 import './professional-ui.css';
 import './sap-flow.css';
+import './reference-home.css';
 
 sapScenarios.forEach((scenario) => {
   if (!scenarios.some((existing) => existing.id === scenario.id)) {
@@ -21,10 +22,28 @@ function setNativeValue(element,value){
   element.dispatchEvent(new Event('change',{bubbles:true}));
 }
 
-function SapFlowBridge(){
+function UiBridge(){
   useEffect(()=>{
     let timer;
     const sync=()=>{
+      const isHome=Boolean(document.querySelector('.heroPanel'));
+      document.body.classList.toggle('support-home-mode',isHome);
+
+      if(isHome){
+        const eyebrow=document.querySelector('.heroPanel .eyebrow');
+        const title=document.querySelector('.heroPanel h2');
+        const intro=document.querySelector('.heroPanel>div:first-child>p');
+        const input=document.querySelector('.intakeBox textarea');
+        const quick=document.querySelector('.sectionTitle h3');
+        const quickTag=document.querySelector('.sectionTitle span');
+        if(eyebrow)eyebrow.textContent='SUPPORTQ · IT + SAP SUPPORT';
+        if(title)title.innerHTML='How can we <span>help?</span>';
+        if(intro)intro.textContent='Describe an IT or SAP issue and SupportQ will guide you through diagnosis, corrective actions, verification, and escalation when needed.';
+        if(input)input.placeholder='Describe your IT or SAP issue...';
+        if(quick)quick.textContent='Common issues';
+        if(quickTag)quickTag.textContent='QUICK START';
+      }
+
       const category=[...document.querySelectorAll('.incidentBanner span')].find(el=>el.textContent.trim()==='SAP MM');
       const isSap=Boolean(category);
       document.body.classList.toggle('sap-diagnostic-mode',isSap);
@@ -59,12 +78,12 @@ function SapFlowBridge(){
     const observer=new MutationObserver(sync);
     observer.observe(document.getElementById('root'),{childList:true,subtree:true,attributes:true});
     sync();
-    return()=>{observer.disconnect();clearTimeout(timer);document.body.classList.remove('sap-diagnostic-mode')};
+    return()=>{observer.disconnect();clearTimeout(timer);document.body.classList.remove('sap-diagnostic-mode','support-home-mode')};
   },[]);
   return null;
 }
 
-function Root(){return <><SapFlowBridge/><App/></>}
+function Root(){return <><UiBridge/><App/></>}
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode><Root/></React.StrictMode>
