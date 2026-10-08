@@ -70,7 +70,7 @@ textarea::placeholder,input::placeholder { color:#667b85; opacity:1; }
 .sectionTitle button { font-size:12px; color:#08776f; white-space:nowrap; min-height:44px; }
 .scenarioGrid { gap:16px; grid-template-columns:repeat(3,minmax(0,1fr)); }
 .scenarioCard { display:flex; flex-direction:column; background:#fff; color:var(--text); border:1px solid #dce4e7; padding:20px; min-height:232px; border-radius:13px; box-shadow:0 2px 3px #192c3602; }
-.scenarioCard:hover { background:#fff; border-color:#7daaa9; transform:translateY(-2px); box-shadow:0 8px 18px #192c3609; }
+.scenarioCard:hover { background:#fff; border-color:#7daaa9; box-shadow:0 8px 18px #192c3609; }
 .scenarioIcon { background:#eff6f5; color:#147d78; border-radius:10px; width:36px; height:36px; }
 .scenarioMeta { width:100%; gap:8px; margin-top:14px; }.scenarioMeta>span { color:#58717b; font-size:10px; }
 .scenarioCard h4 { font-size:15px; line-height:1.5; margin:12px 0 8px; color:#233d47; font-weight:650; }
