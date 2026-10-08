@@ -143,4 +143,17 @@ textarea::placeholder,input::placeholder { color:#667b85; opacity:1; }
  .triageGrid { grid-template-columns:1fr; }.userMsg p { max-width:100%; }.questionCard button { flex:1; padding:12px 14px; }.resultActions>button { width:100%; }
  .barRow { grid-template-columns:100px minmax(0,1fr) 24px; gap:10px; }
 }
+/* Feedback uses opacity and transforms rather than layout-changing animation. */
+.sidebar nav button { position:relative; isolation:isolate; }
+.sidebar nav button.active { background:transparent; box-shadow:none; }
+.navSelection { position:absolute; inset:0; border-radius:9px; background:#284b55; box-shadow:inset 3px 0 #9ee0d0; z-index:-1; pointer-events:none; }
+.domainTabs button { position:relative; isolation:isolate; }
+.domainTabs button[aria-pressed=true] { background:none; box-shadow:none; }
+.filterSelection { position:absolute; inset:0; background:#fff; border-radius:7px; box-shadow:0 1px 4px #192c3610; z-index:-1; pointer-events:none; }
+.intakeBox:focus-within { border-color:#70aaa5; box-shadow:0 0 0 3px #087f7912; }
+.intakeBox { transition:border-color .14s,box-shadow .14s; }
+@media(hover:hover) and (prefers-reduced-motion:no-preference) {
+ .cardFoot svg,.examplePrompts svg,.sectionTitle button svg,.primary svg { transition:transform .14s ease-out; }
+ .scenarioCard:hover .cardFoot svg,.examplePrompts button:hover svg,.sectionTitle button:hover svg,.primary:hover:not(:disabled) svg { transform:translateX(3px); }
+}
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; animation:none!important; } }
