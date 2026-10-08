@@ -1,6 +1,6 @@
 import React,{useMemo,useState,useEffect}from'react';
 import{motion,AnimatePresence,useReducedMotion}from'framer-motion';
-import{ArrowUpRight,Check,ChevronRight,Mail,Code2,Cloud,TestTube2,Wrench,Database,Network,Menu,X}from'lucide-react';
+import{ArrowUpRight,Check,ChevronRight,Mail,Code2,Cloud,TestTube2,Wrench,Database,Network,Menu,X,Search,LifeBuoy,LayoutDashboard,Clock3,BarChart3}from'lucide-react';
 import{scenarios,categoryCounts}from'./data.js';
 import{classifyIssue}from'./classifyIssue.js';
 import{diagnosticPath,resolutionProgress}from'./diagnosticTransitions.js';
@@ -57,9 +57,24 @@ function App(){
  const[query,setQuery]=useState('');
  const[mobile,setMobile]=useState(false);
 
+ useEffect(()=>{
+   if(!mobile)return;
+   const previousFocus=document.activeElement,previousOverflow=document.body.style.overflow;
+   const drawer=document.getElementById('primary-navigation');
+   const buttons=()=>Array.from(drawer.querySelectorAll('button'));
+   document.body.style.overflow='hidden';buttons()[0]?.focus();
+   const close=e=>{
+     if(e.key==='Escape')setMobile(false);
+     if(e.key==='Tab'){const items=buttons(),first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}}
+   };
+   const resize=()=>{if(window.innerWidth>780)setMobile(false)};
+   window.addEventListener('keydown',close);window.addEventListener('resize',resize);
+   return()=>{document.body.style.overflow=previousOverflow;window.removeEventListener('keydown',close);window.removeEventListener('resize',resize);previousFocus?.focus()};
+ },[mobile]);
+
  useEffect(()=>localStorage.setItem('supportq-history',JSON.stringify(history.slice(0,25))),[history]);
 
- const filtered=useMemo(()=>scenarios.filter(s=>`${s.title} ${s.category}`.toLowerCase().includes(query.toLowerCase())),[query]);
+ const filtered=useMemo(()=>scenarios.filter(s=>`${s.title} ${s.category} ${s.symptoms.join(' ')}`.toLowerCase().includes(query.toLowerCase())),[query]);
 
  const start=(s,issue='')=>{
    setScenario(s);setStep(0);setAnswers([]);setResult(null);setActionIndex(0);setActionLog([]);const inferred=inferContext(issue||s.title);const hasEnough=Boolean(s.category.startsWith('SAP') || (inferred.os&&inferred.environment&&inferred.scope));setSupportContext(inferred);setPhase(s.severity==='Critical'||hasEnough?'diagnose':'triage');
@@ -154,19 +169,21 @@ ${result.actions.map(a=>`- ${a}`).join('\n')}`;
  const topCause=hypotheses[0];
 
  return <div className="appShell">
-   <aside className={mobile?'sidebar open':'sidebar'}>
-    <div className="brand"><div className="brandMark"><TestTube2 size={22}/></div><div><strong>SupportQ</strong><span>IT Support Intelligence</span></div></div>
-    <nav>
-      <button className={view==='dashboard'?'active':''} onClick={()=>{setView('dashboard');setMobile(false)}}><Code2/>Dashboard</button>
-      <button className={view==='scenarios'?'active':''} onClick={()=>{setView('scenarios');setMobile(false)}}><Network/>Scenario Library</button>
-      <button className={view==='history'?'active':''} onClick={()=>{setView('history');setMobile(false)}}><Database/>Incident History</button>
-      <button className={view==='analytics'?'active':''} onClick={()=>{setView('analytics');setMobile(false)}}><Database/>Analytics</button>
+   <a className="skipLink" href="#main-content">Skip to content</a>
+   {mobile&&<button className="navBackdrop" aria-label="Close navigation" onClick={()=>setMobile(false)}/>}
+   <aside id="primary-navigation" role={mobile?"dialog":undefined} aria-modal={mobile?true:undefined} aria-label="Workspace navigation" className={mobile?'sidebar open':'sidebar'}>
+    <div className="brand"><div className="brandMark"><LifeBuoy size={22}/></div><div><strong>SupportQ</strong><span>Your troubleshooting workspace</span></div></div>
+    <nav aria-label="Main navigation">
+      <button aria-current={view==='dashboard'?'page':undefined} className={view==='dashboard'?'active':''} onClick={()=>{setView('dashboard');setMobile(false)}}><LayoutDashboard/>Overview</button>
+      <button aria-current={view==='scenarios'?'page':undefined} className={view==='scenarios'?'active':''} onClick={()=>{setView('scenarios');setMobile(false)}}><Network/>Scenario Library</button>
+      <button aria-current={view==='history'?'page':undefined} className={view==='history'?'active':''} onClick={()=>{setView('history');setMobile(false)}}><Clock3/>Incident history</button>
+      <button aria-current={view==='analytics'?'page':undefined} className={view==='analytics'?'active':''} onClick={()=>{setView('analytics');setMobile(false)}}><BarChart3/>Analytics</button>
     </nav>
     <div className="sideNote"><TestTube2 size={17}/><div><b>Resolve, don’t just advise</b><span>Diagnose → action → verify → continue or escalate.</span></div></div>
    </aside>
    <div className="mainArea">
-    <header className="topbar"><button className="mobileToggle" onClick={()=>setMobile(v=>!v)} aria-label="Toggle navigation">{mobile?<X/>:<Menu/>}</button><div><span className="crumb">SUPPORTQ / {view.toUpperCase()}</span><h1>{view==='diagnose'&&scenario?scenario.title:view==='scenarios'?'Scenario Library':view==='history'?'Incident History':view==='analytics'?'Support Analytics':'IT Support Command Center'}</h1></div><div className="status"><i/>Diagnostic engine ready</div></header>
-    <main className="content">
+    <header className="topbar"><button className="mobileToggle" onClick={()=>setMobile(v=>!v)} aria-label={mobile?"Close navigation":"Open navigation"} aria-expanded={mobile} aria-controls="primary-navigation">{mobile?<X/>:<Menu/>}</button><div><span className="crumb">SUPPORTQ / {view.toUpperCase()}</span><h1>{view==='diagnose'&&scenario?scenario.title:view==='scenarios'?'Scenario Library':view==='history'?'Incident History':view==='analytics'?'Support Analytics':'Support workspace'}</h1></div><div className="status"><i/>Workspace ready</div></header>
+    <main id="main-content" className="content" tabIndex={-1}>
       {view==='dashboard'&&<Dashboard intake={intake} setIntake={setIntake} submitIntake={submitIntake} suggestions={suggestions} onStart={start} setView={setView}/>}
       {view==='scenarios'&&<ScenarioLibrary query={query} setQuery={setQuery} filtered={filtered} onStart={start}/>}
       {view==='diagnose'&&scenario&&<Diagnostic scenario={scenario} step={step} answers={answers} result={result} phase={phase} actionIndex={actionIndex} actionLog={actionLog} hypotheses={hypotheses} topCause={topCause} answer={answer} resolutionResponse={resolutionResponse} reset={reset} copyTicket={copyTicket} reduceMotion={reduceMotion} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} beginDiagnosis={beginDiagnosis} onDeepComplete={incident=>setHistory(h=>[{id:Date.now(),...incident},...h].slice(0,25))}/>}
@@ -177,17 +194,27 @@ ${result.actions.map(a=>`- ${a}`).join('\n')}`;
  </div>
 }
 
-function Dashboard({intake,setIntake,submitIntake,suggestions,onStart,setView}){return <>
- <section className="heroPanel"><div><span className="eyebrow">INTERACTIVE IT SUPPORT</span><h2>Tell me the problem.<br/>We’ll troubleshoot it.</h2><p>SupportQ uses fast triage: it infers obvious context from what you type, skips redundant questions, asks only what changes the next decision, applies the safest high-value fix first, and keeps going until the issue is resolved or needs escalation.</p>
- <div className="intakeBox"><label htmlFor="issue">What is happening?</label><div><textarea id="issue" value={intake} onChange={e=>setIntake(e.target.value)} onKeyDown={e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter')submitIntake()}} placeholder="Example: My laptop says Wi-Fi is connected but no websites will load."/><button className="primary" onClick={submitIntake}>Start diagnosis <ArrowUpRight/></button></div><small>Describe the symptom in your own words. Ctrl/Cmd + Enter also starts.</small></div>
- {suggestions.length>0&&<div className="matchBox"><span>I need one more clue. Which issue is closest?</span><div>{suggestions.map(s=><button key={s.id} onClick={()=>onStart(s,intake)}>{s.title}<ChevronRight/></button>)}</div></div>}
- </div><div className="signalCard"><div className="signalHead"><Network/><span>Resolution workflow</span><b>READY</b></div><div className="signalGrid"><div><strong>{scenarios.length}</strong><span>Scenarios</span></div><div><strong>{Object.keys(categoryCounts).length}</strong><span>Domains</span></div><div><strong>P1–P4</strong><span>Priority</span></div><div><strong>VERIFY</strong><span>Every fix</span></div></div><div className="pulseRow"><i/><span>Symptom → Diagnose → Fix → Retest → Resolve</span></div></div></section>
- <section><div className="sectionTitle"><div><span>QUICK START</span><h3>Common support incidents</h3></div><button onClick={()=>setView('scenarios')}>View all <ChevronRight/></button></div><div className="scenarioGrid">{scenarios.slice(0,6).map(s=><ScenarioCard key={s.id} s={s} onStart={onStart}/>)}</div></section>
- </>}
+function Dashboard({intake,setIntake,submitIntake,suggestions,onStart,setView}){
+ const examples=['Wi-Fi connected but no internet','MIRO posting period closed','VPN will not connect'];
+ const quickIds=['wifi-no-internet','sap-material-document-reversal','vpn-failure','sap-miro-blocked','locked-account','sap-account-assignment'];
+ return <>
+ <section className="heroPanel"><div><span className="eyebrow"><i/> A CLEARER PATH TO RESOLUTION</span><h2>Less guesswork.<br/><span>Better troubleshooting.</span></h2><p>Describe an IT or SAP issue. Work through focused checks, find the likely cause, and verify your next step.</p>
+ <div className="intakeBox"><label htmlFor="issue">What do you need help with?</label><textarea id="issue" aria-describedby="intake-help" value={intake} onChange={e=>setIntake(e.target.value)} onKeyDown={e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter')submitIntake()}} placeholder="Describe the problem, including any error message…"/><div className="intakeFooter"><small id="intake-help">Include the exact error if you have it.</small><button className="primary" disabled={!intake.trim()} onClick={submitIntake}>Start diagnosis <ArrowUpRight/></button></div></div>
+ <div className="examplePrompts"><span>Try an example</span>{examples.map(text=><button key={text} onClick={()=>{setIntake(text);document.getElementById('issue')?.focus()}}>{text}<ArrowUpRight size={12}/></button>)}</div>
+ {suggestions.length>0&&<div className="matchBox" role="status"><span>Which issue is closest?</span><div>{suggestions.map(s=><button key={s.id} onClick={()=>onStart(s,intake)}>{s.title}<ChevronRight/></button>)}</div></div>}
+ </div><aside className="workflowCard"><div className="workflowHeader"><LifeBuoy size={22}/><span>One step at a time</span></div><h3>From symptom<br/>to a clear next step.</h3><ol>{[['Describe','Tell us what happened.'],['Diagnose','Check the evidence that matters.'],['Verify','Retest the fix or escalate with context.']].map(([title,description],i)=><li key={title}><b>{String(i+1).padStart(2,'0')}</b><div><strong>{title}</strong><p>{description}</p></div></li>)}</ol><div className="workflowFoot"><span><strong>{scenarios.length}</strong> scenarios</span><span>IT + SAP</span><Check size={16}/></div></aside></section>
+ <section aria-labelledby="quick-start-title"><div className="sectionTitle"><div><span>START WITH A KNOWN ISSUE</span><h3 id="quick-start-title">Common support incidents</h3></div><button onClick={()=>setView('scenarios')}>Browse all scenarios <ArrowUpRight/></button></div><div className="scenarioGrid">{quickIds.map(id=>scenarios.find(s=>s.id===id)).filter(Boolean).map(s=><ScenarioCard key={s.id} s={s} onStart={onStart}/>)}</div></section>
+ <div className="workspaceNote"><TestTube2 size={16}/><span>A guided support demo. Follow your organization’s approved procedures for system changes.</span></div>
+ </>;
+}
 
-function ScenarioCard({s,onStart}){const Icon=icons[s.icon]||Network;return <button className="scenarioCard" onClick={()=>onStart(s,s.title)}><div className="scenarioIcon"><Icon/></div><div className="scenarioMeta"><span>{s.category}</span><b className={`sev ${s.severity.toLowerCase()}`}>{s.severity}</b></div><h4>{s.title}</h4><p>{s.symptoms.join(' · ')}</p><div className="cardFoot"><span>{s.priority}</span><span>Diagnose <ChevronRight/></span></div></button>}
+function ScenarioCard({s,onStart}){const Icon=icons[s.icon]||Network;return <button className="scenarioCard" onClick={()=>onStart(s,s.title)}><div className="scenarioIcon"><Icon/></div><div className="scenarioMeta"><span>{s.category}</span><b className={`sev ${s.severity.toLowerCase()}`}>{s.severity}</b></div><h4>{s.title}</h4><p>{s.symptoms.slice(0,3).join(' · ')}</p><div className="cardFoot"><span>{s.priority}</span><span>Diagnose <ChevronRight/></span></div></button>}
 
-function ScenarioLibrary({query,setQuery,filtered,onStart}){return <><div className="libraryHead"><div className="search"><Code2/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search Wi-Fi, VPN, Outlook, Azure..."/></div><span>{filtered.length} scenarios</span></div><div className="scenarioGrid">{filtered.map(s=><ScenarioCard key={s.id} s={s} onStart={onStart}/>)}</div></>}
+function ScenarioLibrary({query,setQuery,filtered,onStart}){
+ const [domain,setDomain]=useState('All');
+ const visible=filtered.filter(s=>domain==='All'||(domain==='SAP'?s.category.startsWith('SAP'):!s.category.startsWith('SAP')));
+ return <><div className="libraryIntro"><h2>Find your starting point.</h2><p>Browse IT and SAP workflows, or search by symptom, transaction, or error.</p></div><div className="libraryHead"><div className="search"><Search/><input aria-label="Search scenarios" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search symptoms, MIGO, Wi-Fi…"/>{query&&<button aria-label="Clear search" onClick={()=>setQuery('')}><X size={16}/></button>}</div><div className="domainTabs" aria-label="Filter scenario domain">{['All','IT','SAP'].map(value=><button key={value} aria-pressed={domain===value} onClick={()=>setDomain(value)}>{value}</button>)}</div></div><p className="resultCount" aria-live="polite">{visible.length} {visible.length===1?'scenario':'scenarios'}</p>{visible.length?<div className="scenarioGrid">{visible.map(s=><ScenarioCard key={s.id} s={s} onStart={onStart}/>)}</div>:<div className="empty"><Search/><h3>No matching scenarios</h3><p>Try a transaction name or a shorter symptom.</p><button className="secondary" onClick={()=>{setQuery('');setDomain('All')}}>Clear filters</button></div>}</>;
+}
 
 function Diagnostic({scenario,step,answers,result,phase,actionIndex,actionLog,hypotheses,topCause,answer,resolutionResponse,reset,copyTicket,reduceMotion,reportedIssue,supportContext,setSupportContext,beginDiagnosis,onDeepComplete}){
  if(scenario.id==='wifi-no-internet')return <DeepWifiDiagnostic scenario={scenario} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} reduceMotion={reduceMotion} onComplete={onDeepComplete}/>;
