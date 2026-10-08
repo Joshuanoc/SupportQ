@@ -2,6 +2,8 @@ import React,{useMemo,useState,useEffect}from'react';
 import{motion,AnimatePresence,useReducedMotion}from'framer-motion';
 import{ArrowUpRight,Check,ChevronRight,Mail,Code2,Cloud,TestTube2,Wrench,Database,Network,Menu,X}from'lucide-react';
 import{scenarios,categoryCounts}from'./data.js';
+import{classifyIssue}from'./classifyIssue.js';
+import{diagnosticPath,resolutionProgress}from'./diagnosticTransitions.js';
 import{getActionGuide}from'./guidance.js';
 import{getNode,initialHypotheses,applyBoosts,parseDiagnosticText,calculatePriority}from'./diagnosticEngine.js';
 import{profileFor,profileHypotheses,interpretGeneric}from'./scenarioEngines.js';
@@ -9,21 +11,6 @@ import{profileFor,profileHypotheses,interpretGeneric}from'./scenarioEngines.js';
 const icons={Wifi:Network,Shield:TestTube2,KeyRound:Wrench,Mail,MonitorCog:Code2,Printer:Wrench,TriangleAlert:TestTube2,CloudOff:Cloud,AppWindow:Code2,VideoOff:Code2,CloudCog:Cloud,HardDrive:Database};
 const pct=n=>`${Math.max(0,Math.min(100,Math.round(n)))}%`;
 const now=()=>new Date().toLocaleString();
-
-const keywordMap={
- 'wifi-no-internet':['wifi','wi-fi','internet','dns','website','websites','connected no internet','network'],
- 'vpn-failure':['vpn','remote access','tunnel','internal resource'],
- 'locked-account':['locked','password','sign in','login','mfa','account','authentication','sso'],
- 'outlook-send':['outlook','email','mail','outbox','send email','exchange'],
- 'slow-pc':['slow','lag','performance','cpu','memory','windows slow','computer slow','pc slow'],
- 'printer-offline':['printer','printing','print','spooler'],
- 'phishing':['phishing','suspicious email','scam','malware','mfa prompt','clicked link'],
- 'onedrive-sync':['onedrive','sync','files not syncing'],
- 'app-crash':['app crash','application crash','crashes','won\'t open','will not open','software'],
- 'camera-teams':['teams camera','camera','webcam','video'],
- 'azure-access':['azure','rbac','403','cloud access','permission denied'],
- 'disk-full':['disk full','storage full','low disk','drive full','space']
-};
 
 function inferContext(text){
  const q=text.toLowerCase();
@@ -49,37 +36,6 @@ function inferContext(text){
  else if(/several|multiple users|others too/.test(q))ctx.scope='Several users';
  if(/can't work|cannot work|blocked|urgent|critical/.test(q))ctx.impact='Work is blocked';
  return ctx;
-}
-
-function classifyIssue(text){
- const q=text.toLowerCase().trim();
- const tokens=q.replace(/[^a-z0-9/ -]/g,' ').split(/\s+/).filter(x=>x.length>2);
- const sapIntent=/\bsap\b|\bmigo\b|\bmiro\b|\bme2\w*\b|\bme5\w*\b|\bmmbe\b|\bmbst\b|\bgr\/?ir\b|\bidoc\b|\bst22\b|\bsm37\b|\bfiori\b|material document|purchase order|purchase requisition|goods receipt|invoice receipt|movement type|vendor|supplier|posting period|obyc/i.test(q);
- const sapSynonyms={
-  cancel:['cancel','cancelled','canceled','cancellation','reverse','reversal'],
-  reverse:['reverse','reversal','cancel','cancelled','canceled'],
-  material:['material','stock','inventory'],
-  document:['document','posting'],
-  po:['po','purchase order'],
-  pr:['pr','purchase requisition'],
-  gr:['gr','goods receipt'],
-  invoice:['invoice','miro']
- };
- const expanded=new Set(tokens);
- tokens.forEach(t=>(sapSynonyms[t]||[]).forEach(v=>v.split(' ').forEach(x=>expanded.add(x))));
- const ranked=scenarios.map(s=>{
-  let score=0;
-  const hay=`${s.id} ${s.category} ${s.title} ${s.symptoms.join(' ')}`.toLowerCase();
-  const words=keywordMap[s.id]||[];
-  words.forEach(k=>{if(q.includes(k))score+=k.includes(' ')?7:3});
-  if(q.includes(s.category.toLowerCase()))score+=4;
-  s.symptoms.forEach(x=>{const sx=x.toLowerCase();if(q.includes(sx))score+=sx.includes(' ')?10:5});
-  expanded.forEach(t=>{if(t.length>2&&hay.includes(t))score+=1});
-  if(sapIntent&&s.category.toLowerCase().startsWith('sap'))score+=8;
-  if(sapIntent&&!s.category.toLowerCase().startsWith('sap'))score-=8;
-  return{s,score};
- }).sort((a,b)=>b.score-a.score);
- return ranked.filter(x=>x.score>0);
 }
 
 function App(){
@@ -133,8 +89,8 @@ function App(){
 
  const answer=(choice)=>{
    if(!scenario||phase!=='diagnose')return;
-   const node=scenario.steps[step],path=node[choice];
-   const nextAnswers=[...answers,{question:node.q,answer:choice==='yes'?'Yes':'No'}];
+   const node=scenario.steps[step],path=diagnosticPath(scenario,step,choice);
+   const nextAnswers=[...answers,{question:node.q,answer:choice==='unknown'?'Not sure':choice==='yes'?'Yes':'No'}];
    setAnswers(nextAnswers);
    if(path.boost)updateScores(path.boost);
    if(path.result){
@@ -150,13 +106,14 @@ function App(){
    const action=result.actions[actionIndex];
    const nextLog=[...actionLog,{action,outcome:resolved?'Resolved issue':'Did not resolve'}];
    setActionLog(nextLog);
-   if(resolved){
+   const progress=resolutionProgress(resolved,actionIndex,result.actions.length);
+   if(progress.phase==='resolved'){
      setPhase('resolved');
      const incident={id:Date.now(),...result,status:'Resolved',completedAt:now(),reportedIssue,supportContext,answers,actionLog:nextLog};
      setHistory(h=>[incident,...h].slice(0,25));
      return;
    }
-   if(actionIndex<result.actions.length-1)setActionIndex(i=>i+1);
+   if(progress.phase==='resolve')setActionIndex(progress.actionIndex);
    else{
      setPhase('escalated');
      const incident={id:Date.now(),...result,status:'Escalated',escalate:true,completedAt:now(),reportedIssue,supportContext,answers,actionLog:nextLog};
@@ -243,7 +200,7 @@ function Diagnostic({scenario,step,answers,result,phase,actionIndex,actionLog,hy
  {answers.map((a,i)=><React.Fragment key={i}><div className="assistantMsg"><div className="avatar">SQ</div><div><span>Diagnostic question</span><p>{a.question}</p></div></div><div className="userMsg"><p>{a.answer}</p></div></React.Fragment>)}
  <AnimatePresence mode="wait">
  {phase==='triage'&&<motion.div className="triageCard" initial={reduceMotion?false:{opacity:0,y:12}} animate={{opacity:1,y:0}}><span>BEFORE WE TROUBLESHOOT</span><h3>Let me understand your setup first.</h3><p>I already filled in anything I could infer from your description. Just confirm the missing details so we can move quickly.</p><div className="triageGrid"><label>Device<select value={supportContext.device} onChange={e=>setSupportContext(x=>({...x,device:e.target.value}))}><option value="">Select if known</option><option>Laptop</option><option>Desktop</option><option>Phone</option><option>Tablet</option><option>Thin client</option><option>Other</option></select></label><label>Operating system<select value={supportContext.os} onChange={e=>setSupportContext(x=>({...x,os:e.target.value}))}><option value="">Select</option><option>Windows 11</option><option>Windows 10</option><option>macOS</option><option>Linux</option><option>iOS / iPadOS</option><option>Android</option><option>Other / Unknown</option></select></label><label>Environment<select value={supportContext.environment} onChange={e=>setSupportContext(x=>({...x,environment:e.target.value}))}><option value="">Select</option><option>Office</option><option>Home</option><option>Remote / VPN</option><option>Hybrid</option><option>Public / Guest network</option><option>Cloud-only</option></select></label><label>When did it start?<select value={supportContext.onset} onChange={e=>setSupportContext(x=>({...x,onset:e.target.value}))}><option value="">Not sure / not important yet</option><option>Just now</option><option>Today</option><option>Last few days</option><option>More than a week ago</option><option>After a restart/update/change</option></select></label><label>Has this happened before?<select value={supportContext.previous} onChange={e=>setSupportContext(x=>({...x,previous:e.target.value}))}><option value="">Not sure</option><option>No, first time</option><option>Yes, occasionally</option><option>Yes, frequently</option><option>Yes, same issue was fixed before</option></select></label><label>Who is affected?<select value={supportContext.scope} onChange={e=>setSupportContext(x=>({...x,scope:e.target.value}))}><option value="">Select</option><option>Only me / one device</option><option>Several users</option><option>Whole team / department</option><option>Everyone / site-wide</option><option>Not sure</option></select></label></div><label className="wideField">Any recent change before the issue?<input value={supportContext.recentChanges} onChange={e=>setSupportContext(x=>({...x,recentChanges:e.target.value}))} placeholder="Example: Windows update, password change, new VPN, moved desks, installed software..."/></label><label className="wideField">How is this affecting your work?<input value={supportContext.impact} onChange={e=>setSupportContext(x=>({...x,impact:e.target.value}))} placeholder="Example: I cannot work, workaround available, only one app affected..."/></label><button className="primary startDiag" disabled={!scenario.category.startsWith('SAP')&&(!supportContext.os||!supportContext.environment||!supportContext.scope)} onClick={beginDiagnosis}>Continue to diagnosis <ArrowUpRight/></button></motion.div>}
- {phase==='diagnose'&&<motion.div key={step} className="questionCard" initial={reduceMotion?false:{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={{opacity:0}}><span>NEXT BEST TEST</span><h4>{node.q}</h4><p>{node.help}</p><div><button onClick={()=>answer('yes')}><Check/>Yes</button><button onClick={()=>answer('no')}><X/>No</button></div></motion.div>}
+ {phase==='diagnose'&&<motion.div key={step} className="questionCard" initial={reduceMotion?false:{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={{opacity:0}}><span>NEXT BEST TEST</span><h4>{node.q}</h4><p>{node.help}</p><div><button onClick={()=>answer('yes')}><Check/>Yes</button><button onClick={()=>answer('no')}><X/>No</button>{scenario.category.startsWith('SAP')&&<button onClick={()=>answer('unknown')}>Not sure</button>}</div></motion.div>}
  {phase==='resolve'&&result&&actionGuide&&<motion.div key={actionIndex} className="resolutionCard" initial={reduceMotion?false:{opacity:0,y:12}} animate={{opacity:1,y:0}}><span>CORRECTIVE ACTION {actionIndex+1} OF {result.actions.length}</span><h3>{actionGuide.title}</h3><p><b>Why:</b> {actionGuide.why}</p><div className="howTo"><b>How to do it on {supportContext.os||'your device'}</b><ol>{actionGuide.steps.map((s,i)=><li key={i}><code>{s}</code></li>)}</ol></div><div className="expected"><b>Expected result</b><p>{actionGuide.expected}</p></div>{actionGuide.warning&&<div className="warningBox"><TestTube2/><div><b>Important</b><span>{actionGuide.warning}</span></div></div>}<p className="retest">Now retest the original problem: <b>{reportedIssue}</b></p><div className="verifyButtons"><button className="resolvedBtn" onClick={()=>resolutionResponse(true)}><Check/>It works now</button><button className="secondary" onClick={()=>resolutionResponse(false)}><X/>Still not working</button></div>{actionLog.length>0&&<div className="attempts"><b>Previous attempts</b>{actionLog.map((a,i)=><span key={i}>✕ {a.action}</span>)}</div>}</motion.div>}
  {(phase==='resolved'||phase==='escalated')&&result&&<motion.div className={phase==='resolved'?'resultCard resolved':'resultCard escalated'} initial={reduceMotion?false:{opacity:0,y:10}} animate={{opacity:1,y:0}}><div className="resultIcon">{phase==='resolved'?<Check/>:<TestTube2/>}</div><span>{phase==='resolved'?'INCIDENT RESOLVED':'ESCALATION REQUIRED'}</span><h3>{phase==='resolved'?'Issue verified as resolved':result.result}</h3><p>{phase==='resolved'?`Likely root cause: ${result.cause}`:`${result.cause}. The collected evidence and attempted fixes should be attached to the escalation.`}</p><div className="confidence"><div><span>RCA confidence</span><b>{result.confidence}%</b></div><i><em style={{width:`${result.confidence}%`}}/></i></div><h5>{phase==='resolved'?'Actions attempted':'Recommended escalation / next actions'}</h5><ol>{(phase==='resolved'?actionLog.map(x=>x.action):result.actions).map(a=><li key={a}>{a}</li>)}</ol><div className="resultActions"><button className="primary" onClick={copyTicket}><Code2/>Copy incident</button><button className="secondary" onClick={reset}><ArrowUpRight/>Diagnose again</button></div></motion.div>}
  </AnimatePresence></div></section>

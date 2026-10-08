@@ -1,0 +1,502 @@
+[
+  {
+    "number": 1,
+    "prompt": "MIGO 101 goods receipt cannot be posted.",
+    "expected": "sap-gr-posting"
+  },
+  {
+    "number": 2,
+    "prompt": "MIGO 102 reversal fails for a 101 material document.",
+    "expected": "sap-material-document-reversal"
+  },
+  {
+    "number": 3,
+    "prompt": "MIGO 122 return to vendor fails.",
+    "expected": "sap-goods-movement"
+  },
+  {
+    "number": 4,
+    "prompt": "MIGO 123 reversal of return-to-vendor fails.",
+    "expected": "sap-material-document-reversal"
+  },
+  {
+    "number": 5,
+    "prompt": "MIGO 161 return for purchase order fails.",
+    "expected": "sap-goods-movement"
+  },
+  {
+    "number": 6,
+    "prompt": "MIGO 162 reversal of 161 return fails.",
+    "expected": "sap-material-document-reversal"
+  },
+  {
+    "number": 7,
+    "prompt": "Movement 343 blocked stock to unrestricted fails.",
+    "expected": "sap-goods-movement"
+  },
+  {
+    "number": 8,
+    "prompt": "Movement 344 reversal of 343 fails.",
+    "expected": "sap-material-document-reversal"
+  },
+  {
+    "number": 9,
+    "prompt": "Movement 321 quality inspection to unrestricted fails.",
+    "expected": "sap-goods-movement"
+  },
+  {
+    "number": 10,
+    "prompt": "Movement 322 reversal of 321 fails.",
+    "expected": "sap-material-document-reversal"
+  },
+  {
+    "number": 11,
+    "prompt": "Movement 311 storage-location transfer fails.",
+    "expected": "sap-goods-movement"
+  },
+  {
+    "number": 12,
+    "prompt": "Movement 301 plant-to-plant transfer fails.",
+    "expected": "sap-goods-movement"
+  },
+  {
+    "number": 13,
+    "prompt": "Movement 309 material-to-material transfer fails.",
+    "expected": "sap-goods-movement"
+  },
+  {
+    "number": 14,
+    "prompt": "Material document cannot be cancelled in MIGO.",
+    "expected": "sap-material-document-reversal"
+  },
+  {
+    "number": 15,
+    "prompt": "Material document already reversed but user attempts reversal again.",
+    "expected": "sap-material-document-reversal"
+  },
+  {
+    "number": 16,
+    "prompt": "Material document reversal blocked by subsequent invoice receipt.",
+    "expected": "sap-material-document-reversal"
+  },
+  {
+    "number": 17,
+    "prompt": "Material document reversal blocked because stock was consumed.",
+    "expected": "sap-material-document-reversal"
+  },
+  {
+    "number": 18,
+    "prompt": "Material document reversal blocked by closed posting period.",
+    "expected": "sap-material-document-reversal"
+  },
+  {
+    "number": 19,
+    "prompt": "Material document reversal blocked by WBS/account assignment status.",
+    "expected": "sap-material-document-reversal"
+  },
+  {
+    "number": 20,
+    "prompt": "Material document reversal blocked by authorization.",
+    "expected": "sap-material-document-reversal"
+  },
+  {
+    "number": 21,
+    "prompt": "Purchase order cannot be created because vendor is blocked.",
+    "expected": "sap-vendor-blocked"
+  },
+  {
+    "number": 22,
+    "prompt": "Purchase order cannot be created because material is not extended to plant.",
+    "expected": "sap-material-master"
+  },
+  {
+    "number": 23,
+    "prompt": "PO release strategy does not trigger.",
+    "expected": "sap-po-release"
+  },
+  {
+    "number": 24,
+    "prompt": "PO release approval is stuck.",
+    "expected": "sap-po-release"
+  },
+  {
+    "number": 25,
+    "prompt": "PO approver receives authorization error.",
+    "expected": "sap-authorization"
+  },
+  {
+    "number": 26,
+    "prompt": "PO item marked delivery complete too early.",
+    "expected": "sap-gr-posting"
+  },
+  {
+    "number": 27,
+    "prompt": "PO quantity exceeded during GR.",
+    "expected": "sap-gr-posting"
+  },
+  {
+    "number": 28,
+    "prompt": "PO overdelivery tolerance prevents GR.",
+    "expected": "sap-gr-posting"
+  },
+  {
+    "number": 29,
+    "prompt": "PO underdelivery tolerance causes closure issue.",
+    "expected": "sap-gr-posting"
+  },
+  {
+    "number": 30,
+    "prompt": "PO account assignment category is incorrect.",
+    "expected": "sap-account-assignment"
+  },
+  {
+    "number": 31,
+    "prompt": "PO WBS account assignment is invalid.",
+    "expected": "sap-account-assignment"
+  },
+  {
+    "number": 32,
+    "prompt": "PO cost center is invalid or locked.",
+    "expected": "sap-fi"
+  },
+  {
+    "number": 33,
+    "prompt": "PO cannot determine source of supply.",
+    "expected": "sap-pr-source"
+  },
+  {
+    "number": 34,
+    "prompt": "Purchase requisition has no valid source.",
+    "expected": "sap-pr-source"
+  },
+  {
+    "number": 35,
+    "prompt": "Source list missing for material/plant.",
+    "expected": "sap-pr-source"
+  },
+  {
+    "number": 36,
+    "prompt": "Purchasing info record missing.",
+    "expected": "sap-pr-source"
+  },
+  {
+    "number": 37,
+    "prompt": "Contract validity expired.",
+    "expected": "sap-pr-source"
+  },
+  {
+    "number": 38,
+    "prompt": "Scheduling agreement not found.",
+    "expected": "sap-pr-source"
+  },
+  {
+    "number": 39,
+    "prompt": "Vendor purchasing organization data incomplete.",
+    "expected": "sap-vendor-blocked"
+  },
+  {
+    "number": 40,
+    "prompt": "Vendor partner function missing.",
+    "expected": "sap-vendor-blocked"
+  },
+  {
+    "number": 41,
+    "prompt": "MIRO invoice blocked due to quantity variance.",
+    "expected": "sap-miro-blocked"
+  },
+  {
+    "number": 42,
+    "prompt": "MIRO invoice blocked due to price variance.",
+    "expected": "sap-miro-blocked"
+  },
+  {
+    "number": 43,
+    "prompt": "MIRO invoice blocked due to missing GR.",
+    "expected": "sap-miro-blocked"
+  },
+  {
+    "number": 44,
+    "prompt": "MIRO duplicate invoice detected.",
+    "expected": "sap-invoice-posting"
+  },
+  {
+    "number": 45,
+    "prompt": "MIRO tax code invalid.",
+    "expected": "sap-invoice-posting"
+  },
+  {
+    "number": 46,
+    "prompt": "MIRO posting period closed.",
+    "expected": "sap-posting-period"
+  },
+  {
+    "number": 47,
+    "prompt": "MIRO invoice references wrong PO.",
+    "expected": "sap-invoice-posting"
+  },
+  {
+    "number": 48,
+    "prompt": "MIRO invoice currency mismatch.",
+    "expected": "sap-invoice-posting"
+  },
+  {
+    "number": 49,
+    "prompt": "MIRO invoice exceeds tolerance limit.",
+    "expected": "sap-miro-blocked"
+  },
+  {
+    "number": 50,
+    "prompt": "MIRO invoice cannot post due to G/L account determination.",
+    "expected": "sap-account-determination"
+  },
+  {
+    "number": 51,
+    "prompt": "GR/IR account does not clear.",
+    "expected": "sap-grir-balance"
+  },
+  {
+    "number": 52,
+    "prompt": "GR/IR shows unmatched goods receipt.",
+    "expected": "sap-grir-balance"
+  },
+  {
+    "number": 53,
+    "prompt": "GR/IR shows unmatched invoice receipt.",
+    "expected": "sap-grir-balance"
+  },
+  {
+    "number": 54,
+    "prompt": "GR/IR residual balance due to quantity difference.",
+    "expected": "sap-grir-balance"
+  },
+  {
+    "number": 55,
+    "prompt": "GR/IR residual balance due to price difference.",
+    "expected": "sap-grir-balance"
+  },
+  {
+    "number": 56,
+    "prompt": "GR/IR residual balance due to exchange-rate difference.",
+    "expected": "sap-grir-balance"
+  },
+  {
+    "number": 57,
+    "prompt": "OBYC account determination missing for BSX.",
+    "expected": "sap-account-determination"
+  },
+  {
+    "number": 58,
+    "prompt": "OBYC account determination missing for WRX.",
+    "expected": "sap-account-determination"
+  },
+  {
+    "number": 59,
+    "prompt": "OBYC account determination missing for GBB.",
+    "expected": "sap-account-determination"
+  },
+  {
+    "number": 60,
+    "prompt": "Valuation class mismatch causes posting failure.",
+    "expected": "sap-material-master"
+  },
+  {
+    "number": 61,
+    "prompt": "Material master accounting view missing.",
+    "expected": "sap-material-master"
+  },
+  {
+    "number": 62,
+    "prompt": "Material master purchasing view missing.",
+    "expected": "sap-material-master"
+  },
+  {
+    "number": 63,
+    "prompt": "Material master storage view missing.",
+    "expected": "sap-material-master"
+  },
+  {
+    "number": 64,
+    "prompt": "Material status blocks procurement.",
+    "expected": "sap-material-master"
+  },
+  {
+    "number": 65,
+    "prompt": "Base unit of measure mismatch.",
+    "expected": "sap-uom"
+  },
+  {
+    "number": 66,
+    "prompt": "Alternative UOM conversion incorrect.",
+    "expected": "sap-uom"
+  },
+  {
+    "number": 67,
+    "prompt": "Batch-managed material missing batch.",
+    "expected": "sap-gr-posting"
+  },
+  {
+    "number": 68,
+    "prompt": "Serial-number-managed material missing serial number.",
+    "expected": "sap-gr-posting"
+  },
+  {
+    "number": 69,
+    "prompt": "Split valuation configuration blocks posting.",
+    "expected": "sap-material-master"
+  },
+  {
+    "number": 70,
+    "prompt": "Material valuation area mismatch.",
+    "expected": "sap-material-master"
+  },
+  {
+    "number": 71,
+    "prompt": "FI posting fails because period is closed.",
+    "expected": "sap-posting-period"
+  },
+  {
+    "number": 72,
+    "prompt": "G/L account is blocked for posting.",
+    "expected": "sap-fi"
+  },
+  {
+    "number": 73,
+    "prompt": "G/L account not valid for company code.",
+    "expected": "sap-fi"
+  },
+  {
+    "number": 74,
+    "prompt": "Cost center is locked.",
+    "expected": "sap-fi"
+  },
+  {
+    "number": 75,
+    "prompt": "Cost center validity date expired.",
+    "expected": "sap-fi"
+  },
+  {
+    "number": 76,
+    "prompt": "Internal order is closed.",
+    "expected": "sap-fi"
+  },
+  {
+    "number": 77,
+    "prompt": "Profit center derivation fails.",
+    "expected": "sap-fi"
+  },
+  {
+    "number": 78,
+    "prompt": "Document balance is not zero.",
+    "expected": "sap-fi"
+  },
+  {
+    "number": 79,
+    "prompt": "Tax code not valid for company code.",
+    "expected": "sap-fi"
+  },
+  {
+    "number": 80,
+    "prompt": "Currency conversion/posting error.",
+    "expected": "sap-fi"
+  },
+  {
+    "number": 81,
+    "prompt": "WBS element is technically completed.",
+    "expected": "sap-account-assignment"
+  },
+  {
+    "number": 82,
+    "prompt": "WBS element is locked for posting.",
+    "expected": "sap-account-assignment"
+  },
+  {
+    "number": 83,
+    "prompt": "WBS validity date does not allow posting.",
+    "expected": "sap-account-assignment"
+  },
+  {
+    "number": 84,
+    "prompt": "WBS belongs to wrong controlling area/company code.",
+    "expected": "sap-account-assignment"
+  },
+  {
+    "number": 85,
+    "prompt": "Project budget availability control blocks posting.",
+    "expected": "sap-account-assignment"
+  },
+  {
+    "number": 86,
+    "prompt": "Network activity account assignment is invalid.",
+    "expected": "sap-account-assignment"
+  },
+  {
+    "number": 87,
+    "prompt": "Settlement rule missing on project/order.",
+    "expected": "sap-account-assignment"
+  },
+  {
+    "number": 88,
+    "prompt": "Project stock posting fails.",
+    "expected": "sap-account-assignment"
+  },
+  {
+    "number": 89,
+    "prompt": "Goods issue to WBS fails.",
+    "expected": "sap-account-assignment"
+  },
+  {
+    "number": 90,
+    "prompt": "Purchase order account assignment to WBS fails.",
+    "expected": "sap-account-assignment"
+  },
+  {
+    "number": 91,
+    "prompt": "SAP user gets \"not authorized\" in MIGO.",
+    "expected": "sap-authorization"
+  },
+  {
+    "number": 92,
+    "prompt": "SAP user gets \"not authorized\" in MIRO.",
+    "expected": "sap-authorization"
+  },
+  {
+    "number": 93,
+    "prompt": "SU53 shows missing movement-type authorization.",
+    "expected": "sap-authorization"
+  },
+  {
+    "number": 94,
+    "prompt": "SU53 shows missing plant authorization.",
+    "expected": "sap-authorization"
+  },
+  {
+    "number": 95,
+    "prompt": "Role assigned but not effective due to user buffer/session.",
+    "expected": "sap-authorization"
+  },
+  {
+    "number": 96,
+    "prompt": "Fiori app tile visible but backend authorization fails.",
+    "expected": "sap-authorization"
+  },
+  {
+    "number": 97,
+    "prompt": "IDoc stuck in error status because of master-data mismatch.",
+    "expected": "sap-idoc-data"
+  },
+  {
+    "number": 98,
+    "prompt": "Ariba document does not reach SAP ERP.",
+    "expected": "sap-ariba-integration"
+  },
+  {
+    "number": 99,
+    "prompt": "Background job in SM37 fails during procurement/inventory processing.",
+    "expected": "sap-basis-runtime"
+  },
+  {
+    "number": 100,
+    "prompt": "SAP short dump in ST22 occurs during MM transaction processing.",
+    "expected": "sap-basis-runtime"
+  }
+]

@@ -1,36 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { scenarios as itScenarios } from '../src/data.js';
-import { sapScenarios } from '../src/sapData.js';
-import { extendedItScenarios, extendedSapScenarios } from '../src/coverageScenarios.js';
-import { routingScenarios } from '../src/routingScenarios.js';
 
-const scenarios=[...itScenarios,...sapScenarios,...extendedItScenarios,...extendedSapScenarios,...routingScenarios];
-const keywordMap={
- 'wifi-no-internet':['wifi','wi-fi','internet','dns','website','websites','connected no internet','network'],
- 'vpn-failure':['vpn','remote access','tunnel','internal resource'],
- 'locked-account':['locked','password','sign in','login','mfa','account','authentication','sso'],
- 'outlook-send':['outlook','email','mail','outbox','send email','exchange'],
- 'slow-pc':['slow','lag','performance','cpu','memory','windows slow','computer slow','pc slow'],
- 'printer-offline':['printer','printing','print','spooler'],
- 'phishing':['phishing','suspicious email','scam','malware','mfa prompt','clicked link'],
- 'onedrive-sync':['onedrive','sync','files not syncing'],
- 'app-crash':['app crash','application crash','crashes',"won't open",'will not open','software'],
- 'camera-teams':['teams camera','camera','webcam','video'],
- 'azure-access':['azure','rbac','403','cloud access','permission denied'],
- 'disk-full':['disk full','storage full','low disk','drive full','space']
-};
-
-function classify(text){
- const q=text.toLowerCase().trim();
- return scenarios.map(s=>{
-  let score=0;
-  (keywordMap[s.id]||[]).forEach(k=>{if(q.includes(k))score+=k.includes(' ')?4:2});
-  if(q.includes(s.category.toLowerCase()))score+=2;
-  s.symptoms.forEach(x=>{if(q.includes(x.toLowerCase()))score+=3});
-  return{s,score};
- }).sort((a,b)=>b.score-a.score).filter(x=>x.score>0);
-}
+import { classifyIssue as classify } from '../src/classifyIssue.js';
 
 const isSap=s=>s.category.startsWith('SAP');
 
