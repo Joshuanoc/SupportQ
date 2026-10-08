@@ -31,7 +31,7 @@ export function classifyIssue(text){
  };
  const expanded=new Set(tokens);
  tokens.forEach(t=>(sapSynonyms[t]||[]).forEach(v=>v.split(' ').forEach(x=>expanded.add(x))));
- const preferred = /\bazure\b|\brbac\b|\bpim\b/.test(q)?'azure-access':sapRoute(q);
+ const preferred = sapIntent ? sapRoute(q) : (/\bazure\b|\brbac\b|\bpim\b/.test(q)?'azure-access':undefined);
  const ranked=scenarios.map(s=>{
   let score=s.id===preferred?1000:0;
   const hay=`${s.id} ${s.category} ${s.title} ${s.symptoms.join(' ')}`.toLowerCase();
