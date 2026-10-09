@@ -1,0 +1,1381 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-09",
+  "scopeNote": "Working breakdown reconstructed from this assignment. No authoritative earlier 10-module/50-story specification was present in audited main or PR20; additional product scope remains Proposed, not implicitly approved. Tested means the stated local/automated scope only; no story is Accepted or Deployed.",
+  "stateFlow": [
+    "Proposed",
+    "Implemented",
+    "Tested",
+    "Accepted",
+    "Deployed",
+    "Blocked"
+  ],
+  "moduleCount": 10,
+  "storyCount": 50,
+  "stories": [
+    {
+      "id": "SQ-M01-01",
+      "module": "Intake and routing",
+      "epic": "M01: Intake and routing",
+      "title": "Cancellation intent",
+      "userStory": "As a SupportQ user or operator, I want cancellation intent so that support decisions are reliable and auditable.",
+      "status": "Tested",
+      "verificationScope": "automated/local only",
+      "acceptanceCriteria": [
+        "Given cancel or reverse phrasing occurs before or after material document, when the supported flow executes, then open the material-document reversal flow without a candidate choice in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise cancel or reverse phrasing occurs before or after material document; assert open the material-document reversal flow without a candidate choice.",
+        "negative": "Omit the evidence required for cancellation intent; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during cancellation intent; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete cancellation intent with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for cancellation intent.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/20"
+      ]
+    },
+    {
+      "id": "SQ-M01-02",
+      "module": "Intake and routing",
+      "epic": "M01: Intake and routing",
+      "title": "SAP triage bypass",
+      "userStory": "As a SupportQ user or operator, I want sap triage bypass so that support decisions are reliable and auditable.",
+      "status": "Tested",
+      "verificationScope": "automated/local only",
+      "acceptanceCriteria": [
+        "Given a classified SAP process lacks device and OS context, when the supported flow executes, then start SAP diagnosis without mandatory OS, device or VPN fields in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a classified SAP process lacks device and OS context; assert start SAP diagnosis without mandatory OS, device or VPN fields.",
+        "negative": "Omit the evidence required for sap triage bypass; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during sap triage bypass; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete sap triage bypass with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for sap triage bypass.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/20"
+      ]
+    },
+    {
+      "id": "SQ-M01-03",
+      "module": "Intake and routing",
+      "epic": "M01: Intake and routing",
+      "title": "IT context collisions",
+      "userStory": "As a SupportQ user or operator, I want it context collisions so that support decisions are reliable and auditable.",
+      "status": "Tested",
+      "verificationScope": "automated/local only",
+      "acceptanceCriteria": [
+        "Given a GitHub/GitLab PR or vendor website issue has no explicit SAP process context, when the supported flow executes, then return no SAP candidates in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a GitHub/GitLab PR or vendor website issue has no explicit SAP process context; assert return no SAP candidates.",
+        "negative": "Omit the evidence required for it context collisions; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during it context collisions; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete it context collisions with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for it context collisions.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/20"
+      ]
+    },
+    {
+      "id": "SQ-M01-04",
+      "module": "Intake and routing",
+      "epic": "M01: Intake and routing",
+      "title": "Ambiguous intake",
+      "userStory": "As a SupportQ user or operator, I want ambiguous intake so that support decisions are reliable and auditable.",
+      "status": "Tested",
+      "verificationScope": "automated/local only",
+      "acceptanceCriteria": [
+        "Given input is blank, invalid, or only SAP broken, when the supported flow executes, then ask one evidence-focused clarification and assert no root cause in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise input is blank, invalid, or only SAP broken; assert ask one evidence-focused clarification and assert no root cause.",
+        "negative": "Omit the evidence required for ambiguous intake; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during ambiguous intake; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete ambiguous intake with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for ambiguous intake.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/20"
+      ]
+    },
+    {
+      "id": "SQ-M01-05",
+      "module": "Intake and routing",
+      "epic": "M01: Intake and routing",
+      "title": "Routing regression ledger",
+      "userStory": "As a SupportQ user or operator, I want routing regression ledger so that support decisions are reliable and auditable.",
+      "status": "Tested",
+      "verificationScope": "automated/local only",
+      "acceptanceCriteria": [
+        "Given the existing 100 IT and 100 SAP reference prompts execute, when the supported flow executes, then classify all 200 into the correct domain and all 100 SAP functional prompts into their expected route in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise the existing 100 IT and 100 SAP reference prompts execute; assert classify all 200 into the correct domain and all 100 SAP functional prompts into their expected route.",
+        "negative": "Omit the evidence required for routing regression ledger; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during routing regression ledger; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete routing regression ledger with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for routing regression ledger.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/20"
+      ]
+    },
+    {
+      "id": "SQ-M02-01",
+      "module": "SAP diagnosis",
+      "epic": "M02: SAP diagnosis",
+      "title": "Reversal evidence",
+      "userStory": "As a SupportQ user or operator, I want reversal evidence so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a cancellation fails, when the supported flow executes, then capture exact error, document/year and relevant downstream checks before recommending a change in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a cancellation fails; assert capture exact error, document/year and relevant downstream checks before recommending a change.",
+        "negative": "Omit the evidence required for reversal evidence; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during reversal evidence; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete reversal evidence with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for reversal evidence.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M02-02",
+      "module": "SAP diagnosis",
+      "epic": "M02: SAP diagnosis",
+      "title": "Posting periods",
+      "userStory": "As a SupportQ user or operator, I want posting periods so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a period-closed error is reported, when the supported flow executes, then identify applicable MM/FI period checks and require authorized finance approval for changes in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a period-closed error is reported; assert identify applicable MM/FI period checks and require authorized finance approval for changes.",
+        "negative": "Omit the evidence required for posting periods; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during posting periods; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete posting periods with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for posting periods.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M02-03",
+      "module": "SAP diagnosis",
+      "epic": "M02: SAP diagnosis",
+      "title": "Goods movements",
+      "userStory": "As a SupportQ user or operator, I want goods movements so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given 161, 343 or another supported movement fails, when the supported flow executes, then distinguish stock type, quantity and authorization using evidence in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise 161, 343 or another supported movement fails; assert distinguish stock type, quantity and authorization using evidence.",
+        "negative": "Omit the evidence required for goods movements; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during goods movements; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete goods movements with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for goods movements.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M02-04",
+      "module": "SAP diagnosis",
+      "epic": "M02: SAP diagnosis",
+      "title": "WBS restrictions",
+      "userStory": "As a SupportQ user or operator, I want wbs restrictions so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a WBS posting is blocked, when the supported flow executes, then distinguish status/validity, organization and budget evidence in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a WBS posting is blocked; assert distinguish status/validity, organization and budget evidence.",
+        "negative": "Omit the evidence required for wbs restrictions; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during wbs restrictions; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete wbs restrictions with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for wbs restrictions.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M02-05",
+      "module": "SAP diagnosis",
+      "epic": "M02: SAP diagnosis",
+      "title": "Unknown SAP cause",
+      "userStory": "As a SupportQ user or operator, I want unknown sap cause so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given no supported branch has confirming evidence, when the supported flow executes, then escalate with zero diagnostic certainty and no fabricated document or SAP Note in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise no supported branch has confirming evidence; assert escalate with zero diagnostic certainty and no fabricated document or SAP Note.",
+        "negative": "Omit the evidence required for unknown sap cause; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during unknown sap cause; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete unknown sap cause with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for unknown sap cause.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M03-01",
+      "module": "IT diagnosis",
+      "epic": "M03: IT diagnosis",
+      "title": "Network evidence",
+      "userStory": "As a SupportQ user or operator, I want network evidence so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given Wi-Fi or DNS fails, when the supported flow executes, then select the next read-only check based on observed IP, gateway and DNS evidence in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise Wi-Fi or DNS fails; assert select the next read-only check based on observed IP, gateway and DNS evidence.",
+        "negative": "Omit the evidence required for network evidence; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during network evidence; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete network evidence with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for network evidence.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M03-02",
+      "module": "IT diagnosis",
+      "epic": "M03: IT diagnosis",
+      "title": "Identity and MFA",
+      "userStory": "As a SupportQ user or operator, I want identity and mfa so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given login or MFA fails, when the supported flow executes, then avoid collecting passwords/OTP and follow approved recovery in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise login or MFA fails; assert avoid collecting passwords/OTP and follow approved recovery.",
+        "negative": "Omit the evidence required for identity and mfa; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during identity and mfa; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete identity and mfa with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for identity and mfa.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M03-03",
+      "module": "IT diagnosis",
+      "epic": "M03: IT diagnosis",
+      "title": "Endpoint recovery",
+      "userStory": "As a SupportQ user or operator, I want endpoint recovery so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a driver, boot or application error occurs, when the supported flow executes, then use OS-appropriate supported steps and preserve user data in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a driver, boot or application error occurs; assert use OS-appropriate supported steps and preserve user data.",
+        "negative": "Omit the evidence required for endpoint recovery; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during endpoint recovery; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete endpoint recovery with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for endpoint recovery.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M03-04",
+      "module": "IT diagnosis",
+      "epic": "M03: IT diagnosis",
+      "title": "Cloud authorization",
+      "userStory": "As a SupportQ user or operator, I want cloud authorization so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given Azure access is denied, when the supported flow executes, then check tenant, RBAC scope and approved PIM activation without broadening privileges in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise Azure access is denied; assert check tenant, RBAC scope and approved PIM activation without broadening privileges.",
+        "negative": "Omit the evidence required for cloud authorization; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during cloud authorization; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete cloud authorization with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for cloud authorization.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M03-05",
+      "module": "IT diagnosis",
+      "epic": "M03: IT diagnosis",
+      "title": "Critical security intake",
+      "userStory": "As a SupportQ user or operator, I want critical security intake so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a phishing or unsolicited MFA event is reported, when the supported flow executes, then prioritize containment and escalation with no automatic account or device writes in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a phishing or unsolicited MFA event is reported; assert prioritize containment and escalation with no automatic account or device writes.",
+        "negative": "Omit the evidence required for critical security intake; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during critical security intake; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete critical security intake with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for critical security intake.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M04-01",
+      "module": "Identity and access",
+      "epic": "M04: Identity and access",
+      "title": "Authenticated session",
+      "userStory": "As a SupportQ user or operator, I want authenticated session so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given an account signs in, when the supported flow executes, then validate session state and keep private data unavailable to signed-out visitors in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise an account signs in; assert validate session state and keep private data unavailable to signed-out visitors.",
+        "negative": "Omit the evidence required for authenticated session; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during authenticated session; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete authenticated session with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for authenticated session.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M04-02",
+      "module": "Identity and access",
+      "epic": "M04: Identity and access",
+      "title": "Session expiration",
+      "userStory": "As a SupportQ user or operator, I want session expiration so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a session expires during save, when the supported flow executes, then announce expiration and never claim successful persistence in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a session expires during save; assert announce expiration and never claim successful persistence.",
+        "negative": "Omit the evidence required for session expiration; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during session expiration; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete session expiration with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for session expiration.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M04-03",
+      "module": "Identity and access",
+      "epic": "M04: Identity and access",
+      "title": "Owner isolation",
+      "userStory": "As a SupportQ user or operator, I want owner isolation so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given user B requests user A case, when the supported flow executes, then deny read, write and linked-history access for every tested operation in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise user B requests user A case; assert deny read, write and linked-history access for every tested operation.",
+        "negative": "Omit the evidence required for owner isolation; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during owner isolation; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete owner isolation with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for owner isolation.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M04-04",
+      "module": "Identity and access",
+      "epic": "M04: Identity and access",
+      "title": "Profile role protection",
+      "userStory": "As a SupportQ user or operator, I want profile role protection so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a normal user edits their profile, when the supported flow executes, then permit approved editable fields and deny changing role or owner in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a normal user edits their profile; assert permit approved editable fields and deny changing role or owner.",
+        "negative": "Omit the evidence required for profile role protection; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during profile role protection; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete profile role protection with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for profile role protection.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M04-05",
+      "module": "Identity and access",
+      "epic": "M04: Identity and access",
+      "title": "Least privilege credentials",
+      "userStory": "As a SupportQ user or operator, I want least privilege credentials so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given frontend build completes, when the supported flow executes, then include only approved public configuration and zero server-secret keys in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise frontend build completes; assert include only approved public configuration and zero server-secret keys.",
+        "negative": "Omit the evidence required for least privilege credentials; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during least privilege credentials; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete least privilege credentials with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for least privilege credentials.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M05-01",
+      "module": "Case persistence",
+      "epic": "M05: Case persistence",
+      "title": "Case save",
+      "userStory": "As a SupportQ user or operator, I want case save so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given an authenticated owner completes a case, when the supported flow executes, then persist one owned case and restore it after refresh in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise an authenticated owner completes a case; assert persist one owned case and restore it after refresh.",
+        "negative": "Omit the evidence required for case save; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during case save; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete case save with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for case save.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M05-02",
+      "module": "Case persistence",
+      "epic": "M05: Case persistence",
+      "title": "Save retry",
+      "userStory": "As a SupportQ user or operator, I want save retry so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a request fails then retries, when the supported flow executes, then avoid duplicate cases using a stable idempotency key in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a request fails then retries; assert avoid duplicate cases using a stable idempotency key.",
+        "negative": "Omit the evidence required for save retry; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during save retry; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete save retry with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for save retry.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M05-03",
+      "module": "Case persistence",
+      "epic": "M05: Case persistence",
+      "title": "Private history",
+      "userStory": "As a SupportQ user or operator, I want private history so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given history is loaded, when the supported flow executes, then query only owned records with bounded pagination in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise history is loaded; assert query only owned records with bounded pagination.",
+        "negative": "Omit the evidence required for private history; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during private history; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete private history with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for private history.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M05-04",
+      "module": "Case persistence",
+      "epic": "M05: Case persistence",
+      "title": "Offline failure",
+      "userStory": "As a SupportQ user or operator, I want offline failure so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given storage is unavailable, when the supported flow executes, then show a recoverable unsaved state without losing the in-memory case in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise storage is unavailable; assert show a recoverable unsaved state without losing the in-memory case.",
+        "negative": "Omit the evidence required for offline failure; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during offline failure; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete offline failure with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for offline failure.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M05-05",
+      "module": "Case persistence",
+      "epic": "M05: Case persistence",
+      "title": "Retention and deletion",
+      "userStory": "As a SupportQ user or operator, I want retention and deletion so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given an owner requests removal, when the supported flow executes, then apply reviewed retention/deletion behavior and announce the result in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise an owner requests removal; assert apply reviewed retention/deletion behavior and announce the result.",
+        "negative": "Omit the evidence required for retention and deletion; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during retention and deletion; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete retention and deletion with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for retention and deletion.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M06-01",
+      "module": "Incident management",
+      "epic": "M06: Incident management",
+      "title": "Priority calculation",
+      "userStory": "As a SupportQ user or operator, I want priority calculation so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given scope or impact changes, when the supported flow executes, then recalculate priority using documented rules and recorded inputs in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise scope or impact changes; assert recalculate priority using documented rules and recorded inputs.",
+        "negative": "Omit the evidence required for priority calculation; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during priority calculation; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete priority calculation with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for priority calculation.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M06-02",
+      "module": "Incident management",
+      "epic": "M06: Incident management",
+      "title": "Resolution retest",
+      "userStory": "As a SupportQ user or operator, I want resolution retest so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a remedy is recommended, when the supported flow executes, then retain unresolved state until the user confirms a successful original-task retest in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a remedy is recommended; assert retain unresolved state until the user confirms a successful original-task retest.",
+        "negative": "Omit the evidence required for resolution retest; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during resolution retest; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete resolution retest with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for resolution retest.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M06-03",
+      "module": "Incident management",
+      "epic": "M06: Incident management",
+      "title": "Escalation evidence",
+      "userStory": "As a SupportQ user or operator, I want escalation evidence so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given approved remedies fail, when the supported flow executes, then export only collected evidence, attempted actions and the correct assignment in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise approved remedies fail; assert export only collected evidence, attempted actions and the correct assignment.",
+        "negative": "Omit the evidence required for escalation evidence; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during escalation evidence; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete escalation evidence with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for escalation evidence.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M06-04",
+      "module": "Incident management",
+      "epic": "M06: Incident management",
+      "title": "Case lifecycle",
+      "userStory": "As a SupportQ user or operator, I want case lifecycle so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given an incident changes state, when the supported flow executes, then record valid transitions with timestamps and reject invalid transitions in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise an incident changes state; assert record valid transitions with timestamps and reject invalid transitions.",
+        "negative": "Omit the evidence required for case lifecycle; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during case lifecycle; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete case lifecycle with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for case lifecycle.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M06-05",
+      "module": "Incident management",
+      "epic": "M06: Incident management",
+      "title": "Sensitive export",
+      "userStory": "As a SupportQ user or operator, I want sensitive export so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a ticket is copied or exported, when the supported flow executes, then redact secret-like values and show evidence provenance in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a ticket is copied or exported; assert redact secret-like values and show evidence provenance.",
+        "negative": "Omit the evidence required for sensitive export; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during sensitive export; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete sensitive export with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for sensitive export.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M07-01",
+      "module": "Solutions and knowledge",
+      "epic": "M07: Solutions and knowledge",
+      "title": "Solution ownership",
+      "userStory": "As a SupportQ user or operator, I want solution ownership so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a solution is created or relinked, when the supported flow executes, then require ownership of its referenced case on insert and update in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a solution is created or relinked; assert require ownership of its referenced case on insert and update.",
+        "negative": "Omit the evidence required for solution ownership; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during solution ownership; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete solution ownership with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for solution ownership.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M07-02",
+      "module": "Solutions and knowledge",
+      "epic": "M07: Solutions and knowledge",
+      "title": "Verified solutions",
+      "userStory": "As a SupportQ user or operator, I want verified solutions so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given an ordinary user submits a solution, when the supported flow executes, then keep it unverified until a reviewed authorized verification flow succeeds in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise an ordinary user submits a solution; assert keep it unverified until a reviewed authorized verification flow succeeds.",
+        "negative": "Omit the evidence required for verified solutions; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during verified solutions; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete verified solutions with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for verified solutions.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M07-03",
+      "module": "Solutions and knowledge",
+      "epic": "M07: Solutions and knowledge",
+      "title": "Feedback access",
+      "userStory": "As a SupportQ user or operator, I want feedback access so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given feedback references a solution, when the supported flow executes, then require access to the referenced solution on insert and update in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise feedback references a solution; assert require access to the referenced solution on insert and update.",
+        "negative": "Omit the evidence required for feedback access; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during feedback access; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete feedback access with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for feedback access.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M07-04",
+      "module": "Solutions and knowledge",
+      "epic": "M07: Solutions and knowledge",
+      "title": "Knowledge search",
+      "userStory": "As a SupportQ user or operator, I want knowledge search so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a support process is searched, when the supported flow executes, then return matching approved content with clear uncertainty and provenance in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a support process is searched; assert return matching approved content with clear uncertainty and provenance.",
+        "negative": "Omit the evidence required for knowledge search; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during knowledge search; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete knowledge search with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for knowledge search.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M07-05",
+      "module": "Solutions and knowledge",
+      "epic": "M07: Solutions and knowledge",
+      "title": "Solution freshness",
+      "userStory": "As a SupportQ user or operator, I want solution freshness so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given guidance is outdated, when the supported flow executes, then identify review date/version and prevent unsupported verified claims in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise guidance is outdated; assert identify review date/version and prevent unsupported verified claims.",
+        "negative": "Omit the evidence required for solution freshness; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during solution freshness; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete solution freshness with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for solution freshness.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M08-01",
+      "module": "QA and release evidence",
+      "epic": "M08: QA and release evidence",
+      "title": "Deterministic installs",
+      "userStory": "As a SupportQ user or operator, I want deterministic installs so that support decisions are reliable and auditable.",
+      "status": "Tested",
+      "verificationScope": "automated/local only",
+      "acceptanceCriteria": [
+        "Given a clean runner installs dependencies, when the supported flow executes, then reproduce the locked dependency versions with npm ci in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a clean runner installs dependencies; assert reproduce the locked dependency versions with npm ci.",
+        "negative": "Omit the evidence required for deterministic installs; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during deterministic installs; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete deterministic installs with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for deterministic installs.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/21"
+      ]
+    },
+    {
+      "id": "SQ-M08-02",
+      "module": "QA and release evidence",
+      "epic": "M08: QA and release evidence",
+      "title": "Unit reports",
+      "userStory": "As a SupportQ user or operator, I want unit reports so that support decisions are reliable and auditable.",
+      "status": "Tested",
+      "verificationScope": "automated/local only",
+      "acceptanceCriteria": [
+        "Given a PR or main validation executes, when the supported flow executes, then retain JUnit results tied to source SHA even when tests fail in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a PR or main validation executes; assert retain JUnit results tied to source SHA even when tests fail.",
+        "negative": "Omit the evidence required for unit reports; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during unit reports; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete unit reports with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for unit reports.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/21"
+      ]
+    },
+    {
+      "id": "SQ-M08-03",
+      "module": "QA and release evidence",
+      "epic": "M08: QA and release evidence",
+      "title": "Selenium POM regression",
+      "userStory": "As a SupportQ user or operator, I want selenium pom regression so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a reviewed preview is accessible, when the supported flow executes, then run Java/Cucumber/POM routing and retest flows with a report in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a reviewed preview is accessible; assert run Java/Cucumber/POM routing and retest flows with a report.",
+        "negative": "Omit the evidence required for selenium pom regression; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during selenium pom regression; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete selenium pom regression with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for selenium pom regression.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M08-04",
+      "module": "QA and release evidence",
+      "epic": "M08: QA and release evidence",
+      "title": "Daily coverage",
+      "userStory": "As a SupportQ user or operator, I want daily coverage so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given daily QA expansion runs, when the supported flow executes, then append 50 unique scenarios and five proposed features against the global ledger in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise daily QA expansion runs; assert append 50 unique scenarios and five proposed features against the global ledger.",
+        "negative": "Omit the evidence required for daily coverage; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during daily coverage; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete daily coverage with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for daily coverage.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M08-05",
+      "module": "QA and release evidence",
+      "epic": "M08: QA and release evidence",
+      "title": "Negative release gates",
+      "userStory": "As a SupportQ user or operator, I want negative release gates so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a unit, security or critical UI check fails, when the supported flow executes, then block acceptance and release promotion with evidence in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a unit, security or critical UI check fails; assert block acceptance and release promotion with evidence.",
+        "negative": "Omit the evidence required for negative release gates; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during negative release gates; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete negative release gates with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for negative release gates.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M09-01",
+      "module": "Responsive UI and accessibility",
+      "epic": "M09: Responsive UI and accessibility",
+      "title": "Mobile layout",
+      "userStory": "As a SupportQ user or operator, I want mobile layout so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given the app is used at 320, 375 and 768 pixel widths, when the supported flow executes, then show no page-level horizontal overflow and usable controls in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise the app is used at 320, 375 and 768 pixel widths; assert show no page-level horizontal overflow and usable controls.",
+        "negative": "Omit the evidence required for mobile layout; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during mobile layout; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete mobile layout with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for mobile layout.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M09-02",
+      "module": "Responsive UI and accessibility",
+      "epic": "M09: Responsive UI and accessibility",
+      "title": "Keyboard flow",
+      "userStory": "As a SupportQ user or operator, I want keyboard flow so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a keyboard-only user opens diagnosis, when the supported flow executes, then reach every control with visible focus and logical order in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a keyboard-only user opens diagnosis; assert reach every control with visible focus and logical order.",
+        "negative": "Omit the evidence required for keyboard flow; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during keyboard flow; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete keyboard flow with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for keyboard flow.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M09-03",
+      "module": "Responsive UI and accessibility",
+      "epic": "M09: Responsive UI and accessibility",
+      "title": "Accessible feedback",
+      "userStory": "As a SupportQ user or operator, I want accessible feedback so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given intake, save or error state changes, when the supported flow executes, then announce meaningful status and errors without relying on color in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise intake, save or error state changes; assert announce meaningful status and errors without relying on color.",
+        "negative": "Omit the evidence required for accessible feedback; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during accessible feedback; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete accessible feedback with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for accessible feedback.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M09-04",
+      "module": "Responsive UI and accessibility",
+      "epic": "M09: Responsive UI and accessibility",
+      "title": "Reduced motion",
+      "userStory": "As a SupportQ user or operator, I want reduced motion so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given the OS requests reduced motion, when the supported flow executes, then disable nonessential motion while preserving all functionality in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise the OS requests reduced motion; assert disable nonessential motion while preserving all functionality.",
+        "negative": "Omit the evidence required for reduced motion; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during reduced motion; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete reduced motion with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for reduced motion.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M09-05",
+      "module": "Responsive UI and accessibility",
+      "epic": "M09: Responsive UI and accessibility",
+      "title": "Storage resilience",
+      "userStory": "As a SupportQ user or operator, I want storage resilience so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given browser local storage is malformed or unavailable, when the supported flow executes, then keep navigation and diagnosis usable without a render crash in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise browser local storage is malformed or unavailable; assert keep navigation and diagnosis usable without a render crash.",
+        "negative": "Omit the evidence required for storage resilience; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during storage resilience; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete storage resilience with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for storage resilience.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M10-01",
+      "module": "Platform and operations",
+      "epic": "M10: Platform and operations",
+      "title": "Public production smoke",
+      "userStory": "As a SupportQ user or operator, I want public production smoke so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given the canonical production URL is opened anonymously, when the supported flow executes, then return app HTML and render the diagnostic workspace in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise the canonical production URL is opened anonymously; assert return app HTML and render the diagnostic workspace.",
+        "negative": "Omit the evidence required for public production smoke; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during public production smoke; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete public production smoke with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for public production smoke.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M10-02",
+      "module": "Platform and operations",
+      "epic": "M10: Platform and operations",
+      "title": "Protected review preview",
+      "userStory": "As a SupportQ user or operator, I want protected review preview so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a non-production preview is opened, when the supported flow executes, then enforce reviewed access controls and permit authorized QA in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a non-production preview is opened; assert enforce reviewed access controls and permit authorized QA.",
+        "negative": "Omit the evidence required for protected review preview; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during protected review preview; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete protected review preview with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for protected review preview.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M10-03",
+      "module": "Platform and operations",
+      "epic": "M10: Platform and operations",
+      "title": "Deployment gating",
+      "userStory": "As a SupportQ user or operator, I want deployment gating so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a release candidate is promoted, when the supported flow executes, then require independent review and passing tests for the exact deployed commit in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a release candidate is promoted; assert require independent review and passing tests for the exact deployed commit.",
+        "negative": "Omit the evidence required for deployment gating; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during deployment gating; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete deployment gating with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for deployment gating.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M10-04",
+      "module": "Platform and operations",
+      "epic": "M10: Platform and operations",
+      "title": "Rollback readiness",
+      "userStory": "As a SupportQ user or operator, I want rollback readiness so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given a release fails smoke checks, when the supported flow executes, then retain or restore the documented last known-good deployment in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise a release fails smoke checks; assert retain or restore the documented last known-good deployment.",
+        "negative": "Omit the evidence required for rollback readiness; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during rollback readiness; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete rollback readiness with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for rollback readiness.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    },
+    {
+      "id": "SQ-M10-05",
+      "module": "Platform and operations",
+      "epic": "M10: Platform and operations",
+      "title": "Monitoring and alerts",
+      "userStory": "As a SupportQ user or operator, I want monitoring and alerts so that support decisions are reliable and auditable.",
+      "status": "Proposed",
+      "verificationScope": "not executed",
+      "acceptanceCriteria": [
+        "Given production errors or security events appear, when the supported flow executes, then record observable evidence and alert using an approved private destination in 100% of its named regression fixtures.",
+        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
+        "Every delivered state is operable by keyboard and relevant feedback is announced."
+      ],
+      "tests": {
+        "positive": "Exercise production errors or security events appear; assert record observable evidence and alert using an approved private destination.",
+        "negative": "Omit the evidence required for monitoring and alerts; verify clarification or recoverable failure, not a success claim.",
+        "security": "Try unauthorized or adversarial input during monitoring and alerts; verify no secrets disclosure or unauthorized data change.",
+        "accessibility": "Complete monitoring and alerts with keyboard and screen reader; verify focus and status announcement."
+      },
+      "implementationTasks": [
+        "Inspect and reuse existing implementation for monitoring and alerts.",
+        "Implement only the verified gap in an isolated reviewable PR.",
+        "Automate the named acceptance cases and collect relevant UI/security evidence."
+      ],
+      "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
+      "evidence": []
+    }
+  ]
+}
