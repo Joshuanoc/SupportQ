@@ -4,6 +4,7 @@ import{ArrowUpRight,Check,ChevronRight,Mail,Code2,Cloud,TestTube2,Wrench,Databas
 import{scenarios,categoryCounts}from'./data.js';
 import{classifyIssue}from'./classifyIssue.js';
 import{diagnosticPath,resolutionProgress}from'./diagnosticTransitions.js';
+import{readIncidentHistory,writeIncidentHistory}from'./historyStorage.js';
 import{getActionGuide}from'./guidance.js';
 import{getNode,initialHypotheses,applyBoosts,parseDiagnosticText,calculatePriority}from'./diagnosticEngine.js';
 import{profileFor,profileHypotheses,interpretGeneric}from'./scenarioEngines.js';
@@ -60,7 +61,9 @@ function App(){
  const[reportedIssue,setReportedIssue]=useState('');
  const[intake,setIntake]=useState('');
  const[suggestions,setSuggestions]=useState([]);
- const[history,setHistory]=useState(()=>{try{return JSON.parse(localStorage.getItem('supportq-history')||'[]')}catch{return[]}});
+ const[restoredHistory]=useState(readIncidentHistory);
+ const[history,setHistory]=useState(restoredHistory.history);
+ const[historyWarning,setHistoryWarning]=useState(restoredHistory.warning);
  const[query,setQuery]=useState('');
  const[mobile,setMobile]=useState(false);
 
@@ -79,7 +82,12 @@ function App(){
    return()=>{document.body.style.overflow=previousOverflow;window.removeEventListener('keydown',close);window.removeEventListener('resize',resize);previousFocus?.focus()};
  },[mobile]);
 
- useEffect(()=>localStorage.setItem('supportq-history',JSON.stringify(history.slice(0,25))),[history]);
+ useEffect(()=>{
+   // Do not overwrite malformed or inaccessible saved data during mount.
+   if(history===restoredHistory.history)return;
+   const saved=writeIncidentHistory(history);
+   setHistoryWarning(saved.warning);
+ },[history,restoredHistory]);
 
  const filtered=useMemo(()=>scenarios.filter(s=>`${s.title} ${s.category} ${s.symptoms.join(' ')}`.toLowerCase().includes(query.toLowerCase())),[query]);
 
@@ -191,6 +199,7 @@ ${result.actions.map(a=>`- ${a}`).join('\n')}`;
    <div className="mainArea">
     <header className="topbar"><FeedbackButton className="mobileToggle" onClick={()=>setMobile(v=>!v)} aria-label={mobile?"Close navigation":"Open navigation"} aria-expanded={mobile} aria-controls="primary-navigation">{mobile?<X/>:<Menu/>}</FeedbackButton><div><span className="crumb">SUPPORTQ / {view.toUpperCase()}</span><h1>{view==='diagnose'&&scenario?scenario.title:view==='scenarios'?'Scenario Library':view==='history'?'Incident History':view==='analytics'?'Support Analytics':'Support workspace'}</h1></div><div className="status"><i/>Workspace ready</div></header>
     <main id="main-content" className="content" tabIndex={-1}>
+     <p role="status" aria-live="polite" aria-atomic="true">{historyWarning}</p>
      <AnimatePresence mode="wait" initial={false}><motion.div key={view} initial={reduceMotion?false:{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={reduceMotion?{opacity:1}:{opacity:0,y:-6}} transition={{duration:reduceMotion?0:.2}}>
       {view==='dashboard'&&<Dashboard intake={intake} setIntake={setIntake} submitIntake={submitIntake} suggestions={suggestions} onStart={start} setView={setView}/>}
       {view==='scenarios'&&<ScenarioLibrary query={query} setQuery={setQuery} filtered={filtered} onStart={start}/>}
