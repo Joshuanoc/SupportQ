@@ -1,2 +1,3 @@
 import test from 'node:test';
-test('BA routing placeholder',()=>{});
+import assert from 'node:assert/strict';
+test('routing placeholder',()=>assert.equal(2+2,4));
