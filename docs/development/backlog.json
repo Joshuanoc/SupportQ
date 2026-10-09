@@ -812,26 +812,31 @@
       "epic": "M06: Incident management",
       "title": "Sensitive export",
       "userStory": "As a SupportQ user or operator, I want sensitive export so that support decisions are reliable and auditable.",
-      "status": "Proposed",
-      "verificationScope": "not executed",
+      "status": "Tested",
+      "verificationScope": "145 local and GitHub CI automated tests passed, including 12 focused export tests; production build passed; live clipboard/browser, assistive-technology, independent review and deployment not verified",
       "acceptanceCriteria": [
-        "Given a ticket is copied or exported, when the supported flow executes, then redact secret-like values and show evidence provenance in 100% of its named regression fixtures.",
-        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
-        "Every delivered state is operable by keyboard and relevant feedback is announced."
+        "Given any of the three incident-result surfaces is copied, when the Clipboard API is called, then the written text contains no matching synthetic private key, authorization credential, JWT, provider token, labeled credential, email, labeled phone, labeled government identifier, labeled card number or URL password in 100% of named regression fixtures.",
+        "Given SAP or IT operational evidence contains an unlabeled document number, company/plant code, movement type, WBS identifier or error code, when it is copied, then the operational value remains present in 100% of named preservation fixtures.",
+        "Given clipboard access is absent or rejects the write, when copy is requested, then announce failure through a polite atomic status region and never announce success.",
+        "Given export input contains control characters or more than 100,000 characters, when it is copied, then normalize the text, cap it at 100,000 source characters and append a visible truncation marker."
       ],
       "tests": {
-        "positive": "Exercise a ticket is copied or exported; assert redact secret-like values and show evidence provenance.",
-        "negative": "Omit the evidence required for sensitive export; verify clarification or recoverable failure, not a success claim.",
-        "security": "Try unauthorized or adversarial input during sensitive export; verify no secrets disclosure or unauthorized data change.",
-        "accessibility": "Complete sensitive export with keyboard and screen reader; verify focus and status announcement."
+        "positive": "Copy synthetic SAP operational evidence and assert its document, movement and WBS values are preserved.",
+        "negative": "Remove or reject clipboard access; assert a safe failure result with no false success or browser exception detail.",
+        "security": "Copy synthetic credentials, tokens, private keys, contact/identity/payment data and URL credentials; assert every sensitive value is absent.",
+        "accessibility": "Inspect all three copy-result surfaces for polite atomic status markup; live keyboard and screen-reader verification remains required."
       },
       "implementationTasks": [
-        "Inspect and reuse existing implementation for sensitive export.",
-        "Implement only the verified gap in an isolated reviewable PR.",
-        "Automate the named acceptance cases and collect relevant UI/security evidence."
+        "Implemented one bounded sanitizer shared by all three existing Copy incident paths.",
+        "Implemented accurate copy success/failure feedback through polite atomic status regions.",
+        "Passed focused positive, negative and security tests plus the full suite and production build; live browser, assistive-technology and independent review remain required."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
-      "evidence": []
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/24",
+        "https://github.com/Joshuanoc/SupportQ/blob/9620dbbd4f825da68db5fe57720e18f58b583505/docs/development/runs/2026-10-09-safe-incident-export.md",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/37998563152"
+      ]
     },
     {
       "id": "SQ-M07-01",
