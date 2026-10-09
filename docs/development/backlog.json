@@ -1221,8 +1221,8 @@
       "epic": "M09: Responsive UI and accessibility",
       "title": "Storage resilience",
       "userStory": "As a SupportQ user or operator, I want storage resilience so that support decisions are reliable and auditable.",
-      "status": "Proposed",
-      "verificationScope": "not executed",
+      "status": "Tested",
+      "verificationScope": "160 local automated tests passed, including App SSR initialization/accessible markup; live browser, keyboard/screen-reader, independent review and deployment not verified",
       "acceptanceCriteria": [
         "Given browser local storage is malformed or unavailable, when the supported flow executes, then keep navigation and diagnosis usable without a render crash in 100% of its named regression fixtures.",
         "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
@@ -1235,12 +1235,15 @@
         "accessibility": "Complete storage resilience with keyboard and screen reader; verify focus and status announcement."
       },
       "implementationTasks": [
-        "Inspect and reuse existing implementation for storage resilience.",
-        "Implement only the verified gap in an isolated reviewable PR.",
-        "Automate the named acceptance cases and collect relevant UI/security evidence."
+        "Implemented guarded loading/saving with valid-record retention and protected storage API access.",
+        "Implemented polite, atomic status feedback and preserved in-memory history on write failure.",
+        "Passed positive, negative, security and App SSR accessibility-markup checks; live candidate browser and independent review remain required."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
-      "evidence": []
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/23",
+        "https://github.com/Joshuanoc/SupportQ/blob/f11c4f83a14827837c5322a2342f83f49591090c/docs/development/runs/2026-10-09-history-storage.md"
+      ]
     },
     {
       "id": "SQ-M10-01",
@@ -1377,5 +1380,6 @@
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
       "evidence": []
     }
-  ]
+  ],
+  "lastUpdated": "2026-10-09"
 }
