@@ -1,0 +1,2516 @@
+{
+  "date": "2026-10-09",
+  "scope": "SupportQ BA gaps",
+  "status": "test-specifications-only",
+  "count": 50,
+  "caseCount": 200,
+  "areas": {
+    "routing": 10,
+    "evidence": 10,
+    "persistence": 10,
+    "automation": 10,
+    "deployment": 10
+  },
+  "scenarios": [
+    {
+      "id": "SQ-20261009-001",
+      "area": "routing",
+      "title": "MIGO 161 vendor return with WBS reference",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the SupportQ intake screen is open with no device information supplied",
+      "testCases": [
+        {
+          "id": "SQ-20261009-001-P",
+          "type": "positive",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When MIGO movement 161 return-to-vendor WBS account assignment rejected",
+            "Then SAP goods-movement or WBS-specific diagnostic is offered without asking for Windows or macOS"
+          ],
+          "expected": "SAP goods-movement or WBS-specific diagnostic is offered without asking for Windows or macOS"
+        },
+        {
+          "id": "SQ-20261009-001-N",
+          "type": "negative",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When The same input says Azure permission denied but includes MIGO",
+            "Then SAP workflow remains primary and requests SAP document evidence"
+          ],
+          "expected": "SAP workflow remains primary and requests SAP document evidence"
+        },
+        {
+          "id": "SQ-20261009-001-S",
+          "type": "security",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the migo 161 vendor return with wbs reference workflow is exercised with a malicious input or unauthorized identity",
+            "Then Ensure input is treated as text; no raw HTML executes and no document is modified"
+          ],
+          "expected": "Ensure input is treated as text; no raw HTML executes and no document is modified"
+        },
+        {
+          "id": "SQ-20261009-001-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the migo 161 vendor return with wbs reference workflow is navigated using keyboard and screen reader",
+            "Then Keyboard focus reaches the chosen diagnostic and its heading is announced"
+          ],
+          "expected": "Keyboard focus reaches the chosen diagnostic and its heading is announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-002",
+      "area": "routing",
+      "title": "Reversal after downstream invoice",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the SupportQ intake screen is open with no device information supplied",
+      "testCases": [
+        {
+          "id": "SQ-20261009-002-P",
+          "type": "positive",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When Cancel material document 4900000012 but subsequent invoice exists",
+            "Then Reversal workflow checks follow-on invoice before recommending any change"
+          ],
+          "expected": "Reversal workflow checks follow-on invoice before recommending any change"
+        },
+        {
+          "id": "SQ-20261009-002-N",
+          "type": "negative",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When User omits material document number",
+            "Then System asks for document identifier without inventing it"
+          ],
+          "expected": "System asks for document identifier without inventing it"
+        },
+        {
+          "id": "SQ-20261009-002-S",
+          "type": "security",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the reversal after downstream invoice workflow is exercised with a malicious input or unauthorized identity",
+            "Then Ensure input is treated as text; no raw HTML executes and no document is modified"
+          ],
+          "expected": "Ensure input is treated as text; no raw HTML executes and no document is modified"
+        },
+        {
+          "id": "SQ-20261009-002-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the reversal after downstream invoice workflow is navigated using keyboard and screen reader",
+            "Then Keyboard focus reaches the chosen diagnostic and its heading is announced"
+          ],
+          "expected": "Keyboard focus reaches the chosen diagnostic and its heading is announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-003",
+      "area": "routing",
+      "title": "Posting period ambiguous MM and FI",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the SupportQ intake screen is open with no device information supplied",
+      "testCases": [
+        {
+          "id": "SQ-20261009-003-P",
+          "type": "positive",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When MIGO goods movement rejected: posting period closed for company code 1000",
+            "Then Posting-period workflow requests posting date and MM/FI period context"
+          ],
+          "expected": "Posting-period workflow requests posting date and MM/FI period context"
+        },
+        {
+          "id": "SQ-20261009-003-N",
+          "type": "negative",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When Only user local computer date is supplied",
+            "Then No instruction to change local OS clock is suggested"
+          ],
+          "expected": "No instruction to change local OS clock is suggested"
+        },
+        {
+          "id": "SQ-20261009-003-S",
+          "type": "security",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the posting period ambiguous mm and fi workflow is exercised with a malicious input or unauthorized identity",
+            "Then Ensure input is treated as text; no raw HTML executes and no document is modified"
+          ],
+          "expected": "Ensure input is treated as text; no raw HTML executes and no document is modified"
+        },
+        {
+          "id": "SQ-20261009-003-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the posting period ambiguous mm and fi workflow is navigated using keyboard and screen reader",
+            "Then Keyboard focus reaches the chosen diagnostic and its heading is announced"
+          ],
+          "expected": "Keyboard focus reaches the chosen diagnostic and its heading is announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-004",
+      "area": "routing",
+      "title": "Source list missing for plant",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the SupportQ intake screen is open with no device information supplied",
+      "testCases": [
+        {
+          "id": "SQ-20261009-004-P",
+          "type": "positive",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When ME51N source list missing for material 100 plant 2000",
+            "Then Source determination route takes priority over generic material-master route"
+          ],
+          "expected": "Source determination route takes priority over generic material-master route"
+        },
+        {
+          "id": "SQ-20261009-004-N",
+          "type": "negative",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When User says cannot access source list because 403 Azure",
+            "Then Classifier requests disambiguation rather than confidently inventing SAP source data"
+          ],
+          "expected": "Classifier requests disambiguation rather than confidently inventing SAP source data"
+        },
+        {
+          "id": "SQ-20261009-004-S",
+          "type": "security",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the source list missing for plant workflow is exercised with a malicious input or unauthorized identity",
+            "Then Ensure input is treated as text; no raw HTML executes and no document is modified"
+          ],
+          "expected": "Ensure input is treated as text; no raw HTML executes and no document is modified"
+        },
+        {
+          "id": "SQ-20261009-004-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the source list missing for plant workflow is navigated using keyboard and screen reader",
+            "Then Keyboard focus reaches the chosen diagnostic and its heading is announced"
+          ],
+          "expected": "Keyboard focus reaches the chosen diagnostic and its heading is announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-005",
+      "area": "routing",
+      "title": "PO delivery completed prematurely",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the SupportQ intake screen is open with no device information supplied",
+      "testCases": [
+        {
+          "id": "SQ-20261009-005-P",
+          "type": "positive",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When ME23N PO item delivery complete while outstanding GR quantity remains",
+            "Then Goods-receipt/PO delivery completion checks are presented"
+          ],
+          "expected": "Goods-receipt/PO delivery completion checks are presented"
+        },
+        {
+          "id": "SQ-20261009-005-N",
+          "type": "negative",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When User reports PO closed but supplies no PO item",
+            "Then No change to delivery-complete indicator is instructed without approval"
+          ],
+          "expected": "No change to delivery-complete indicator is instructed without approval"
+        },
+        {
+          "id": "SQ-20261009-005-S",
+          "type": "security",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the po delivery completed prematurely workflow is exercised with a malicious input or unauthorized identity",
+            "Then Ensure input is treated as text; no raw HTML executes and no document is modified"
+          ],
+          "expected": "Ensure input is treated as text; no raw HTML executes and no document is modified"
+        },
+        {
+          "id": "SQ-20261009-005-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the po delivery completed prematurely workflow is navigated using keyboard and screen reader",
+            "Then Keyboard focus reaches the chosen diagnostic and its heading is announced"
+          ],
+          "expected": "Keyboard focus reaches the chosen diagnostic and its heading is announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-006",
+      "area": "routing",
+      "title": "Serial managed GR error",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the SupportQ intake screen is open with no device information supplied",
+      "testCases": [
+        {
+          "id": "SQ-20261009-006-P",
+          "type": "positive",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When MIGO 101 serial-number-managed material missing serial 0009",
+            "Then Goods receipt route asks for approved serial-number evidence"
+          ],
+          "expected": "Goods receipt route asks for approved serial-number evidence"
+        },
+        {
+          "id": "SQ-20261009-006-N",
+          "type": "negative",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When User enters fake serial number",
+            "Then System does not present a fake serial as validated"
+          ],
+          "expected": "System does not present a fake serial as validated"
+        },
+        {
+          "id": "SQ-20261009-006-S",
+          "type": "security",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the serial managed gr error workflow is exercised with a malicious input or unauthorized identity",
+            "Then Ensure input is treated as text; no raw HTML executes and no document is modified"
+          ],
+          "expected": "Ensure input is treated as text; no raw HTML executes and no document is modified"
+        },
+        {
+          "id": "SQ-20261009-006-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the serial managed gr error workflow is navigated using keyboard and screen reader",
+            "Then Keyboard focus reaches the chosen diagnostic and its heading is announced"
+          ],
+          "expected": "Keyboard focus reaches the chosen diagnostic and its heading is announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-007",
+      "area": "routing",
+      "title": "SAP role buffer issue",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the SupportQ intake screen is open with no device information supplied",
+      "testCases": [
+        {
+          "id": "SQ-20261009-007-P",
+          "type": "positive",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When SU53 role assigned but new authorization not effective after login",
+            "Then SAP authorization flow asks for SU53 and user-session evidence"
+          ],
+          "expected": "SAP authorization flow asks for SU53 and user-session evidence"
+        },
+        {
+          "id": "SQ-20261009-007-N",
+          "type": "negative",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When User says RBAC and SU53 together",
+            "Then SAP authorization wins over Azure RBAC keyword"
+          ],
+          "expected": "SAP authorization wins over Azure RBAC keyword"
+        },
+        {
+          "id": "SQ-20261009-007-S",
+          "type": "security",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the sap role buffer issue workflow is exercised with a malicious input or unauthorized identity",
+            "Then Ensure input is treated as text; no raw HTML executes and no document is modified"
+          ],
+          "expected": "Ensure input is treated as text; no raw HTML executes and no document is modified"
+        },
+        {
+          "id": "SQ-20261009-007-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the sap role buffer issue workflow is navigated using keyboard and screen reader",
+            "Then Keyboard focus reaches the chosen diagnostic and its heading is announced"
+          ],
+          "expected": "Keyboard focus reaches the chosen diagnostic and its heading is announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-008",
+      "area": "routing",
+      "title": "GR IR value mismatch",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the SupportQ intake screen is open with no device information supplied",
+      "testCases": [
+        {
+          "id": "SQ-20261009-008-P",
+          "type": "positive",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When GR/IR reconciliation shows residual value after invoice",
+            "Then GR/IR flow separates quantity from price and exchange-rate differences"
+          ],
+          "expected": "GR/IR flow separates quantity from price and exchange-rate differences"
+        },
+        {
+          "id": "SQ-20261009-008-N",
+          "type": "negative",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When User supplies only PO number",
+            "Then No automatic accounting adjustment is offered"
+          ],
+          "expected": "No automatic accounting adjustment is offered"
+        },
+        {
+          "id": "SQ-20261009-008-S",
+          "type": "security",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the gr ir value mismatch workflow is exercised with a malicious input or unauthorized identity",
+            "Then Ensure input is treated as text; no raw HTML executes and no document is modified"
+          ],
+          "expected": "Ensure input is treated as text; no raw HTML executes and no document is modified"
+        },
+        {
+          "id": "SQ-20261009-008-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the gr ir value mismatch workflow is navigated using keyboard and screen reader",
+            "Then Keyboard focus reaches the chosen diagnostic and its heading is announced"
+          ],
+          "expected": "Keyboard focus reaches the chosen diagnostic and its heading is announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-009",
+      "area": "routing",
+      "title": "Batch stock return restriction",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the SupportQ intake screen is open with no device information supplied",
+      "testCases": [
+        {
+          "id": "SQ-20261009-009-P",
+          "type": "positive",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When Movement 122 return batch in quality stock fails",
+            "Then SAP goods movement route requests stock type and batch"
+          ],
+          "expected": "SAP goods movement route requests stock type and batch"
+        },
+        {
+          "id": "SQ-20261009-009-N",
+          "type": "negative",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When User asks to bypass quality inspection",
+            "Then System refuses unsafe stock release shortcut"
+          ],
+          "expected": "System refuses unsafe stock release shortcut"
+        },
+        {
+          "id": "SQ-20261009-009-S",
+          "type": "security",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the batch stock return restriction workflow is exercised with a malicious input or unauthorized identity",
+            "Then Ensure input is treated as text; no raw HTML executes and no document is modified"
+          ],
+          "expected": "Ensure input is treated as text; no raw HTML executes and no document is modified"
+        },
+        {
+          "id": "SQ-20261009-009-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the batch stock return restriction workflow is navigated using keyboard and screen reader",
+            "Then Keyboard focus reaches the chosen diagnostic and its heading is announced"
+          ],
+          "expected": "Keyboard focus reaches the chosen diagnostic and its heading is announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-010",
+      "area": "routing",
+      "title": "WBS budget block during 161",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the SupportQ intake screen is open with no device information supplied",
+      "testCases": [
+        {
+          "id": "SQ-20261009-010-P",
+          "type": "positive",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When Movement 161 WBS element budget availability control blocks return",
+            "Then Account-assignment flow requests WBS status and budget-control message"
+          ],
+          "expected": "Account-assignment flow requests WBS status and budget-control message"
+        },
+        {
+          "id": "SQ-20261009-010-N",
+          "type": "negative",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When WBS is not provided",
+            "Then No project budget increase is assumed"
+          ],
+          "expected": "No project budget increase is assumed"
+        },
+        {
+          "id": "SQ-20261009-010-S",
+          "type": "security",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the wbs budget block during 161 workflow is exercised with a malicious input or unauthorized identity",
+            "Then Ensure input is treated as text; no raw HTML executes and no document is modified"
+          ],
+          "expected": "Ensure input is treated as text; no raw HTML executes and no document is modified"
+        },
+        {
+          "id": "SQ-20261009-010-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the SupportQ intake screen is open with no device information supplied",
+            "When the wbs budget block during 161 workflow is navigated using keyboard and screen reader",
+            "Then Keyboard focus reaches the chosen diagnostic and its heading is announced"
+          ],
+          "expected": "Keyboard focus reaches the chosen diagnostic and its heading is announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-011",
+      "area": "evidence",
+      "title": "SAP unknown error message",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "an incident is open in the diagnostic view with an empty evidence log",
+      "testCases": [
+        {
+          "id": "SQ-20261009-011-P",
+          "type": "positive",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When SAP posting error M7 021 pasted without screenshot",
+            "Then System records message class and number as evidence and states uncertainty"
+          ],
+          "expected": "System records message class and number as evidence and states uncertainty"
+        },
+        {
+          "id": "SQ-20261009-011-N",
+          "type": "negative",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When Only phrase SAP broken is entered",
+            "Then System does not claim a confirmed root cause"
+          ],
+          "expected": "System does not claim a confirmed root cause"
+        },
+        {
+          "id": "SQ-20261009-011-S",
+          "type": "security",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the sap unknown error message workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify no pasted data triggers code execution or writes to production systems"
+          ],
+          "expected": "Verify no pasted data triggers code execution or writes to production systems"
+        },
+        {
+          "id": "SQ-20261009-011-A",
+          "type": "accessibility",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the sap unknown error message workflow is navigated using keyboard and screen reader",
+            "Then Evidence prompts and result changes are keyboard operable and announced"
+          ],
+          "expected": "Evidence prompts and result changes are keyboard operable and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-012",
+      "area": "evidence",
+      "title": "SAP reversal retest fails",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "an incident is open in the diagnostic view with an empty evidence log",
+      "testCases": [
+        {
+          "id": "SQ-20261009-012-P",
+          "type": "positive",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When User selects fix attempted then reversal still fails",
+            "Then Incident stays diagnosing or escalated with failed retest"
+          ],
+          "expected": "Incident stays diagnosing or escalated with failed retest"
+        },
+        {
+          "id": "SQ-20261009-012-N",
+          "type": "negative",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When User selects resolved before executing corrective action",
+            "Then No verified-resolution label without successful retest"
+          ],
+          "expected": "No verified-resolution label without successful retest"
+        },
+        {
+          "id": "SQ-20261009-012-S",
+          "type": "security",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the sap reversal retest fails workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify no pasted data triggers code execution or writes to production systems"
+          ],
+          "expected": "Verify no pasted data triggers code execution or writes to production systems"
+        },
+        {
+          "id": "SQ-20261009-012-A",
+          "type": "accessibility",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the sap reversal retest fails workflow is navigated using keyboard and screen reader",
+            "Then Evidence prompts and result changes are keyboard operable and announced"
+          ],
+          "expected": "Evidence prompts and result changes are keyboard operable and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-013",
+      "area": "evidence",
+      "title": "Unexpected MFA prompts",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "an incident is open in the diagnostic view with an empty evidence log",
+      "testCases": [
+        {
+          "id": "SQ-20261009-013-P",
+          "type": "positive",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When User reports three uninitiated MFA prompts",
+            "Then Security escalation appears and no approval instruction is given"
+          ],
+          "expected": "Security escalation appears and no approval instruction is given"
+        },
+        {
+          "id": "SQ-20261009-013-N",
+          "type": "negative",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When User reports a normal expected MFA challenge",
+            "Then Do not incorrectly classify it as compromise"
+          ],
+          "expected": "Do not incorrectly classify it as compromise"
+        },
+        {
+          "id": "SQ-20261009-013-S",
+          "type": "security",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the unexpected mfa prompts workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify no pasted data triggers code execution or writes to production systems"
+          ],
+          "expected": "Verify no pasted data triggers code execution or writes to production systems"
+        },
+        {
+          "id": "SQ-20261009-013-A",
+          "type": "accessibility",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the unexpected mfa prompts workflow is navigated using keyboard and screen reader",
+            "Then Evidence prompts and result changes are keyboard operable and announced"
+          ],
+          "expected": "Evidence prompts and result changes are keyboard operable and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-014",
+      "area": "evidence",
+      "title": "Missing VPN route evidence",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "an incident is open in the diagnostic view with an empty evidence log",
+      "testCases": [
+        {
+          "id": "SQ-20261009-014-P",
+          "type": "positive",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When VPN connected but internal subnet route absent in route table",
+            "Then Network hypothesis strengthened with observed route evidence"
+          ],
+          "expected": "Network hypothesis strengthened with observed route evidence"
+        },
+        {
+          "id": "SQ-20261009-014-N",
+          "type": "negative",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When User pastes empty output",
+            "Then No definitive network-route root cause is claimed"
+          ],
+          "expected": "No definitive network-route root cause is claimed"
+        },
+        {
+          "id": "SQ-20261009-014-S",
+          "type": "security",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the missing vpn route evidence workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify no pasted data triggers code execution or writes to production systems"
+          ],
+          "expected": "Verify no pasted data triggers code execution or writes to production systems"
+        },
+        {
+          "id": "SQ-20261009-014-A",
+          "type": "accessibility",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the missing vpn route evidence workflow is navigated using keyboard and screen reader",
+            "Then Evidence prompts and result changes are keyboard operable and announced"
+          ],
+          "expected": "Evidence prompts and result changes are keyboard operable and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-015",
+      "area": "evidence",
+      "title": "Azure 403 missing scope",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "an incident is open in the diagnostic view with an empty evidence log",
+      "testCases": [
+        {
+          "id": "SQ-20261009-015-P",
+          "type": "positive",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When AuthorizationFailed 403 with tenant but no resource scope",
+            "Then Requests resource ID and role assignment scope before conclusion"
+          ],
+          "expected": "Requests resource ID and role assignment scope before conclusion"
+        },
+        {
+          "id": "SQ-20261009-015-N",
+          "type": "negative",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When Error code is 403 from a public website unrelated to Azure",
+            "Then Avoid Azure-specific fix based on number alone"
+          ],
+          "expected": "Avoid Azure-specific fix based on number alone"
+        },
+        {
+          "id": "SQ-20261009-015-S",
+          "type": "security",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the azure 403 missing scope workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify no pasted data triggers code execution or writes to production systems"
+          ],
+          "expected": "Verify no pasted data triggers code execution or writes to production systems"
+        },
+        {
+          "id": "SQ-20261009-015-A",
+          "type": "accessibility",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the azure 403 missing scope workflow is navigated using keyboard and screen reader",
+            "Then Evidence prompts and result changes are keyboard operable and announced"
+          ],
+          "expected": "Evidence prompts and result changes are keyboard operable and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-016",
+      "area": "evidence",
+      "title": "Malformed diagnostic log",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "an incident is open in the diagnostic view with an empty evidence log",
+      "testCases": [
+        {
+          "id": "SQ-20261009-016-P",
+          "type": "positive",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When Paste 100KB of binary-like diagnostic text",
+            "Then Input is safely bounded or rejected with a readable message"
+          ],
+          "expected": "Input is safely bounded or rejected with a readable message"
+        },
+        {
+          "id": "SQ-20261009-016-N",
+          "type": "negative",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When Paste a valid short error",
+            "Then Valid input remains usable"
+          ],
+          "expected": "Valid input remains usable"
+        },
+        {
+          "id": "SQ-20261009-016-S",
+          "type": "security",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the malformed diagnostic log workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify no pasted data triggers code execution or writes to production systems"
+          ],
+          "expected": "Verify no pasted data triggers code execution or writes to production systems"
+        },
+        {
+          "id": "SQ-20261009-016-A",
+          "type": "accessibility",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the malformed diagnostic log workflow is navigated using keyboard and screen reader",
+            "Then Evidence prompts and result changes are keyboard operable and announced"
+          ],
+          "expected": "Evidence prompts and result changes are keyboard operable and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-017",
+      "area": "evidence",
+      "title": "PII in incident evidence",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "an incident is open in the diagnostic view with an empty evidence log",
+      "testCases": [
+        {
+          "id": "SQ-20261009-017-P",
+          "type": "positive",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When Paste employee email phone and ticket log",
+            "Then Sensitive evidence is masked or warned before export"
+          ],
+          "expected": "Sensitive evidence is masked or warned before export"
+        },
+        {
+          "id": "SQ-20261009-017-N",
+          "type": "negative",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When Paste sanitized log with no PII",
+            "Then No false redaction or content loss"
+          ],
+          "expected": "No false redaction or content loss"
+        },
+        {
+          "id": "SQ-20261009-017-S",
+          "type": "security",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the pii in incident evidence workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify no pasted data triggers code execution or writes to production systems"
+          ],
+          "expected": "Verify no pasted data triggers code execution or writes to production systems"
+        },
+        {
+          "id": "SQ-20261009-017-A",
+          "type": "accessibility",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the pii in incident evidence workflow is navigated using keyboard and screen reader",
+            "Then Evidence prompts and result changes are keyboard operable and announced"
+          ],
+          "expected": "Evidence prompts and result changes are keyboard operable and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-018",
+      "area": "evidence",
+      "title": "Contradictory user answers",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "an incident is open in the diagnostic view with an empty evidence log",
+      "testCases": [
+        {
+          "id": "SQ-20261009-018-P",
+          "type": "positive",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When User confirms both all users affected and only one user affected",
+            "Then System asks one targeted clarification and lowers confidence"
+          ],
+          "expected": "System asks one targeted clarification and lowers confidence"
+        },
+        {
+          "id": "SQ-20261009-018-N",
+          "type": "negative",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When User supplies consistent scope",
+            "Then No redundant scope question"
+          ],
+          "expected": "No redundant scope question"
+        },
+        {
+          "id": "SQ-20261009-018-S",
+          "type": "security",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the contradictory user answers workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify no pasted data triggers code execution or writes to production systems"
+          ],
+          "expected": "Verify no pasted data triggers code execution or writes to production systems"
+        },
+        {
+          "id": "SQ-20261009-018-A",
+          "type": "accessibility",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the contradictory user answers workflow is navigated using keyboard and screen reader",
+            "Then Evidence prompts and result changes are keyboard operable and announced"
+          ],
+          "expected": "Evidence prompts and result changes are keyboard operable and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-019",
+      "area": "evidence",
+      "title": "Unverified SAP custom transaction",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "an incident is open in the diagnostic view with an empty evidence log",
+      "testCases": [
+        {
+          "id": "SQ-20261009-019-P",
+          "type": "positive",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When ZMM_RETURN_ERR in custom SAP transaction",
+            "Then System identifies custom code uncertainty and requests actual error"
+          ],
+          "expected": "System identifies custom code uncertainty and requests actual error"
+        },
+        {
+          "id": "SQ-20261009-019-N",
+          "type": "negative",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When User asks for an invented SAP note number",
+            "Then System does not fabricate note number"
+          ],
+          "expected": "System does not fabricate note number"
+        },
+        {
+          "id": "SQ-20261009-019-S",
+          "type": "security",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the unverified sap custom transaction workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify no pasted data triggers code execution or writes to production systems"
+          ],
+          "expected": "Verify no pasted data triggers code execution or writes to production systems"
+        },
+        {
+          "id": "SQ-20261009-019-A",
+          "type": "accessibility",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the unverified sap custom transaction workflow is navigated using keyboard and screen reader",
+            "Then Evidence prompts and result changes are keyboard operable and announced"
+          ],
+          "expected": "Evidence prompts and result changes are keyboard operable and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-020",
+      "area": "evidence",
+      "title": "Escalation without evidence",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "an incident is open in the diagnostic view with an empty evidence log",
+      "testCases": [
+        {
+          "id": "SQ-20261009-020-P",
+          "type": "positive",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When User clicks escalate after no checks completed",
+            "Then Escalation ticket states evidence not collected and zero confidence"
+          ],
+          "expected": "Escalation ticket states evidence not collected and zero confidence"
+        },
+        {
+          "id": "SQ-20261009-020-N",
+          "type": "negative",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When User provides exact error and steps",
+            "Then Ticket includes only actually captured checks"
+          ],
+          "expected": "Ticket includes only actually captured checks"
+        },
+        {
+          "id": "SQ-20261009-020-S",
+          "type": "security",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the escalation without evidence workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify no pasted data triggers code execution or writes to production systems"
+          ],
+          "expected": "Verify no pasted data triggers code execution or writes to production systems"
+        },
+        {
+          "id": "SQ-20261009-020-A",
+          "type": "accessibility",
+          "steps": [
+            "Given an incident is open in the diagnostic view with an empty evidence log",
+            "When the escalation without evidence workflow is navigated using keyboard and screen reader",
+            "Then Evidence prompts and result changes are keyboard operable and announced"
+          ],
+          "expected": "Evidence prompts and result changes are keyboard operable and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-021",
+      "area": "persistence",
+      "title": "Owner reads own incident",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "test users A and B have separate authenticated sessions and synthetic test records",
+      "testCases": [
+        {
+          "id": "SQ-20261009-021-P",
+          "type": "positive",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When User A opens history for their own support_issues row",
+            "Then Exactly A-owned incidents appear"
+          ],
+          "expected": "Exactly A-owned incidents appear"
+        },
+        {
+          "id": "SQ-20261009-021-N",
+          "type": "negative",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When User B tries to open A issue ID",
+            "Then No A-owned record is returned to B"
+          ],
+          "expected": "No A-owned record is returned to B"
+        },
+        {
+          "id": "SQ-20261009-021-S",
+          "type": "security",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the owner reads own incident workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify unauthorized cross-user reads or writes return no private rows"
+          ],
+          "expected": "Verify unauthorized cross-user reads or writes return no private rows"
+        },
+        {
+          "id": "SQ-20261009-021-A",
+          "type": "accessibility",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the owner reads own incident workflow is navigated using keyboard and screen reader",
+            "Then History errors and save status are announced without relying only on color"
+          ],
+          "expected": "History errors and save status are announced without relying only on color"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-022",
+      "area": "persistence",
+      "title": "Cross-tenant history insert",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "test users A and B have separate authenticated sessions and synthetic test records",
+      "testCases": [
+        {
+          "id": "SQ-20261009-022-P",
+          "type": "positive",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When User A creates troubleshooting_history for own issue",
+            "Then Insert succeeds and links correct owner"
+          ],
+          "expected": "Insert succeeds and links correct owner"
+        },
+        {
+          "id": "SQ-20261009-022-N",
+          "type": "negative",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When User A tries to attach history to B issue",
+            "Then Insert denied by RLS"
+          ],
+          "expected": "Insert denied by RLS"
+        },
+        {
+          "id": "SQ-20261009-022-S",
+          "type": "security",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the cross-tenant history insert workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify unauthorized cross-user reads or writes return no private rows"
+          ],
+          "expected": "Verify unauthorized cross-user reads or writes return no private rows"
+        },
+        {
+          "id": "SQ-20261009-022-A",
+          "type": "accessibility",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the cross-tenant history insert workflow is navigated using keyboard and screen reader",
+            "Then History errors and save status are announced without relying only on color"
+          ],
+          "expected": "History errors and save status are announced without relying only on color"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-023",
+      "area": "persistence",
+      "title": "Profile role tamper",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "test users A and B have separate authenticated sessions and synthetic test records",
+      "testCases": [
+        {
+          "id": "SQ-20261009-023-P",
+          "type": "positive",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When Normal user edits their own display_name",
+            "Then Display name updates without privilege change"
+          ],
+          "expected": "Display name updates without privilege change"
+        },
+        {
+          "id": "SQ-20261009-023-N",
+          "type": "negative",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When Normal user attempts profile.role admin update",
+            "Then Role elevation denied and role remains user"
+          ],
+          "expected": "Role elevation denied and role remains user"
+        },
+        {
+          "id": "SQ-20261009-023-S",
+          "type": "security",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the profile role tamper workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify unauthorized cross-user reads or writes return no private rows"
+          ],
+          "expected": "Verify unauthorized cross-user reads or writes return no private rows"
+        },
+        {
+          "id": "SQ-20261009-023-A",
+          "type": "accessibility",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the profile role tamper workflow is navigated using keyboard and screen reader",
+            "Then History errors and save status are announced without relying only on color"
+          ],
+          "expected": "History errors and save status are announced without relying only on color"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-024",
+      "area": "persistence",
+      "title": "Solution owner isolation",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "test users A and B have separate authenticated sessions and synthetic test records",
+      "testCases": [
+        {
+          "id": "SQ-20261009-024-P",
+          "type": "positive",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When User A adds solution to their own issue",
+            "Then Solution appears only for authorized owner"
+          ],
+          "expected": "Solution appears only for authorized owner"
+        },
+        {
+          "id": "SQ-20261009-024-N",
+          "type": "negative",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When User B adds solution to A issue",
+            "Then Write denied without leaking issue details"
+          ],
+          "expected": "Write denied without leaking issue details"
+        },
+        {
+          "id": "SQ-20261009-024-S",
+          "type": "security",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the solution owner isolation workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify unauthorized cross-user reads or writes return no private rows"
+          ],
+          "expected": "Verify unauthorized cross-user reads or writes return no private rows"
+        },
+        {
+          "id": "SQ-20261009-024-A",
+          "type": "accessibility",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the solution owner isolation workflow is navigated using keyboard and screen reader",
+            "Then History errors and save status are announced without relying only on color"
+          ],
+          "expected": "History errors and save status are announced without relying only on color"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-025",
+      "area": "persistence",
+      "title": "Feedback owner isolation",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "test users A and B have separate authenticated sessions and synthetic test records",
+      "testCases": [
+        {
+          "id": "SQ-20261009-025-P",
+          "type": "positive",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When User A submits feedback to accessible solution",
+            "Then Feedback linked to A and solution"
+          ],
+          "expected": "Feedback linked to A and solution"
+        },
+        {
+          "id": "SQ-20261009-025-N",
+          "type": "negative",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When User B requests A feedback record",
+            "Then Cross-user read denied"
+          ],
+          "expected": "Cross-user read denied"
+        },
+        {
+          "id": "SQ-20261009-025-S",
+          "type": "security",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the feedback owner isolation workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify unauthorized cross-user reads or writes return no private rows"
+          ],
+          "expected": "Verify unauthorized cross-user reads or writes return no private rows"
+        },
+        {
+          "id": "SQ-20261009-025-A",
+          "type": "accessibility",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the feedback owner isolation workflow is navigated using keyboard and screen reader",
+            "Then History errors and save status are announced without relying only on color"
+          ],
+          "expected": "History errors and save status are announced without relying only on color"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-026",
+      "area": "persistence",
+      "title": "Anonymous read denied",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "test users A and B have separate authenticated sessions and synthetic test records",
+      "testCases": [
+        {
+          "id": "SQ-20261009-026-P",
+          "type": "positive",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When Unauthenticated visitor opens landing page",
+            "Then Public UI loads without incident records"
+          ],
+          "expected": "Public UI loads without incident records"
+        },
+        {
+          "id": "SQ-20261009-026-N",
+          "type": "negative",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When Unauthenticated visitor calls support_issues select",
+            "Then No incident data returned"
+          ],
+          "expected": "No incident data returned"
+        },
+        {
+          "id": "SQ-20261009-026-S",
+          "type": "security",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the anonymous read denied workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify unauthorized cross-user reads or writes return no private rows"
+          ],
+          "expected": "Verify unauthorized cross-user reads or writes return no private rows"
+        },
+        {
+          "id": "SQ-20261009-026-A",
+          "type": "accessibility",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the anonymous read denied workflow is navigated using keyboard and screen reader",
+            "Then History errors and save status are announced without relying only on color"
+          ],
+          "expected": "History errors and save status are announced without relying only on color"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-027",
+      "area": "persistence",
+      "title": "Local storage shared device",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "test users A and B have separate authenticated sessions and synthetic test records",
+      "testCases": [
+        {
+          "id": "SQ-20261009-027-P",
+          "type": "positive",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When User A logs out after viewing case history",
+            "Then Session history is cleared or appropriately isolated"
+          ],
+          "expected": "Session history is cleared or appropriately isolated"
+        },
+        {
+          "id": "SQ-20261009-027-N",
+          "type": "negative",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When User B opens same browser after A logout",
+            "Then A incident content is not visible"
+          ],
+          "expected": "A incident content is not visible"
+        },
+        {
+          "id": "SQ-20261009-027-S",
+          "type": "security",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the local storage shared device workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify unauthorized cross-user reads or writes return no private rows"
+          ],
+          "expected": "Verify unauthorized cross-user reads or writes return no private rows"
+        },
+        {
+          "id": "SQ-20261009-027-A",
+          "type": "accessibility",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the local storage shared device workflow is navigated using keyboard and screen reader",
+            "Then History errors and save status are announced without relying only on color"
+          ],
+          "expected": "History errors and save status are announced without relying only on color"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-028",
+      "area": "persistence",
+      "title": "Concurrent update isolation",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "test users A and B have separate authenticated sessions and synthetic test records",
+      "testCases": [
+        {
+          "id": "SQ-20261009-028-P",
+          "type": "positive",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When User A updates own issue while B updates own issue",
+            "Then Both changes persist to correct records"
+          ],
+          "expected": "Both changes persist to correct records"
+        },
+        {
+          "id": "SQ-20261009-028-N",
+          "type": "negative",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When B submits update for A issue ID",
+            "Then B update is denied"
+          ],
+          "expected": "B update is denied"
+        },
+        {
+          "id": "SQ-20261009-028-S",
+          "type": "security",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the concurrent update isolation workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify unauthorized cross-user reads or writes return no private rows"
+          ],
+          "expected": "Verify unauthorized cross-user reads or writes return no private rows"
+        },
+        {
+          "id": "SQ-20261009-028-A",
+          "type": "accessibility",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the concurrent update isolation workflow is navigated using keyboard and screen reader",
+            "Then History errors and save status are announced without relying only on color"
+          ],
+          "expected": "History errors and save status are announced without relying only on color"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-029",
+      "area": "persistence",
+      "title": "Deletion audit trail",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "test users A and B have separate authenticated sessions and synthetic test records",
+      "testCases": [
+        {
+          "id": "SQ-20261009-029-P",
+          "type": "positive",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When Authorized user requests deletion of their own draft incident",
+            "Then Deletion obeys retention policy and confirms outcome"
+          ],
+          "expected": "Deletion obeys retention policy and confirms outcome"
+        },
+        {
+          "id": "SQ-20261009-029-N",
+          "type": "negative",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When Other user attempts deletion of same incident",
+            "Then Deletion denied and audit trail preserved"
+          ],
+          "expected": "Deletion denied and audit trail preserved"
+        },
+        {
+          "id": "SQ-20261009-029-S",
+          "type": "security",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the deletion audit trail workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify unauthorized cross-user reads or writes return no private rows"
+          ],
+          "expected": "Verify unauthorized cross-user reads or writes return no private rows"
+        },
+        {
+          "id": "SQ-20261009-029-A",
+          "type": "accessibility",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the deletion audit trail workflow is navigated using keyboard and screen reader",
+            "Then History errors and save status are announced without relying only on color"
+          ],
+          "expected": "History errors and save status are announced without relying only on color"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-030",
+      "area": "persistence",
+      "title": "Offline write retry",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "test users A and B have separate authenticated sessions and synthetic test records",
+      "testCases": [
+        {
+          "id": "SQ-20261009-030-P",
+          "type": "positive",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When Signed-in user saves incident during network outage",
+            "Then UI queues or reports unsaved state without claiming success"
+          ],
+          "expected": "UI queues or reports unsaved state without claiming success"
+        },
+        {
+          "id": "SQ-20261009-030-N",
+          "type": "negative",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When Connection returns with expired auth session",
+            "Then Retry requires fresh authorization and avoids duplicate record"
+          ],
+          "expected": "Retry requires fresh authorization and avoids duplicate record"
+        },
+        {
+          "id": "SQ-20261009-030-S",
+          "type": "security",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the offline write retry workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify unauthorized cross-user reads or writes return no private rows"
+          ],
+          "expected": "Verify unauthorized cross-user reads or writes return no private rows"
+        },
+        {
+          "id": "SQ-20261009-030-A",
+          "type": "accessibility",
+          "steps": [
+            "Given test users A and B have separate authenticated sessions and synthetic test records",
+            "When the offline write retry workflow is navigated using keyboard and screen reader",
+            "Then History errors and save status are announced without relying only on color"
+          ],
+          "expected": "History errors and save status are announced without relying only on color"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-031",
+      "area": "automation",
+      "title": "PR runs unit tests",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable test PR is available with CI enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261009-031-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When PR changes classifier with new routing rule",
+            "Then npm test and npm run build execute before merge"
+          ],
+          "expected": "npm test and npm run build execute before merge"
+        },
+        {
+          "id": "SQ-20261009-031-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When One routing assertion fails",
+            "Then PR check is red and merge gate blocks release"
+          ],
+          "expected": "PR check is red and merge gate blocks release"
+        },
+        {
+          "id": "SQ-20261009-031-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the pr runs unit tests workflow is exercised with a malicious input or unauthorized identity",
+            "Then Check CI output never prints tokens or unmasked secret values"
+          ],
+          "expected": "Check CI output never prints tokens or unmasked secret values"
+        },
+        {
+          "id": "SQ-20261009-031-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the pr runs unit tests workflow is navigated using keyboard and screen reader",
+            "Then The generated QA report has semantic headings and readable pass/fail labels"
+          ],
+          "expected": "The generated QA report has semantic headings and readable pass/fail labels"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-032",
+      "area": "automation",
+      "title": "Main push triggers Selenium",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable test PR is available with CI enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261009-032-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When Merge commit lands on main after green CI",
+            "Then Automation repository dispatch receives source SHA"
+          ],
+          "expected": "Automation repository dispatch receives source SHA"
+        },
+        {
+          "id": "SQ-20261009-032-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When Automation PAT absent",
+            "Then Trigger fails visibly rather than silently passing"
+          ],
+          "expected": "Trigger fails visibly rather than silently passing"
+        },
+        {
+          "id": "SQ-20261009-032-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the main push triggers selenium workflow is exercised with a malicious input or unauthorized identity",
+            "Then Check CI output never prints tokens or unmasked secret values"
+          ],
+          "expected": "Check CI output never prints tokens or unmasked secret values"
+        },
+        {
+          "id": "SQ-20261009-032-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the main push triggers selenium workflow is navigated using keyboard and screen reader",
+            "Then The generated QA report has semantic headings and readable pass/fail labels"
+          ],
+          "expected": "The generated QA report has semantic headings and readable pass/fail labels"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-033",
+      "area": "automation",
+      "title": "Coverage duplicate guard",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable test PR is available with CI enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261009-033-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When Daily fixture adds new case ID SQ-20261009-001",
+            "Then Uniqueness validator counts case once"
+          ],
+          "expected": "Uniqueness validator counts case once"
+        },
+        {
+          "id": "SQ-20261009-033-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When Same ID appears twice in daily fixture",
+            "Then Validator fails with duplicate ID"
+          ],
+          "expected": "Validator fails with duplicate ID"
+        },
+        {
+          "id": "SQ-20261009-033-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the coverage duplicate guard workflow is exercised with a malicious input or unauthorized identity",
+            "Then Check CI output never prints tokens or unmasked secret values"
+          ],
+          "expected": "Check CI output never prints tokens or unmasked secret values"
+        },
+        {
+          "id": "SQ-20261009-033-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the coverage duplicate guard workflow is navigated using keyboard and screen reader",
+            "Then The generated QA report has semantic headings and readable pass/fail labels"
+          ],
+          "expected": "The generated QA report has semantic headings and readable pass/fail labels"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-034",
+      "area": "automation",
+      "title": "Existing fixture overlap guard",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable test PR is available with CI enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261009-034-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When New daily title differs from prior test prompts",
+            "Then Coverage ledger increments new count by one"
+          ],
+          "expected": "Coverage ledger increments new count by one"
+        },
+        {
+          "id": "SQ-20261009-034-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When Daily prompt repeats old SAP fixture prompt exactly",
+            "Then Validator fails rather than inflating coverage"
+          ],
+          "expected": "Validator fails rather than inflating coverage"
+        },
+        {
+          "id": "SQ-20261009-034-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the existing fixture overlap guard workflow is exercised with a malicious input or unauthorized identity",
+            "Then Check CI output never prints tokens or unmasked secret values"
+          ],
+          "expected": "Check CI output never prints tokens or unmasked secret values"
+        },
+        {
+          "id": "SQ-20261009-034-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the existing fixture overlap guard workflow is navigated using keyboard and screen reader",
+            "Then The generated QA report has semantic headings and readable pass/fail labels"
+          ],
+          "expected": "The generated QA report has semantic headings and readable pass/fail labels"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-035",
+      "area": "automation",
+      "title": "Selenium browser crash",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable test PR is available with CI enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261009-035-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When Selenium worker browser terminates mid-run",
+            "Then CI marks test failed with reproducible log"
+          ],
+          "expected": "CI marks test failed with reproducible log"
+        },
+        {
+          "id": "SQ-20261009-035-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When Browser crashes but runner exits zero",
+            "Then Build is not falsely accepted"
+          ],
+          "expected": "Build is not falsely accepted"
+        },
+        {
+          "id": "SQ-20261009-035-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the selenium browser crash workflow is exercised with a malicious input or unauthorized identity",
+            "Then Check CI output never prints tokens or unmasked secret values"
+          ],
+          "expected": "Check CI output never prints tokens or unmasked secret values"
+        },
+        {
+          "id": "SQ-20261009-035-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the selenium browser crash workflow is navigated using keyboard and screen reader",
+            "Then The generated QA report has semantic headings and readable pass/fail labels"
+          ],
+          "expected": "The generated QA report has semantic headings and readable pass/fail labels"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-036",
+      "area": "automation",
+      "title": "API contract schema drift",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable test PR is available with CI enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261009-036-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When Support API adds optional field with valid schema",
+            "Then API contract checks pass"
+          ],
+          "expected": "API contract checks pass"
+        },
+        {
+          "id": "SQ-20261009-036-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When Response drops required issue ID",
+            "Then Contract check fails"
+          ],
+          "expected": "Contract check fails"
+        },
+        {
+          "id": "SQ-20261009-036-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the api contract schema drift workflow is exercised with a malicious input or unauthorized identity",
+            "Then Check CI output never prints tokens or unmasked secret values"
+          ],
+          "expected": "Check CI output never prints tokens or unmasked secret values"
+        },
+        {
+          "id": "SQ-20261009-036-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the api contract schema drift workflow is navigated using keyboard and screen reader",
+            "Then The generated QA report has semantic headings and readable pass/fail labels"
+          ],
+          "expected": "The generated QA report has semantic headings and readable pass/fail labels"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-037",
+      "area": "automation",
+      "title": "Flaky test isolation",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable test PR is available with CI enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261009-037-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When Same scenario fails intermittently across three reruns",
+            "Then Flaky label is recorded with original failure"
+          ],
+          "expected": "Flaky label is recorded with original failure"
+        },
+        {
+          "id": "SQ-20261009-037-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When Flaky test passes on retry only",
+            "Then Release is not automatically accepted"
+          ],
+          "expected": "Release is not automatically accepted"
+        },
+        {
+          "id": "SQ-20261009-037-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the flaky test isolation workflow is exercised with a malicious input or unauthorized identity",
+            "Then Check CI output never prints tokens or unmasked secret values"
+          ],
+          "expected": "Check CI output never prints tokens or unmasked secret values"
+        },
+        {
+          "id": "SQ-20261009-037-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the flaky test isolation workflow is navigated using keyboard and screen reader",
+            "Then The generated QA report has semantic headings and readable pass/fail labels"
+          ],
+          "expected": "The generated QA report has semantic headings and readable pass/fail labels"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-038",
+      "area": "automation",
+      "title": "Secret scanning CI",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable test PR is available with CI enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261009-038-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When PR includes normal fixture values",
+            "Then Security scan passes without printing secrets"
+          ],
+          "expected": "Security scan passes without printing secrets"
+        },
+        {
+          "id": "SQ-20261009-038-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When PR includes a simulated credential pattern",
+            "Then CI fails and redacts secret in logs"
+          ],
+          "expected": "CI fails and redacts secret in logs"
+        },
+        {
+          "id": "SQ-20261009-038-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the secret scanning ci workflow is exercised with a malicious input or unauthorized identity",
+            "Then Check CI output never prints tokens or unmasked secret values"
+          ],
+          "expected": "Check CI output never prints tokens or unmasked secret values"
+        },
+        {
+          "id": "SQ-20261009-038-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the secret scanning ci workflow is navigated using keyboard and screen reader",
+            "Then The generated QA report has semantic headings and readable pass/fail labels"
+          ],
+          "expected": "The generated QA report has semantic headings and readable pass/fail labels"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-039",
+      "area": "automation",
+      "title": "A11y smoke checks",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable test PR is available with CI enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261009-039-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When Keyboard-only navigation reaches diagnose and history",
+            "Then Automated accessibility check reports no critical errors"
+          ],
+          "expected": "Automated accessibility check reports no critical errors"
+        },
+        {
+          "id": "SQ-20261009-039-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When Button has no accessible name",
+            "Then Accessibility gate fails"
+          ],
+          "expected": "Accessibility gate fails"
+        },
+        {
+          "id": "SQ-20261009-039-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the a11y smoke checks workflow is exercised with a malicious input or unauthorized identity",
+            "Then Check CI output never prints tokens or unmasked secret values"
+          ],
+          "expected": "Check CI output never prints tokens or unmasked secret values"
+        },
+        {
+          "id": "SQ-20261009-039-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the a11y smoke checks workflow is navigated using keyboard and screen reader",
+            "Then The generated QA report has semantic headings and readable pass/fail labels"
+          ],
+          "expected": "The generated QA report has semantic headings and readable pass/fail labels"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-040",
+      "area": "automation",
+      "title": "Daily coverage reconciliation",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable test PR is available with CI enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261009-040-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When 50 unique cases and five features are proposed",
+            "Then Ledger records 50 proposed and zero accepted until tested"
+          ],
+          "expected": "Ledger records 50 proposed and zero accepted until tested"
+        },
+        {
+          "id": "SQ-20261009-040-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When Daily run contains 49 unique cases",
+            "Then Count validation fails"
+          ],
+          "expected": "Count validation fails"
+        },
+        {
+          "id": "SQ-20261009-040-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the daily coverage reconciliation workflow is exercised with a malicious input or unauthorized identity",
+            "Then Check CI output never prints tokens or unmasked secret values"
+          ],
+          "expected": "Check CI output never prints tokens or unmasked secret values"
+        },
+        {
+          "id": "SQ-20261009-040-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable test PR is available with CI enabled",
+            "When the daily coverage reconciliation workflow is navigated using keyboard and screen reader",
+            "Then The generated QA report has semantic headings and readable pass/fail labels"
+          ],
+          "expected": "The generated QA report has semantic headings and readable pass/fail labels"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-041",
+      "area": "deployment",
+      "title": "Public production access",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable preview and the configured production domain are available",
+      "testCases": [
+        {
+          "id": "SQ-20261009-041-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Production domain support-q-mu.vercel.app is assigned",
+            "Then Anonymous browser can load homepage without login"
+          ],
+          "expected": "Anonymous browser can load homepage without login"
+        },
+        {
+          "id": "SQ-20261009-041-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Vercel SSO protects all vercel.app domains",
+            "Then Public-access gate fails and release remains blocked"
+          ],
+          "expected": "Public-access gate fails and release remains blocked"
+        },
+        {
+          "id": "SQ-20261009-041-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the public production access workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify protected preview access and absence of credentials in HTML responses"
+          ],
+          "expected": "Verify protected preview access and absence of credentials in HTML responses"
+        },
+        {
+          "id": "SQ-20261009-041-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the public production access workflow is navigated using keyboard and screen reader",
+            "Then Test page status and error states with keyboard and screen reader"
+          ],
+          "expected": "Test page status and error states with keyboard and screen reader"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-042",
+      "area": "deployment",
+      "title": "Preview protected isolation",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable preview and the configured production domain are available",
+      "testCases": [
+        {
+          "id": "SQ-20261009-042-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Preview branch deploys a draft PR",
+            "Then Preview is accessible only to authorized reviewers"
+          ],
+          "expected": "Preview is accessible only to authorized reviewers"
+        },
+        {
+          "id": "SQ-20261009-042-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Anonymous visitor requests protected preview",
+            "Then Visitor cannot view preview contents"
+          ],
+          "expected": "Visitor cannot view preview contents"
+        },
+        {
+          "id": "SQ-20261009-042-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the preview protected isolation workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify protected preview access and absence of credentials in HTML responses"
+          ],
+          "expected": "Verify protected preview access and absence of credentials in HTML responses"
+        },
+        {
+          "id": "SQ-20261009-042-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the preview protected isolation workflow is navigated using keyboard and screen reader",
+            "Then Test page status and error states with keyboard and screen reader"
+          ],
+          "expected": "Test page status and error states with keyboard and screen reader"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-043",
+      "area": "deployment",
+      "title": "Production alias consistency",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable preview and the configured production domain are available",
+      "testCases": [
+        {
+          "id": "SQ-20261009-043-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Latest approved production SHA deployed",
+            "Then Domain alias resolves to that exact SHA"
+          ],
+          "expected": "Domain alias resolves to that exact SHA"
+        },
+        {
+          "id": "SQ-20261009-043-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Alias points to older commit than approved",
+            "Then Deployment verification fails"
+          ],
+          "expected": "Deployment verification fails"
+        },
+        {
+          "id": "SQ-20261009-043-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the production alias consistency workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify protected preview access and absence of credentials in HTML responses"
+          ],
+          "expected": "Verify protected preview access and absence of credentials in HTML responses"
+        },
+        {
+          "id": "SQ-20261009-043-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the production alias consistency workflow is navigated using keyboard and screen reader",
+            "Then Test page status and error states with keyboard and screen reader"
+          ],
+          "expected": "Test page status and error states with keyboard and screen reader"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-044",
+      "area": "deployment",
+      "title": "Failed build cannot promote",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable preview and the configured production domain are available",
+      "testCases": [
+        {
+          "id": "SQ-20261009-044-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Preview build and tests succeed",
+            "Then Staged production candidate eligible for promotion"
+          ],
+          "expected": "Staged production candidate eligible for promotion"
+        },
+        {
+          "id": "SQ-20261009-044-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Preview build fails npm test",
+            "Then Production alias remains unchanged"
+          ],
+          "expected": "Production alias remains unchanged"
+        },
+        {
+          "id": "SQ-20261009-044-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the failed build cannot promote workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify protected preview access and absence of credentials in HTML responses"
+          ],
+          "expected": "Verify protected preview access and absence of credentials in HTML responses"
+        },
+        {
+          "id": "SQ-20261009-044-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the failed build cannot promote workflow is navigated using keyboard and screen reader",
+            "Then Test page status and error states with keyboard and screen reader"
+          ],
+          "expected": "Test page status and error states with keyboard and screen reader"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-045",
+      "area": "deployment",
+      "title": "SPA deep-link fallback",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable preview and the configured production domain are available",
+      "testCases": [
+        {
+          "id": "SQ-20261009-045-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When User navigates directly to /history route if supported",
+            "Then Page loads app shell and appropriate view"
+          ],
+          "expected": "Page loads app shell and appropriate view"
+        },
+        {
+          "id": "SQ-20261009-045-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Unknown route requested",
+            "Then App displays accessible not-found state, not blank screen"
+          ],
+          "expected": "App displays accessible not-found state, not blank screen"
+        },
+        {
+          "id": "SQ-20261009-045-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the spa deep-link fallback workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify protected preview access and absence of credentials in HTML responses"
+          ],
+          "expected": "Verify protected preview access and absence of credentials in HTML responses"
+        },
+        {
+          "id": "SQ-20261009-045-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the spa deep-link fallback workflow is navigated using keyboard and screen reader",
+            "Then Test page status and error states with keyboard and screen reader"
+          ],
+          "expected": "Test page status and error states with keyboard and screen reader"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-046",
+      "area": "deployment",
+      "title": "Cache stale asset recovery",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable preview and the configured production domain are available",
+      "testCases": [
+        {
+          "id": "SQ-20261009-046-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When New deployment changes hashed JS bundle",
+            "Then Browser refresh loads current bundle"
+          ],
+          "expected": "Browser refresh loads current bundle"
+        },
+        {
+          "id": "SQ-20261009-046-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Old HTML references removed chunk",
+            "Then Graceful reload instead of permanent white screen"
+          ],
+          "expected": "Graceful reload instead of permanent white screen"
+        },
+        {
+          "id": "SQ-20261009-046-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the cache stale asset recovery workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify protected preview access and absence of credentials in HTML responses"
+          ],
+          "expected": "Verify protected preview access and absence of credentials in HTML responses"
+        },
+        {
+          "id": "SQ-20261009-046-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the cache stale asset recovery workflow is navigated using keyboard and screen reader",
+            "Then Test page status and error states with keyboard and screen reader"
+          ],
+          "expected": "Test page status and error states with keyboard and screen reader"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-047",
+      "area": "deployment",
+      "title": "Health probe failure",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable preview and the configured production domain are available",
+      "testCases": [
+        {
+          "id": "SQ-20261009-047-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Synthetic homepage probe receives successful response",
+            "Then Deployment marked reachable only after content assertion"
+          ],
+          "expected": "Deployment marked reachable only after content assertion"
+        },
+        {
+          "id": "SQ-20261009-047-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Probe receives 401 403 or 5xx",
+            "Then Availability marked failed despite Vercel READY"
+          ],
+          "expected": "Availability marked failed despite Vercel READY"
+        },
+        {
+          "id": "SQ-20261009-047-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the health probe failure workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify protected preview access and absence of credentials in HTML responses"
+          ],
+          "expected": "Verify protected preview access and absence of credentials in HTML responses"
+        },
+        {
+          "id": "SQ-20261009-047-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the health probe failure workflow is navigated using keyboard and screen reader",
+            "Then Test page status and error states with keyboard and screen reader"
+          ],
+          "expected": "Test page status and error states with keyboard and screen reader"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-048",
+      "area": "deployment",
+      "title": "Production rollback",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable preview and the configured production domain are available",
+      "testCases": [
+        {
+          "id": "SQ-20261009-048-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When New release fails verified smoke check",
+            "Then Rollback restores last known-good SHA and domain"
+          ],
+          "expected": "Rollback restores last known-good SHA and domain"
+        },
+        {
+          "id": "SQ-20261009-048-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When No known-good rollback candidate exists",
+            "Then Automation stops and flags manual intervention"
+          ],
+          "expected": "Automation stops and flags manual intervention"
+        },
+        {
+          "id": "SQ-20261009-048-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the production rollback workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify protected preview access and absence of credentials in HTML responses"
+          ],
+          "expected": "Verify protected preview access and absence of credentials in HTML responses"
+        },
+        {
+          "id": "SQ-20261009-048-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the production rollback workflow is navigated using keyboard and screen reader",
+            "Then Test page status and error states with keyboard and screen reader"
+          ],
+          "expected": "Test page status and error states with keyboard and screen reader"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-049",
+      "area": "deployment",
+      "title": "Environment variable absence",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable preview and the configured production domain are available",
+      "testCases": [
+        {
+          "id": "SQ-20261009-049-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Preview lacks required public Supabase URL",
+            "Then Build or startup emits clear safe configuration warning"
+          ],
+          "expected": "Build or startup emits clear safe configuration warning"
+        },
+        {
+          "id": "SQ-20261009-049-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Secret service-role key exposed in browser bundle",
+            "Then Security check blocks deployment"
+          ],
+          "expected": "Security check blocks deployment"
+        },
+        {
+          "id": "SQ-20261009-049-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the environment variable absence workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify protected preview access and absence of credentials in HTML responses"
+          ],
+          "expected": "Verify protected preview access and absence of credentials in HTML responses"
+        },
+        {
+          "id": "SQ-20261009-049-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the environment variable absence workflow is navigated using keyboard and screen reader",
+            "Then Test page status and error states with keyboard and screen reader"
+          ],
+          "expected": "Test page status and error states with keyboard and screen reader"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261009-050",
+      "area": "deployment",
+      "title": "Keyboard access to error state",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a disposable preview and the configured production domain are available",
+      "testCases": [
+        {
+          "id": "SQ-20261009-050-P",
+          "type": "positive",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Deployment unavailable page shown on narrow mobile viewport",
+            "Then Error message is readable and focusable with retry link"
+          ],
+          "expected": "Error message is readable and focusable with retry link"
+        },
+        {
+          "id": "SQ-20261009-050-N",
+          "type": "negative",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When Error page traps keyboard focus",
+            "Then Accessibility check fails and outage is not marked resolved"
+          ],
+          "expected": "Accessibility check fails and outage is not marked resolved"
+        },
+        {
+          "id": "SQ-20261009-050-S",
+          "type": "security",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the keyboard access to error state workflow is exercised with a malicious input or unauthorized identity",
+            "Then Verify protected preview access and absence of credentials in HTML responses"
+          ],
+          "expected": "Verify protected preview access and absence of credentials in HTML responses"
+        },
+        {
+          "id": "SQ-20261009-050-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a disposable preview and the configured production domain are available",
+            "When the keyboard access to error state workflow is navigated using keyboard and screen reader",
+            "Then Test page status and error states with keyboard and screen reader"
+          ],
+          "expected": "Test page status and error states with keyboard and screen reader"
+        }
+      ]
+    }
+  ]
+}
