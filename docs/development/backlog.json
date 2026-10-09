@@ -785,26 +785,31 @@
       "epic": "M06: Incident management",
       "title": "Case lifecycle",
       "userStory": "As a SupportQ user or operator, I want case lifecycle so that support decisions are reliable and auditable.",
-      "status": "Proposed",
-      "verificationScope": "not executed",
+      "status": "Tested",
+      "verificationScope": "146 local and GitHub CI automated tests passed, including 13 focused lifecycle and accessibility-markup tests; production build passed; live browser, keyboard/screen-reader, independent review and deployment not verified",
       "acceptanceCriteria": [
-        "Given an incident changes state, when the supported flow executes, then record valid transitions with timestamps and reject invalid transitions in 100% of its named regression fixtures.",
-        "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
-        "Every delivered state is operable by keyboard and relevant feedback is announced."
+        "Given a new incident is completed, when any generic, deep Wi-Fi or other deep diagnostic path resolves or escalates, then persist an immutable chronological Reported → In progress → Resolved/Escalated timeline with canonical ISO 8601 timestamps in 100% of named regression fixtures.",
+        "Given an unknown, skipped, forged, terminal-to-terminal, non-terminal completion or backwards-dated transition is supplied, when validation runs, then reject it without modifying the input timeline.",
+        "Given incident history contains lifecycle data, when it is rendered, then expose a keyboard-operable native disclosure with a labeled ordered list and machine-readable times.",
+        "Given a legacy record has no lifecycle field, when history renders, then keep the record usable and show no fabricated lifecycle."
       ],
       "tests": {
-        "positive": "Exercise an incident changes state; assert record valid transitions with timestamps and reject invalid transitions.",
-        "negative": "Omit the evidence required for case lifecycle; verify clarification or recoverable failure, not a success claim.",
-        "security": "Try unauthorized or adversarial input during case lifecycle; verify no secrets disclosure or unauthorized data change.",
-        "accessibility": "Complete case lifecycle with keyboard and screen reader; verify focus and status announcement."
+        "positive": "Complete in-progress incidents as Resolved and Escalated; assert a timestamped terminal event is appended.",
+        "negative": "Attempt skipped and terminal-to-terminal transitions; assert rejection and unchanged input.",
+        "security": "Supply unknown states, forged chains, invalid/noncanonical dates and backwards timestamps; assert validation rejects caller-asserted state.",
+        "accessibility": "Server-render lifecycle and legacy records; assert native disclosure, labeled ordered list, machine-readable time elements, and no misleading legacy timeline."
       },
       "implementationTasks": [
-        "Inspect and reuse existing implementation for case lifecycle.",
-        "Implement only the verified gap in an isolated reviewable PR.",
-        "Automate the named acceptance cases and collect relevant UI/security evidence."
+        "Implemented one immutable lifecycle model shared by all application completion paths.",
+        "Attached validated timelines to generic, deep Wi-Fi and other deep diagnostic history records while preserving legacy records.",
+        "Added a semantic incident-history disclosure and passed positive, negative, security, immutability and accessibility-markup tests; live browser and assistive-technology review remain required."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
-      "evidence": []
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/25",
+        "https://github.com/Joshuanoc/SupportQ/blob/3a6bc47f05919a49463398d5174b9485d2b3c5f5/docs/development/runs/2026-10-09-incident-lifecycle.md",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38004209374"
+      ]
     },
     {
       "id": "SQ-M06-05",
