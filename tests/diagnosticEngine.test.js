@@ -98,6 +98,20 @@ test('Public IP success routes to DNS test',()=>{
   assert.equal(r.next,'dns_test');
 });
 
+test('DNS success continues diagnosis instead of claiming resolution',()=>{
+  const r=parseDiagnosticText('dns_test','Server: 10.0.0.1\nNon-authoritative answer:\nName: google.com\nAddress: 142.250.72.14');
+  assert.equal(r.next,'browser_test');
+  assert.equal(r.resolve,undefined);
+  assert.match(r.summary,/requires retest/i);
+  assert.ok(r.boosts?.['Browser/application issue']>0);
+});
+
+test('unavailable alternate-network test avoids a disruptive stack reset',()=>{
+  const option=wifiFlow.adapter_check.options.find(item=>item.value==='cant_test');
+  assert.equal(option.next,'driver_health');
+  assert.notEqual(option.next,'stack_reset');
+});
+
 test('DNS timeout routes to DNS fix',()=>{
   const r=parseDiagnosticText('dns_test','DNS request timed out.');
   assert.equal(r.next,'dns_fix');
