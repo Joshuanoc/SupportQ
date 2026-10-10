@@ -151,6 +151,20 @@ test('OneDrive invalid-name evidence stays on targeted content diagnosis',()=>{
  assert.equal(r.next,'specific_error');
 });
 
+for(const evidence of ['Faulting module KERNELBASE.dll','Runtime error: missing Visual C++ component','DLL not found: VCRUNTIME140.dll']){
+ test(`specific application crash evidence justifies specialist escalation: ${evidence}`,()=>{
+  const r=interpretGeneric('app-crash','logs',evidence);
+  assert.equal(r.escalate?.team,'Application/Desktop Support');
+  assert.match(r.summary,/dependency|module/i);
+ });
+}
+
+test('neutral runtime wording does not invent a dependency failure',()=>{
+ const r=interpretGeneric('app-crash','logs','Application runtime was 25 minutes before the window closed; no error code was shown.');
+ assert.equal(r.escalate,undefined);
+ assert.equal(r.next,'logs');
+});
+
 test('Slow PC high CPU evidence changes branch',()=>{
   const r=interpretGeneric('slow-pc','resources','CPU 94% Memory 70%');
   assert.equal(r.next,'disk');
