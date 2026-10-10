@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "lastUpdated": "2026-10-10",
+  "counts": {
+    "dailyScenariosProposed": 100,
+    "dailyCasesSpecified": 400,
+    "featuresProposed": 10,
+    "featuresImplemented": 0,
+    "featuresAccepted": 0,
+    "featuresDeployed": 0
+  },
+  "runs": [
+    {
+      "date": "2026-10-09",
+      "fixture": "tests/fixtures/daily/2026-10-09.json",
+      "scenarios": 50,
+      "caseCount": 200,
+      "areas": {
+        "routing": 10,
+        "evidence": 10,
+        "persistence": 10,
+        "automation": 10,
+        "deployment": 10
+      },
+      "statuses": {
+        "specified": 50,
+        "automatedFunctionalExecuted": 0,
+        "uiVerified": 0,
+        "accepted": 0,
+        "deployed": 0
+      },
+      "featuresDocument": "docs/qa/2026-10-09-feature-proposals.md"
+    },
+    {
+      "date": "2026-10-10",
+      "fixture": "tests/fixtures/daily/2026-10-10.json",
+      "scenarios": 50,
+      "caseCount": 200,
+      "areas": {
+        "routing": 10,
+        "evidence": 10,
+        "persistence": 10,
+        "automation": 10,
+        "deployment": 10
+      },
+      "statuses": {
+        "specified": 50,
+        "automatedFunctionalExecuted": 0,
+        "uiVerified": 0,
+        "accepted": 0,
+        "deployed": 0
+      },
+      "featuresDocument": "docs/qa/2026-10-10-feature-proposals.md"
+    }
+  ],
+  "gates": {
+    "sourcePR": 20,
+    "merge": "pending independent review and verified CI",
+    "production": "not released",
+    "security": "verify RLS/role immutability and owner isolation",
+    "accessibility": "browser and screen-reader audit pending",
+    "reachability": "Vercel SSO protects vercel.app alias"
+  }
+}

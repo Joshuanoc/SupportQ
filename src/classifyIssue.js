@@ -16,9 +16,16 @@ const keywordMap={
 };
 
 export function classifyIssue(text){
- const q=text.toLowerCase().trim();
+ const q=typeof text==='string'?text.toLowerCase().trim():'';
+ if(!q)return [];
+ // A platform name alone is context, not enough evidence to select a workflow.
+ if(/^(?:sap|sap (?:broken|not working|issue|error|help))$/.test(q))return [];
  const tokens=q.replace(/[^a-z0-9/ -]/g,' ').split(/\s+/).filter(x=>x.length>2);
- const sapIntent=/\bsap\b|\bmigo\b|\bmiro\b|\bme2\w*\b|\bme5\w*\b|\bmmbe\b|\bmbst\b|\bgr\/?ir\b|\bidoc\b|\bst22\b|\bsm37\b|\bfiori\b|material document|purchase order|purchase requisition|goods receipt|invoice receipt|movement type|vendor|supplier|posting period|obyc/i.test(q);
+ const explicitSapProcess=/\bmigo\b|\bmiro\b|\bmbst\b|material document|purchase order|purchase requisition|goods receipt|posting period|\bwbs\b|\bidoc\b|\bfiori\b|movement (?:type|[0-9]{3})|\bgr\/?ir\b|\bfrom sap\b|sap (?:spool|output|transaction|document|posting|authorization|role)/i.test(q);
+ const itContext=/\bgithub\b|\bgitlab\b|pull request|\bvpn\b|remote access|\bwi-?fi\b|\binternet\b|\bwebsite\b|\bbrowser\b|\boutlook\b|\bemail\b|\bprinter\b|\bonedrive\b|\bcamera\b|\bwebcam\b/i.test(q);
+ // Shared business nouns such as supplier, vendor, project and network are not
+ // sufficient SAP evidence when the report contains a concrete IT symptom.
+ const sapIntent=(explicitSapProcess||!itContext)&&/\bsap\b|\bmigo\b|\bmiro\b|\bme2\w*\b|\bme5\w*\b|\bmmbe\b|\bmbst\b|\bgr\/?ir\b|\bidoc\b|\bst22\b|\bsm37\b|\bfiori\b|material document|purchase order|purchase requisition|goods receipt|invoice receipt|movement type|movement [0-9]{3}|document balance|currency conversion|vendor|supplier|posting period|obyc|\bpo\b|\bpr\b|\bgr\b|\bwbs\b|fi (?:posting|document|period)|\bg\/l\b|cost center|internal order|source list|purchasing info record|scheduling agreement|contract validity|base unit|split valuation|valuation area|material status|batch.managed|serial.number.managed|project budget|role assigned|\bvl0[12]n\b|\bmb51\b|\bme23n\b|\bfb0[13]\b|\bm7\s*0?21\b|\bm7\s*0?22\b/i.test(q);
  const sapSynonyms={
   cancel:['cancel','cancelled','canceled','cancellation','reverse','reversal'],
   reverse:['reverse','reversal','cancel','cancelled','canceled'],
@@ -31,7 +38,7 @@ export function classifyIssue(text){
  };
  const expanded=new Set(tokens);
  tokens.forEach(t=>(sapSynonyms[t]||[]).forEach(v=>v.split(' ').forEach(x=>expanded.add(x))));
- const preferred = /\bazure\b|\brbac\b|\bpim\b/.test(q)?'azure-access':sapRoute(q);
+ const preferred = sapIntent ? sapRoute(q) : (/\bazure\b|\brbac\b|\bpim\b/.test(q)?'azure-access':undefined);
  const ranked=scenarios.map(s=>{
   let score=s.id===preferred?1000:0;
   const hay=`${s.id} ${s.category} ${s.title} ${s.symptoms.join(' ')}`.toLowerCase();
@@ -40,11 +47,11 @@ export function classifyIssue(text){
   if(q.includes(s.category.toLowerCase()))score+=4;
   s.symptoms.forEach(x=>{const sx=x.toLowerCase();if(q.includes(sx))score+=sx.includes(' ')?10:5});
   expanded.forEach(t=>{if(t.length>2&&hay.includes(t))score+=1});
-  if(sapIntent&&s.category.toLowerCase().startsWith('sap'))score+=8;
-  if(sapIntent&&!s.category.toLowerCase().startsWith('sap'))score-=8;
+  if(sapIntent&&s.category.toLowerCase().startsWith('sap'))score+=18;
+  if(sapIntent&&!s.category.toLowerCase().startsWith('sap'))score-=25;
   return{s,score};
  }).sort((a,b)=>b.score-a.score);
- return ranked.filter(x=>x.score>0);
+ return ranked.filter(x=>x.score>0 && !(itContext&&!explicitSapProcess&&x.s.category.startsWith('SAP')));
 }
 
 
@@ -52,19 +59,19 @@ export function classifyIssue(text){
 function sapRoute(q){
  const rules=[
   [/\b(?:sap|migo|miro|su53|fiori|po)\b.*(?:not authorized|authorization|role)|\bsu53\b|missing (?:movement.type|plant) authorization|role assigned.*(?:buffer|session)|fiori.*backend authorization/, 'sap-authorization'],
-  [/(?:material document|migo|mbst|movement)\b.*(?:revers|cancel)|\b(?:102|123|162|344|322)\b.*revers/, 'sap-material-document-reversal'],
-  [/closed posting period|posting period.*closed|closed.*posting period|\bfi\b.*period.*closed/, 'sap-posting-period'],
+  [/(?:material document|migo|mbst|movement)\b.*(?:revers|cancel)|(?:revers|cancel).*\b(?:material document|migo|mbst)\b|\b(?:102|123|162|344|322)\b.*revers/, 'sap-material-document-reversal'],
+  [/closed posting period|posting period.*closed|closed.*posting period|\bfi\b.*period.*closed|posting.*period is closed/, 'sap-posting-period'],
   [/\bwbs\b|account assignment|account-assignment|network activity|project (?:stock|budget)|settlement rule/, 'sap-account-assignment'],
   [/\bgr\s*\/?\s*ir\b|\bgrir\b/, 'sap-grir-balance'],
   [/\bidoc\b/, 'sap-idoc-data'],
   [/\bariba\b|\bcig\b/, 'sap-ariba-integration'],
   [/\b(?:st22|sm37)\b|sap short dump|background job/, 'sap-basis-runtime'],
   [/\bobyc\b|account determination/, 'sap-account-determination'],
-  [/\buom\b|unit of measure|unit conversion/, 'sap-uom'],
+  [/\buom\b|unit of measure|unit conversion|base unit/, 'sap-uom'],
   [/(?:vendor|supplier).*(?:block|purchasing organization|partner function)|vendor partner/, 'sap-vendor-blocked'],
-  [/material.*(?:not extended|view missing|missing.*view|status|valuation|split valuation)|(?:accounting|purchasing|storage) view|valuation class|split valuation/, 'sap-material-master'],
-  [/source of supply|source list|source.*(?:missing|not determined)|purchasing info record|contract.*expired|scheduling agreement/, 'sap-pr-source'],
-  [/release strategy|\bpo\b.*(?:approv|release)|purchase order.*(?:approv|release)|approver.*purchase order/, 'sap-po-release'],
+  [/material.*(?:not extended|view missing|missing.*view|status|valuation|split valuation)|(?:accounting|purchasing|storage) view|valuation class|split valuation|valuation area/, 'sap-material-master'],
+  [/source of supply|source list|source.*(?:missing|not determined)|purchasing info record|contract.*expired|contract validity|scheduling agreement/, 'sap-pr-source'],
+  [/release strategy|\bpo\b.*(?:approv|releas)|purchase order.*(?:approv|releas)|approver.*purchase order/, 'sap-po-release'],
   [/\b(?:122|161|343|321|311|301|309)\b|storage.location transfer|plant.to.plant|material.to.material/, 'sap-goods-movement'],
   [/duplicate invoice|duplicate.*invoice|invoice.*(?:wrong po|currency mismatch)|miro.*tax code/, 'sap-invoice-posting'],
   [/\bmiro\b|invoice.*(?:variance|tolerance|wrong po|duplicate|currency)|duplicate invoice/, 'sap-miro-blocked'],
