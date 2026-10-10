@@ -1223,8 +1223,8 @@
       "epic": "M09: Responsive UI and accessibility",
       "title": "Reduced motion",
       "userStory": "As a SupportQ user or operator, I want reduced motion so that support decisions are reliable and auditable.",
-      "status": "Proposed",
-      "verificationScope": "not executed",
+      "status": "Tested",
+      "verificationScope": "137 local automated tests and production build passed; GitHub feature CI passed; live OS/browser reduced-motion behavior, independent review and deployment not verified",
       "acceptanceCriteria": [
         "Given the OS requests reduced motion, when the supported flow executes, then disable nonessential motion while preserving all functionality in 100% of its named regression fixtures.",
         "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
@@ -1237,12 +1237,15 @@
         "accessibility": "Complete reduced motion with keyboard and screen reader; verify focus and status announcement."
       },
       "implementationTasks": [
-        "Inspect and reuse existing implementation for reduced motion.",
-        "Implement only the verified gap in an isolated reviewable PR.",
-        "Automate the named acceptance cases and collect relevant UI/security evidence."
+        "Reused the existing useReducedMotion guards and CSS preference rules.",
+        "Removed the remaining unconditional diagnostic exit fade and spatial scenario-card hover movement under reduced motion.",
+        "Added positive, negative, resilience and accessibility source/CSS contract tests; live candidate browser verification remains required."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
-      "evidence": []
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/30",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38023735353"
+      ]
     },
     {
       "id": "SQ-M09-05",
