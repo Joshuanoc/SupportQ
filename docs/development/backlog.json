@@ -101,15 +101,15 @@
       "title": "IT context collisions",
       "userStory": "As a SupportQ user or operator, I want it context collisions so that support decisions are reliable and auditable.",
       "status": "Tested",
-      "verificationScope": "automated/local only",
+      "verificationScope": "automated local and GitHub CI only",
       "acceptanceCriteria": [
-        "Given a GitHub/GitLab PR or vendor website issue has no explicit SAP process context, when the supported flow executes, then return no SAP candidates in 100% of its named regression fixtures.",
+        "Given a GitHub/GitLab PR, vendor website, supplier/vendor VPN, supplier/vendor email or project-network VPN issue has no explicit SAP process context, when the supported flow executes, then return no SAP candidates in 100% of its named regression fixtures.",
         "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
         "Every delivered state is operable by keyboard and relevant feedback is announced."
       ],
       "tests": {
-        "positive": "Exercise a GitHub/GitLab PR or vendor website issue has no explicit SAP process context; assert return no SAP candidates.",
-        "negative": "Omit the evidence required for it context collisions; verify clarification or recoverable failure, not a success claim.",
+        "positive": "Exercise GitHub/GitLab PR, vendor website, supplier VPN and vendor email issues without SAP process context; assert an IT workflow is preferred and no SAP candidate is returned.",
+        "negative": "Exercise ambiguous project/network/VPN wording; verify a choice is requested without presenting SAP candidates or asserting a cause.",
         "security": "Try unauthorized or adversarial input during it context collisions; verify no secrets disclosure or unauthorized data change.",
         "accessibility": "Complete it context collisions with keyboard and screen reader; verify focus and status announcement."
       },
@@ -120,7 +120,8 @@
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
       "evidence": [
-        "https://github.com/Joshuanoc/SupportQ/pull/20"
+        "https://github.com/Joshuanoc/SupportQ/pull/20",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38044571533"
       ]
     },
     {
