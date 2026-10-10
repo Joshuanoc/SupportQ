@@ -138,6 +138,17 @@ test('Outlook NDR signature takes precedence over generic failed wording',()=>{
   assert.match(r.summary,/NDR/i);
 });
 
+test('Outlook bounce evidence reaches mail transport support',()=>{
+ const r=interpretGeneric('outlook-send','outlook_error','Message bounced with status 5.1.1');
+ assert.equal(r.escalate?.team,'Microsoft 365 Support');
+});
+
+test('negative NDR evidence does not invent a mail transport escalation',()=>{
+ const r=interpretGeneric('outlook-send','outlook_error','No NDR or bounce was received; Outlook send still failed');
+ assert.equal(r.next,'outlook_error');
+ assert.equal(r.escalate,undefined);
+});
+
 for(const evidence of ['OneDrive storage is full and sync failed','Out of storage: cannot upload','Quota exceeded error code 0x800']){
  test(`OneDrive storage-limit evidence reaches quota remediation: ${evidence}`,()=>{
   const r=interpretGeneric('onedrive-sync','specific_error',evidence);
