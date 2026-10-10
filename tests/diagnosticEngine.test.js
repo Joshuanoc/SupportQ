@@ -213,9 +213,17 @@ test('Slow PC high CPU evidence changes branch',()=>{
   assert.ok(r.boosts?.['High CPU/memory']>0);
 });
 
-test('Known camera not-found signature routes to device health',()=>{
-  const r=interpretGeneric('camera-teams','teams_error','0xA00F4244 no camera found');
+for(const evidence of ['0xA00F4244 no camera found','No camera detected by Windows']){
+ test(`known camera-not-found evidence routes to device health: ${evidence}`,()=>{
+  const r=interpretGeneric('camera-teams','teams_error',evidence);
   assert.equal(r.next,'device_health');
+ });
+}
+
+test('negated camera-problem wording does not invent missing hardware',()=>{
+ const r=interpretGeneric('camera-teams','teams_error','Camera works in the OS; no camera problem there, but Teams preview is black');
+ assert.equal(r.next,'teams_error');
+ assert.equal(r.escalate,undefined);
 });
 
 test('Generic unknown evidence must not immediately escalate solely because it is unknown',()=>{
