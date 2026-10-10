@@ -284,18 +284,20 @@ export function parseDiagnosticText(nodeId, text){
     if(nodeId==='public_ip_test')return {next:'vpn_proxy_check',summary:'Public IP unreachable',boosts:{'Gateway/router issue':20,'VPN/proxy interference':15}};
     if(nodeId==='dns_test')return {next:'dns_fix',summary:'DNS query timed out',boosts:{'DNS resolution failure':45}};
   }
+  // nslookup/dig print server metadata before the actual DNS result. Match
+  // explicit failures before generic success markers such as "Server:".
+  if(/nxdomain|non-existent domain/.test(q)){
+    return {next:'dns_settings',summary:'DNS returned NXDOMAIN',boosts:{'DNS resolution failure':25}};
+  }
+  if(/server failed|servfail|refused/.test(q)){
+    return {next:'dns_settings',summary:'DNS server error/refusal',boosts:{'DNS resolution failure':35}};
+  }
   if(/reply from .*1\.1\.1\.1|bytes from 1\.1\.1\.1|0% packet loss|0\.0% packet loss/.test(q)){
     if(nodeId==='public_ip_test')return {next:'dns_test',summary:'Public IP connectivity works',boosts:{'DNS resolution failure':35,'Gateway/router issue':-15,'ISP outage':-10}};
     if(nodeId==='gateway_test')return {next:'public_ip_test',summary:'Gateway is reachable',boosts:{'Gateway/router issue':-15}};
   }
   if(/server:|address:.*53|non-authoritative answer|answer section|name:.*google/.test(q)){
     if(nodeId==='dns_test') return {next:'browser_test',summary:'DNS lookup succeeded; original issue still requires retest',boosts:{'DNS resolution failure':-30,'Browser/application issue':25,'VPN/proxy interference':10}};
-  }
-  if(/nxdomain|non-existent domain/.test(q)){
-    return {next:'dns_settings',summary:'DNS returned NXDOMAIN',boosts:{'DNS resolution failure':25}};
-  }
-  if(/server failed|servfail|refused/.test(q)){
-    return {next:'dns_settings',summary:'DNS server error/refusal',boosts:{'DNS resolution failure':35}};
   }
   if(/192\.168\.|10\.\d+\.|172\.(1[6-9]|2\d|3[0-1])\./.test(q)){
     if(nodeId==='ip_check')return {next:'gateway_test',summary:'Valid private IP detected',boosts:{'Local IP/DHCP issue':-15}};
