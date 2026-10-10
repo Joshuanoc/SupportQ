@@ -356,25 +356,29 @@
       "title": "Identity and MFA",
       "userStory": "As a SupportQ user or operator, I want identity and mfa so that support decisions are reliable and auditable.",
       "status": "Proposed",
-      "verificationScope": "not executed",
+      "verificationScope": "partial local and GitHub CI automation for MFA evidence specificity; complete live identity and MFA recovery flow not executed",
       "acceptanceCriteria": [
         "Given login or MFA fails, when the supported flow executes, then avoid collecting passwords/OTP and follow approved recovery in 100% of its named regression fixtures.",
         "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
         "Every delivered state is operable by keyboard and relevant feedback is announced."
       ],
       "tests": {
-        "positive": "Exercise login or MFA fails; assert avoid collecting passwords/OTP and follow approved recovery.",
-        "negative": "Omit the evidence required for identity and mfa; verify clarification or recoverable failure, not a success claim.",
-        "security": "Try unauthorized or adversarial input during identity and mfa; verify no secrets disclosure or unauthorized data change.",
+        "positive": "Provide genuine MFA failure evidence; assert the flow reaches approved MFA remediation without requesting passwords or OTP values.",
+        "negative": "Provide evidence that MFA succeeded or was not involved; verify sign-in diagnosis continues without an unnecessary MFA remediation loop.",
+        "security": "Verify successful or unrelated MFA evidence cannot trigger factor-reset guidance, and that no password, OTP or secret is requested or disclosed.",
         "accessibility": "Complete identity and mfa with keyboard and screen reader; verify focus and status announcement."
       },
       "implementationTasks": [
         "Inspect and reuse existing implementation for identity and mfa.",
         "Implement only the verified gap in an isolated reviewable PR.",
-        "Automate the named acceptance cases and collect relevant UI/security evidence."
+        "Automate the named acceptance cases and collect relevant UI/security evidence.",
+        "Partially advanced in PR #33: genuine MFA failure evidence reaches MFA remediation, while successful or explicitly unrelated MFA evidence remains in sign-in diagnosis. 152 local tests, production build and feature CI passed."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
-      "evidence": []
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/33",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38066747339"
+      ]
     },
     {
       "id": "SQ-M03-03",
