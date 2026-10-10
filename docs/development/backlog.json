@@ -1208,7 +1208,7 @@
       "title": "Accessible feedback",
       "userStory": "As a SupportQ user or operator, I want accessible feedback so that support decisions are reliable and auditable.",
       "status": "Proposed",
-      "verificationScope": "partial local and GitHub CI automation for wording, evidence entry, semantic progress and view-change focus; live status-announcement and assistive-technology verification not executed",
+      "verificationScope": "partial local and GitHub CI automation for wording, evidence entry, semantic progress, view-change focus and fatal-error recovery; live status-announcement and assistive-technology verification not executed",
       "acceptanceCriteria": [
         "Given intake, save or error state changes, when the supported flow executes, then announce meaningful status and errors without relying on color in 100% of its named regression fixtures.",
         "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
@@ -1227,7 +1227,8 @@
         "Partially advanced diagnostic introductory wording in PR26: removed engine promises from all three flows; 133 local tests and build passed. Intake/save/error announcements and live accessibility remain outstanding.",
         "Partially advanced evidence entry in PR #27: visible diagnostic prompts programmatically name textareas, help text is described, empty submission is prevented and input length is bounded; 137 local tests, production build and feature CI passed. Intake/save/error live announcements remain outstanding.",
         "Partially advanced semantic progress in PR #28: all three diagnosis engines expose a bounded 0–100 progressbar with matching visual and announced values; invalid and hostile values are normalized. 137 local tests, production build and feature CI passed; live screen-reader verification remains outstanding.",
-        "Partially advanced view-change feedback in PR #29: new sections and started diagnoses focus their visible h1 so keyboard and screen-reader users receive the new context. 138 local tests, production build and feature CI passed; broader live announcements remain outstanding."
+        "Partially advanced view-change feedback in PR #29: new sections and started diagnoses focus their visible h1 so keyboard and screen-reader users receive the new context. 138 local tests, production build and feature CI passed; broader live announcements remain outstanding.",
+        "Partially advanced fatal-error feedback in PR #34: the error boundary now exposes a labelled alert and native 44 px reload control without rendering internal exception details; 137 local tests, production build and feature CI passed. Live screen-reader verification remains outstanding."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
       "evidence": [
@@ -1237,7 +1238,9 @@
         "https://github.com/Joshuanoc/SupportQ/pull/28",
         "https://github.com/Joshuanoc/SupportQ/actions/runs/38016126861",
         "https://github.com/Joshuanoc/SupportQ/pull/29",
-        "https://github.com/Joshuanoc/SupportQ/actions/runs/38019744280"
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38019744280",
+        "https://github.com/Joshuanoc/SupportQ/pull/34",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38037300667"
       ]
     },
     {
@@ -1277,7 +1280,7 @@
       "title": "Storage resilience",
       "userStory": "As a SupportQ user or operator, I want storage resilience so that support decisions are reliable and auditable.",
       "status": "Tested",
-      "verificationScope": "160 local automated tests passed, including App SSR initialization/accessible markup; live browser, keyboard/screen-reader, independent review and deployment not verified",
+      "verificationScope": "160 local automated storage tests plus 137 local and GitHub CI render-recovery tests passed; App SSR initialization and secure error-boundary markup covered; live browser, keyboard/screen-reader, independent review and deployment not verified",
       "acceptanceCriteria": [
         "Given browser local storage is malformed or unavailable, when the supported flow executes, then keep navigation and diagnosis usable without a render crash in 100% of its named regression fixtures.",
         "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
@@ -1292,12 +1295,15 @@
       "implementationTasks": [
         "Implemented guarded loading/saving with valid-record retention and protected storage API access.",
         "Implemented polite, atomic status feedback and preserved in-memory history on write failure.",
-        "Passed positive, negative, security and App SSR accessibility-markup checks; live candidate browser and independent review remain required."
+        "Passed positive, negative, security and App SSR accessibility-markup checks; live candidate browser and independent review remain required.",
+        "Additional browser-resilience coverage in PR #34: fatal render errors now show fixed recovery guidance rather than raw exception details, preserve developer logging and provide an accessible reload action. 137 local tests, production build and feature CI passed."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
       "evidence": [
         "https://github.com/Joshuanoc/SupportQ/pull/23",
-        "https://github.com/Joshuanoc/SupportQ/blob/f11c4f83a14827837c5322a2342f83f49591090c/docs/development/runs/2026-10-09-history-storage.md"
+        "https://github.com/Joshuanoc/SupportQ/blob/f11c4f83a14827837c5322a2342f83f49591090c/docs/development/runs/2026-10-09-history-storage.md",
+        "https://github.com/Joshuanoc/SupportQ/pull/34",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38037300667"
       ]
     },
     {
