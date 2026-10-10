@@ -310,7 +310,8 @@ export function interpretGeneric(id,nodeId,input){
  if(id==='slow-pc'){
   const cpu=q.match(/cpu[^0-9]*(\d{2,3})%/)||q.match(/(\d{2,3})%[^\n]*cpu/);
   const mem=q.match(/memory[^0-9]*(\d{2,3})%/)||q.match(/(\d{2,3})%[^\n]*memory/);
-  if((cpu&&+cpu[1]>=80)||(mem&&+mem[1]>=85))return {summary:'Sustained high CPU/memory detected',next:'disk',boosts:{'High CPU/memory':35}};
+  const memoryPercent=mem?+mem[1]:null;
+  if((cpu&&+cpu[1]>=80)||(memoryPercent!==null&&memoryPercent>=85&&memoryPercent<=100))return {summary:'Sustained high CPU/memory detected',next:'disk',boosts:{'High CPU/memory':35}};
   return {summary:'No obvious CPU/memory saturation in pasted data',next:'disk'};
  }
  if(id==='outlook-send'){
