@@ -21,9 +21,11 @@ export function classifyIssue(text){
  // A platform name alone is context, not enough evidence to select a workflow.
  if(/^(?:sap|sap (?:broken|not working|issue|error|help))$/.test(q))return [];
  const tokens=q.replace(/[^a-z0-9/ -]/g,' ').split(/\s+/).filter(x=>x.length>2);
- const explicitSap=/\bsap\b|\bmigo\b|\bmiro\b|\bmbst\b|material document|purchase order|purchase requisition|goods receipt|posting period|\bwbs\b/i.test(q);
- const itContext=/\bgithub\b|\bgitlab\b|pull request|supplier website|vendor website/i.test(q);
- const sapIntent=(explicitSap||!itContext)&&/\bsap\b|\bmigo\b|\bmiro\b|\bme2\w*\b|\bme5\w*\b|\bmmbe\b|\bmbst\b|\bgr\/?ir\b|\bidoc\b|\bst22\b|\bsm37\b|\bfiori\b|material document|purchase order|purchase requisition|goods receipt|invoice receipt|movement type|movement [0-9]{3}|document balance|currency conversion|vendor|supplier|posting period|obyc|\bpo\b|\bpr\b|\bgr\b|\bwbs\b|fi (?:posting|document|period)|\bg\/l\b|cost center|internal order|source list|purchasing info record|scheduling agreement|contract validity|base unit|split valuation|valuation area|material status|batch.managed|serial.number.managed|project budget|role assigned|\bvl0[12]n\b|\bmb51\b|\bme23n\b|\bfb0[13]\b|\bm7\s*0?21\b|\bm7\s*0?22\b/i.test(q);
+ const explicitSapProcess=/\bmigo\b|\bmiro\b|\bmbst\b|material document|purchase order|purchase requisition|goods receipt|posting period|\bwbs\b|\bidoc\b|\bfiori\b|movement (?:type|[0-9]{3})|\bgr\/?ir\b|\bfrom sap\b|sap (?:spool|output|transaction|document|posting|authorization|role)/i.test(q);
+ const itContext=/\bgithub\b|\bgitlab\b|pull request|\bvpn\b|remote access|\bwi-?fi\b|\binternet\b|\bwebsite\b|\bbrowser\b|\boutlook\b|\bemail\b|\bprinter\b|\bonedrive\b|\bcamera\b|\bwebcam\b/i.test(q);
+ // Shared business nouns such as supplier, vendor, project and network are not
+ // sufficient SAP evidence when the report contains a concrete IT symptom.
+ const sapIntent=(explicitSapProcess||!itContext)&&/\bsap\b|\bmigo\b|\bmiro\b|\bme2\w*\b|\bme5\w*\b|\bmmbe\b|\bmbst\b|\bgr\/?ir\b|\bidoc\b|\bst22\b|\bsm37\b|\bfiori\b|material document|purchase order|purchase requisition|goods receipt|invoice receipt|movement type|movement [0-9]{3}|document balance|currency conversion|vendor|supplier|posting period|obyc|\bpo\b|\bpr\b|\bgr\b|\bwbs\b|fi (?:posting|document|period)|\bg\/l\b|cost center|internal order|source list|purchasing info record|scheduling agreement|contract validity|base unit|split valuation|valuation area|material status|batch.managed|serial.number.managed|project budget|role assigned|\bvl0[12]n\b|\bmb51\b|\bme23n\b|\bfb0[13]\b|\bm7\s*0?21\b|\bm7\s*0?22\b/i.test(q);
  const sapSynonyms={
   cancel:['cancel','cancelled','canceled','cancellation','reverse','reversal'],
   reverse:['reverse','reversal','cancel','cancelled','canceled'],
@@ -49,7 +51,7 @@ export function classifyIssue(text){
   if(sapIntent&&!s.category.toLowerCase().startsWith('sap'))score-=25;
   return{s,score};
  }).sort((a,b)=>b.score-a.score);
- return ranked.filter(x=>x.score>0 && !(itContext&&!explicitSap&&x.s.category.startsWith('SAP')));
+ return ranked.filter(x=>x.score>0 && !(itContext&&!explicitSapProcess&&x.s.category.startsWith('SAP')));
 }
 
 
