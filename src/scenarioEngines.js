@@ -307,23 +307,36 @@ export function profileHypotheses(id){const p=profileFor(id);return p?p.hypothes
 export function interpretGeneric(id,nodeId,input){
  const q=(input||'').toLowerCase();
  if(!q.trim())return {summary:'No evidence provided',next:nodeId};
+ if(id==='slow-pc'){
+  const cpu=q.match(/cpu[^0-9]*(\d{2,3})%/)||q.match(/(\d{2,3})%[^\n]*cpu/);
+  const mem=q.match(/memory[^0-9]*(\d{2,3})%/)||q.match(/(\d{2,3})%[^\n]*memory/);
+  const memoryPercent=mem?+mem[1]:null;
+  if((cpu&&+cpu[1]>=80)||(memoryPercent!==null&&memoryPercent>=85&&memoryPercent<=100))return {summary:'Sustained high CPU/memory detected',next:'disk',boosts:{'High CPU/memory':35}};
+  return {summary:'No obvious CPU/memory saturation in pasted data',next:'disk'};
+ }
+ if(id==='outlook-send'){
+  const transportSignature=/5\.[0-9]\.[0-9]|\bndr\b|\bbounce(?:d)?\b|non-delivery report/.test(q);
+  const transportCleared=/\bno\s+(?:ndr|bounce|non-delivery report)\b|(?:\bndr\b|\bbounce\b|non-delivery report).{0,24}\b(?:not received|not generated|absent)\b/.test(q);
+  if(transportSignature&&!transportCleared)return {summary:'Mail transport/NDR evidence captured',escalate:{team:'Microsoft 365 Support',reason:'Mail transport/NDR error requires mailbox/transport investigation'}};
+ }
+ if(id==='onedrive-sync'){
+  if(/invalid.*name|path.*long/.test(q))return {summary:'OneDrive content/path blocker detected',next:'specific_error'};
+  const storageLimit=/\bstorage\s+(?:is\s+)?full\b|\bout of storage\b|\bquota\s+(?:is\s+)?(?:exceeded|full|reached)\b|\b(?:exceeded|reached)\s+(?:the\s+)?(?:storage\s+)?quota\b|\bstorage\s+(?:quota|limit)\s+(?:is\s+)?(?:exceeded|full|reached)\b/.test(q);
+  if(storageLimit)return {summary:'OneDrive storage/quota blocker detected',next:'quota'};
+ }
+ if(id==='app-crash'&&/(?:dll|module).*(?:not found|missing|failed|fault)|(?:not found|missing|failed|fault).*(?:dll|module)|faulting (?:application|module)|runtime (?:error|exception|failure)|(?:error|exception|failure).*runtime/.test(q))return {summary:'Application dependency/module crash signature detected',escalate:{team:'Application/Desktop Support',reason:'Crash log indicates dependency/module failure'}};
+ if(id==='camera-teams'&&/0xa00f|camera.{0,24}(?:not found|not detected|missing)|no camera (?:found|detected|available)/.test(q))return {summary:'Camera device-not-found signature detected',next:'device_health'};
+ if(id==='azure-access'&&/role assignment|authorizationfailed|does not have authorization/.test(q))return {summary:'Azure RBAC authorization failure detected',escalate:{team:'Cloud/IAM Support',reason:'Azure error confirms missing/insufficient RBAC at requested scope'}};
+ if(id==='disk-full'&&/\b(?:temp|temporary|cache)\b/.test(q))return {summary:'Temporary/cache growth identified',next:'cleanup'};
+ if(id==='disk-full'&&/\blogs?\b/.test(q))return {summary:'Log growth identified',next:'retention'};
+ if(id==='locked-account'&&/mfa|multi-factor|authentication method/.test(q)){
+  const mfaCleared=/\b(?:mfa|multi-factor|authentication method)\b.{0,24}\b(?:succeeded|successful|passed|completed|not involved|not required)\b|\b(?:no|without)\s+(?:mfa|multi-factor)\b/.test(q);
+  if(!mfaCleared)return {summary:'MFA-related sign-in failure detected',next:'mfa'};
+ }
  if(/access denied|permission denied|403|forbidden/.test(q)){
   if(id==='azure-access')return {summary:'Authorization failure detected',next:'azure_error'};
   if(id==='locked-account')return {summary:'Access/authentication denial detected',next:'signin_logs'};
  }
  if(/0x800|error code|exception|failed|failure|cannot|unable|timed out|timeout/.test(q))return {summary:'Error output captured for diagnosis',next:nodeId};
- if(id==='slow-pc'){
-  const cpu=q.match(/cpu[^0-9]*(\d{2,3})%/)||q.match(/(\d{2,3})%[^\n]*cpu/);
-  const mem=q.match(/memory[^0-9]*(\d{2,3})%/)||q.match(/(\d{2,3})%[^\n]*memory/);
-  if((cpu&&+cpu[1]>=80)||(mem&&+mem[1]>=85))return {summary:'Sustained high CPU/memory detected',next:'disk',boosts:{'High CPU/memory':35}};
-  return {summary:'No obvious CPU/memory saturation in pasted data',next:'disk'};
- }
- if(id==='outlook-send'&&/5\.[0-9]\.[0-9]|ndr|bounce/.test(q))return {summary:'Mail transport/NDR evidence captured',escalate:{team:'Microsoft 365 Support',reason:'Mail transport/NDR error requires mailbox/transport investigation'}};
- if(id==='onedrive-sync'&&/invalid.*name|path.*long|storage.*full|quota/.test(q))return {summary:'OneDrive content/quota blocker detected',next:q.includes('quota')?'quota':'specific_error'};
- if(id==='app-crash'&&/dll|runtime|module|faulting/.test(q))return {summary:'Application dependency/module crash signature detected',escalate:{team:'Application/Desktop Support',reason:'Crash log indicates dependency/module failure'}};
- if(id==='camera-teams'&&/0xa00f|camera.*not found|no camera/.test(q))return {summary:'Camera device-not-found signature detected',next:'device_health'};
- if(id==='azure-access'&&/role assignment|authorizationfailed|does not have authorization/.test(q))return {summary:'Azure RBAC authorization failure detected',escalate:{team:'Cloud/IAM Support',reason:'Azure error confirms missing/insufficient RBAC at requested scope'}};
- if(id==='disk-full'&&/log|logs|cache|temp/.test(q))return {summary:'Log/cache growth identified',next:'retention'};
- if(id==='locked-account'&&/mfa|multi-factor|authentication method/.test(q))return {summary:'MFA-related sign-in failure detected',next:'mfa'};
  return {summary:'Evidence captured but not yet conclusive. Keep the incident in diagnosis and collect the exact error/code, what happened immediately before it, and one comparison result before escalating.',next:nodeId};
 }
