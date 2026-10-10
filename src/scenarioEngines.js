@@ -313,7 +313,11 @@ export function interpretGeneric(id,nodeId,input){
   if((cpu&&+cpu[1]>=80)||(mem&&+mem[1]>=85))return {summary:'Sustained high CPU/memory detected',next:'disk',boosts:{'High CPU/memory':35}};
   return {summary:'No obvious CPU/memory saturation in pasted data',next:'disk'};
  }
- if(id==='outlook-send'&&/5\.[0-9]\.[0-9]|ndr|bounce/.test(q))return {summary:'Mail transport/NDR evidence captured',escalate:{team:'Microsoft 365 Support',reason:'Mail transport/NDR error requires mailbox/transport investigation'}};
+ if(id==='outlook-send'){
+  const transportSignature=/5\.[0-9]\.[0-9]|\bndr\b|\bbounce(?:d)?\b|non-delivery report/.test(q);
+  const transportCleared=/\bno\s+(?:ndr|bounce|non-delivery report)\b|(?:\bndr\b|\bbounce\b|non-delivery report).{0,24}\b(?:not received|not generated|absent)\b/.test(q);
+  if(transportSignature&&!transportCleared)return {summary:'Mail transport/NDR evidence captured',escalate:{team:'Microsoft 365 Support',reason:'Mail transport/NDR error requires mailbox/transport investigation'}};
+ }
  if(id==='onedrive-sync'){
   if(/invalid.*name|path.*long/.test(q))return {summary:'OneDrive content/path blocker detected',next:'specific_error'};
   const storageLimit=/\bstorage\s+(?:is\s+)?full\b|\bout of storage\b|\bquota\s+(?:is\s+)?(?:exceeded|full|reached)\b|\b(?:exceeded|reached)\s+(?:the\s+)?(?:storage\s+)?quota\b|\bstorage\s+(?:quota|limit)\s+(?:is\s+)?(?:exceeded|full|reached)\b/.test(q);
