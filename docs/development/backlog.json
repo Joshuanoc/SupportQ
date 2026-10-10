@@ -385,7 +385,7 @@
       "title": "Cloud authorization",
       "userStory": "As a SupportQ user or operator, I want cloud authorization so that support decisions are reliable and auditable.",
       "status": "Proposed",
-      "verificationScope": "not executed",
+      "verificationScope": "partial local and GitHub CI automation for confirmed Azure RBAC signatures and ambiguous 403 handling; complete live cloud-authorization flow not executed",
       "acceptanceCriteria": [
         "Given Azure access is denied, when the supported flow executes, then check tenant, RBAC scope and approved PIM activation without broadening privileges in 100% of its named regression fixtures.",
         "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
@@ -400,10 +400,14 @@
       "implementationTasks": [
         "Inspect and reuse existing implementation for cloud authorization.",
         "Implement only the verified gap in an isolated reviewable PR.",
-        "Automate the named acceptance cases and collect relevant UI/security evidence."
+        "Automate the named acceptance cases and collect relevant UI/security evidence.",
+        "Partially advanced in PR #33: confirmed AuthorizationFailed/missing-authorization evidence now reaches a justified Cloud/IAM escalation, while a generic 403 remains in diagnosis without inventing an RBAC cause. 135 local tests, production build and feature CI passed."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
-      "evidence": []
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/33",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38033665432"
+      ]
     },
     {
       "id": "SQ-M03-05",
@@ -767,7 +771,7 @@
       "title": "Escalation evidence",
       "userStory": "As a SupportQ user or operator, I want escalation evidence so that support decisions are reliable and auditable.",
       "status": "Proposed",
-      "verificationScope": "not executed",
+      "verificationScope": "partial local and GitHub CI automation for Azure RBAC and Outlook NDR evidence precedence; complete live escalation workflow not executed",
       "acceptanceCriteria": [
         "Given approved remedies fail, when the supported flow executes, then export only collected evidence, attempted actions and the correct assignment in 100% of its named regression fixtures.",
         "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
@@ -782,10 +786,14 @@
       "implementationTasks": [
         "Inspect and reuse existing implementation for escalation evidence.",
         "Implement only the verified gap in an isolated reviewable PR.",
-        "Automate the named acceptance cases and collect relevant UI/security evidence."
+        "Automate the named acceptance cases and collect relevant UI/security evidence.",
+        "Partially advanced in PR #33: scenario-specific Azure RBAC and Outlook NDR signatures now take precedence over generic error wording, producing evidence-backed specialist escalation while ambiguous errors continue diagnosis. 135 local tests, production build and feature CI passed."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
-      "evidence": []
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/33",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38033665432"
+      ]
     },
     {
       "id": "SQ-M06-04",
