@@ -314,7 +314,10 @@ export function interpretGeneric(id,nodeId,input){
   return {summary:'No obvious CPU/memory saturation in pasted data',next:'disk'};
  }
  if(id==='outlook-send'&&/5\.[0-9]\.[0-9]|ndr|bounce/.test(q))return {summary:'Mail transport/NDR evidence captured',escalate:{team:'Microsoft 365 Support',reason:'Mail transport/NDR error requires mailbox/transport investigation'}};
- if(id==='onedrive-sync'&&/invalid.*name|path.*long|storage.*full|quota/.test(q))return {summary:'OneDrive content/quota blocker detected',next:q.includes('quota')?'quota':'specific_error'};
+ if(id==='onedrive-sync'&&/invalid.*name|path.*long|storage.*full|out of storage|quota/.test(q)){
+  const storageLimit=/storage.*full|out of storage|quota/.test(q);
+  return {summary:'OneDrive content/quota blocker detected',next:storageLimit?'quota':'specific_error'};
+ }
  if(id==='app-crash'&&/dll|runtime|module|faulting/.test(q))return {summary:'Application dependency/module crash signature detected',escalate:{team:'Application/Desktop Support',reason:'Crash log indicates dependency/module failure'}};
  if(id==='camera-teams'&&/0xa00f|camera.*not found|no camera/.test(q))return {summary:'Camera device-not-found signature detected',next:'device_health'};
  if(id==='azure-access'&&/role assignment|authorizationfailed|does not have authorization/.test(q))return {summary:'Azure RBAC authorization failure detected',escalate:{team:'Cloud/IAM Support',reason:'Azure error confirms missing/insufficient RBAC at requested scope'}};
