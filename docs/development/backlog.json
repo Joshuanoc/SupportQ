@@ -383,7 +383,7 @@
       "title": "Endpoint recovery",
       "userStory": "As a SupportQ user or operator, I want endpoint recovery so that support decisions are reliable and auditable.",
       "status": "Proposed",
-      "verificationScope": "not executed",
+      "verificationScope": "partial local and GitHub CI automation for OneDrive storage-limit evidence; complete live endpoint/application recovery flow not executed",
       "acceptanceCriteria": [
         "Given a driver, boot or application error occurs, when the supported flow executes, then use OS-appropriate supported steps and preserve user data in 100% of its named regression fixtures.",
         "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
@@ -391,17 +391,21 @@
       ],
       "tests": {
         "positive": "Exercise a driver, boot or application error occurs; assert use OS-appropriate supported steps and preserve user data.",
-        "negative": "Omit the evidence required for endpoint recovery; verify clarification or recoverable failure, not a success claim.",
+        "negative": "Provide invalid-name evidence without a storage-limit signature; verify it remains on targeted content diagnosis instead of entering unrelated capacity remediation.",
         "security": "Try unauthorized or adversarial input during endpoint recovery; verify no secrets disclosure or unauthorized data change.",
         "accessibility": "Complete endpoint recovery with keyboard and screen reader; verify focus and status announcement."
       },
       "implementationTasks": [
         "Inspect and reuse existing implementation for endpoint recovery.",
         "Implement only the verified gap in an isolated reviewable PR.",
-        "Automate the named acceptance cases and collect relevant UI/security evidence."
+        "Automate the named acceptance cases and collect relevant UI/security evidence.",
+        "Partially advanced in PR #33: OneDrive storage-full, out-of-storage and quota evidence now reaches capacity remediation instead of looping on the same evidence prompt, while invalid-name evidence remains on content diagnosis. 139 local tests, production build and feature CI passed."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
-      "evidence": []
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/33",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38051140088"
+      ]
     },
     {
       "id": "SQ-M03-04",
