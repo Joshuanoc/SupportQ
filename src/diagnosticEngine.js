@@ -48,7 +48,7 @@ export const wifiFlow = {
     options:[
       {label:'Yes, another connection works',value:'alt_works',next:'wifi_adapter_fix', boosts:{'Local IP/DHCP issue':20,'Gateway/router issue':-10}},
       {label:'No, nothing works',value:'none_work',next:'stack_reset', boosts:{'Local IP/DHCP issue':15,'VPN/proxy interference':10}},
-      {label:'I cannot test that',value:'cant_test',next:'stack_reset'}
+      {label:'I cannot test that',value:'cant_test',next:'driver_health'}
     ]
   },
   wifi_adapter_fix:{
@@ -289,7 +289,7 @@ export function parseDiagnosticText(nodeId, text){
     if(nodeId==='gateway_test')return {next:'public_ip_test',summary:'Gateway is reachable',boosts:{'Gateway/router issue':-15}};
   }
   if(/server:|address:.*53|non-authoritative answer|answer section|name:.*google/.test(q)){
-    if(nodeId==='dns_test') return {resolve:{cause:'DNS is functioning; issue is likely browser, proxy, or application-specific',confidence:78},summary:'DNS lookup succeeded'};
+    if(nodeId==='dns_test') return {next:'browser_test',summary:'DNS lookup succeeded; original issue still requires retest',boosts:{'DNS resolution failure':-30,'Browser/application issue':25,'VPN/proxy interference':10}};
   }
   if(/nxdomain|non-existent domain/.test(q)){
     return {next:'dns_settings',summary:'DNS returned NXDOMAIN',boosts:{'DNS resolution failure':25}};
