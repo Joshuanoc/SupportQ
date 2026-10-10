@@ -314,9 +314,10 @@ export function interpretGeneric(id,nodeId,input){
   return {summary:'No obvious CPU/memory saturation in pasted data',next:'disk'};
  }
  if(id==='outlook-send'&&/5\.[0-9]\.[0-9]|ndr|bounce/.test(q))return {summary:'Mail transport/NDR evidence captured',escalate:{team:'Microsoft 365 Support',reason:'Mail transport/NDR error requires mailbox/transport investigation'}};
- if(id==='onedrive-sync'&&/invalid.*name|path.*long|storage.*full|out of storage|quota/.test(q)){
-  const storageLimit=/storage.*full|out of storage|quota/.test(q);
-  return {summary:'OneDrive content/quota blocker detected',next:storageLimit?'quota':'specific_error'};
+ if(id==='onedrive-sync'){
+  if(/invalid.*name|path.*long/.test(q))return {summary:'OneDrive content/path blocker detected',next:'specific_error'};
+  const storageLimit=/\bstorage\s+(?:is\s+)?full\b|\bout of storage\b|\bquota\s+(?:is\s+)?(?:exceeded|full|reached)\b|\b(?:exceeded|reached)\s+(?:the\s+)?(?:storage\s+)?quota\b|\bstorage\s+(?:quota|limit)\s+(?:is\s+)?(?:exceeded|full|reached)\b/.test(q);
+  if(storageLimit)return {summary:'OneDrive storage/quota blocker detected',next:'quota'};
  }
  if(id==='app-crash'&&/(?:dll|module).*(?:not found|missing|failed|fault)|(?:not found|missing|failed|fault).*(?:dll|module)|faulting (?:application|module)|runtime (?:error|exception|failure)|(?:error|exception|failure).*runtime/.test(q))return {summary:'Application dependency/module crash signature detected',escalate:{team:'Application/Desktop Support',reason:'Crash log indicates dependency/module failure'}};
  if(id==='camera-teams'&&/0xa00f|camera.*not found|no camera/.test(q))return {summary:'Camera device-not-found signature detected',next:'device_health'};
