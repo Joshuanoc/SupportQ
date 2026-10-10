@@ -156,4 +156,7 @@ textarea::placeholder,input::placeholder { color:#667b85; opacity:1; }
  .cardFoot svg,.examplePrompts svg,.sectionTitle button svg,.primary svg { transition:transform .14s ease-out; }
  .scenarioCard:hover .cardFoot svg,.examplePrompts button:hover svg,.sectionTitle button:hover svg,.primary:hover:not(:disabled) svg { transform:translateX(3px); }
 }
-@media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; animation:none!important; } }
+@media(prefers-reduced-motion:reduce) {
+ *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; animation:none!important; }
+ .scenarioCard:hover { transform:none!important; }
+}
