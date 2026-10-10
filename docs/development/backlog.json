@@ -1124,7 +1124,7 @@
       "title": "Mobile layout",
       "userStory": "As a SupportQ user or operator, I want mobile layout so that support decisions are reliable and auditable.",
       "status": "Proposed",
-      "verificationScope": "not executed",
+      "verificationScope": "partial local and GitHub CI automation for mobile drawer closure and resilient focus-target discovery; live 320/375/768 pixel responsive verification not executed",
       "acceptanceCriteria": [
         "Given the app is used at 320, 375 and 768 pixel widths, when the supported flow executes, then show no page-level horizontal overflow and usable controls in 100% of its named regression fixtures.",
         "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
@@ -1139,10 +1139,14 @@
       "implementationTasks": [
         "Inspect and reuse existing implementation for mobile layout.",
         "Implement only the verified gap in an isolated reviewable PR.",
-        "Automate the named acceptance cases and collect relevant UI/security evidence."
+        "Automate the named acceptance cases and collect relevant UI/security evidence.",
+        "Partially advanced in PR #31: the mobile navigation dialog now contains a first-in-order 44 px close control within its focus trap, while missing drawer markup fails recoverably; 137 local tests, production build and feature CI passed. Live 320/375/768 pixel layout review remains outstanding."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
-      "evidence": []
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/31",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38026982111"
+      ]
     },
     {
       "id": "SQ-M09-02",
@@ -1151,7 +1155,7 @@
       "title": "Keyboard flow",
       "userStory": "As a SupportQ user or operator, I want keyboard flow so that support decisions are reliable and auditable.",
       "status": "Proposed",
-      "verificationScope": "partial local and GitHub CI automation for evidence entry and view focus; complete live keyboard and assistive-technology verification not executed",
+      "verificationScope": "partial local and GitHub CI automation for evidence entry, view focus and mobile drawer closure; complete live keyboard and assistive-technology verification not executed",
       "acceptanceCriteria": [
         "Given a keyboard-only user opens diagnosis, when the supported flow executes, then reach every control with visible focus and logical order in 100% of its named regression fixtures.",
         "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
@@ -1168,14 +1172,17 @@
         "Implement only the verified gap in an isolated reviewable PR.",
         "Automate the named acceptance cases and collect relevant UI/security evidence.",
         "Partially advanced in PR #27: both evidence forms expose prompt/help associations, disable blank submission, support Ctrl/Command+Enter and bound evidence to 4,000 characters; 137 local tests, production build and feature CI passed. Full keyboard flow and live screen-reader verification remain outstanding.",
-        "Partially advanced view focus in PR #29: real section and diagnosis changes move focus to the visible page heading without forcing scroll; initial render is unchanged and focus failures are recoverable. 138 local tests, production build and feature CI passed; end-to-end browser focus order remains outstanding."
+        "Partially advanced view focus in PR #29: real section and diagnosis changes move focus to the visible page heading without forcing scroll; initial render is unchanged and focus failures are recoverable. 138 local tests, production build and feature CI passed; end-to-end browser focus order remains outstanding.",
+        "Partially advanced mobile keyboard closure in PR #31: the navigation dialog now provides an explicit first focus target for closing, while preserving Escape and trigger-focus restoration; 137 local tests, production build and feature CI passed. Live keyboard and screen-reader verification remain outstanding."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
       "evidence": [
         "https://github.com/Joshuanoc/SupportQ/pull/27",
         "https://github.com/Joshuanoc/SupportQ/actions/runs/38012898487",
         "https://github.com/Joshuanoc/SupportQ/pull/29",
-        "https://github.com/Joshuanoc/SupportQ/actions/runs/38019744280"
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38019744280",
+        "https://github.com/Joshuanoc/SupportQ/pull/31",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38026982111"
       ]
     },
     {
@@ -1413,5 +1420,5 @@
       "evidence": []
     }
   ],
-  "lastUpdated": "2026-10-09"
+  "lastUpdated": "2026-10-10"
 }
