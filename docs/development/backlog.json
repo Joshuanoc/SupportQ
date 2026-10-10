@@ -1193,10 +1193,13 @@
       "implementationTasks": [
         "Inspect and reuse existing implementation for accessible feedback.",
         "Implement only the verified gap in an isolated reviewable PR.",
-        "Automate the named acceptance cases and collect relevant UI/security evidence."
+        "Automate the named acceptance cases and collect relevant UI/security evidence.",
+        "Partially advanced diagnostic introductory wording in PR26: removed engine promises from all three flows; 133 local tests and build passed. Intake/save/error announcements and live accessibility remain outstanding."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
-      "evidence": []
+      "evidence": [
+        "https://github.com/Joshuanoc/SupportQ/pull/26"
+      ]
     },
     {
       "id": "SQ-M09-04",
