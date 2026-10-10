@@ -193,6 +193,20 @@ test('words containing log do not invent a log-retention cause',()=>{
  assert.equal(r.escalate,undefined);
 });
 
+test('genuine MFA failure reaches MFA remediation',()=>{
+ const r=interpretGeneric('locked-account','signin_logs','MFA challenge failed after password entry');
+ assert.equal(r.next,'mfa');
+ assert.match(r.summary,/MFA/i);
+});
+
+for(const evidence of ['MFA was successful; sign-in still failed','MFA not involved; password expired']){
+ test(`cleared or unrelated MFA evidence does not loop into MFA remediation: ${evidence}`,()=>{
+  const r=interpretGeneric('locked-account','signin_logs',evidence);
+  assert.equal(r.next,'signin_logs');
+  assert.equal(r.escalate,undefined);
+ });
+}
+
 test('Slow PC high CPU evidence changes branch',()=>{
   const r=interpretGeneric('slow-pc','resources','CPU 94% Memory 70%');
   assert.equal(r.next,'disk');
