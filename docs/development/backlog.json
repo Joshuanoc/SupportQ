@@ -3,18 +3,21 @@
   "date": "2026-10-09",
   "scopeNote": "Working breakdown reconstructed from this assignment. No authoritative earlier 10-module/50-story specification was present in audited main or PR20; additional product scope remains Proposed, not implicitly approved. Tested means the stated local/automated scope only; no story is Accepted or Deployed.",
   "integrationAudit": {
-    "checkedAt": "2026-10-10T09:14:31Z",
+    "checkedAt": "2026-10-10T20:12:00Z",
     "baseline": "779aa0d29c397ea643d822ac08ed9c21c79e8eb6",
-    "method": "Git merge-tree audit of the current remote heads in priority order; no production or database access was used.",
+    "method": "Local merge of the exact current remote heads in priority order, followed by the complete Node test suite, production build, backlog JSON parse and diff whitespace validation; no production or database access was used.",
     "cleanInOrder": [
+      "PR21",
       "PR23",
       "PR24",
       "PR26",
       "PR32",
       "PR33",
-      "PR34"
+      "PR34",
+      "PR22"
     ],
     "requiresAppConflictResolution": [
+      "PR20",
       "PR25",
       "PR27",
       "PR28",
@@ -23,7 +26,23 @@
       "PR31"
     ],
     "conflictPath": "src/App.jsx",
-    "releaseGate": "Do not merge the conflicting drafts independently after PR23/PR24. Rebase them in reviewed priority order, preserve each story's tests and acceptance criteria, then run the full suite and production build on the combined head before acceptance."
+    "validatedHeads": {
+      "PR21": "f4bc8105af979fdc30842b235e8bd2b3e640d9b0",
+      "PR22": "7ce768c9ac6b22360f337a008214c8128d36df0d",
+      "PR23": "f11c4f83a14827837c5322a2342f83f49591090c",
+      "PR24": "9620dbbd4f825da68db5fe57720e18f58b583505",
+      "PR26": "4f92de6a83bbb100f81172a69d39bd75b9385d65",
+      "PR32": "7bbab3b97205ecb328bc804e95a79077cb5447d1",
+      "PR33": "0ff9614eb837ea7817cb3d430c230d1af729c33f",
+      "PR34": "c972150e8b9f5f1d11df711799f1aa2c266e395"
+    },
+    "validation": {
+      "tests": "205 passed, 0 failed",
+      "productionBuild": "passed with existing non-failing bundle-size advisory",
+      "backlogJson": "valid",
+      "diffCheck": "passed"
+    },
+    "releaseGate": "PR20 now conflicts with PR23 in src/App.jsx because intake feedback and resilient history initialization touch the same state block. Review and compose PR20 before PR23, then rebase the remaining App.jsx drafts in approved priority order, preserve every story's tests and acceptance criteria, and rerun the full suite and production build on the final combined head before acceptance."
   },
   "stateFlow": [
     "Proposed",
