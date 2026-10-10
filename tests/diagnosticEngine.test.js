@@ -138,6 +138,19 @@ test('Outlook NDR signature takes precedence over generic failed wording',()=>{
   assert.match(r.summary,/NDR/i);
 });
 
+for(const evidence of ['OneDrive storage is full and sync failed','Out of storage: cannot upload','Quota exceeded error code 0x800']){
+ test(`OneDrive storage-limit evidence reaches quota remediation: ${evidence}`,()=>{
+  const r=interpretGeneric('onedrive-sync','specific_error',evidence);
+  assert.equal(r.next,'quota');
+  assert.match(r.summary,/quota blocker/i);
+ });
+}
+
+test('OneDrive invalid-name evidence stays on targeted content diagnosis',()=>{
+ const r=interpretGeneric('onedrive-sync','specific_error','Sync failed: invalid file name');
+ assert.equal(r.next,'specific_error');
+});
+
 test('Slow PC high CPU evidence changes branch',()=>{
   const r=interpretGeneric('slow-pc','resources','CPU 94% Memory 70%');
   assert.equal(r.next,'disk');
