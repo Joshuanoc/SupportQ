@@ -318,7 +318,7 @@ export function interpretGeneric(id,nodeId,input){
   const storageLimit=/storage.*full|out of storage|quota/.test(q);
   return {summary:'OneDrive content/quota blocker detected',next:storageLimit?'quota':'specific_error'};
  }
- if(id==='app-crash'&&/dll|runtime|module|faulting/.test(q))return {summary:'Application dependency/module crash signature detected',escalate:{team:'Application/Desktop Support',reason:'Crash log indicates dependency/module failure'}};
+ if(id==='app-crash'&&/(?:dll|module).*(?:not found|missing|failed|fault)|(?:not found|missing|failed|fault).*(?:dll|module)|faulting (?:application|module)|runtime (?:error|exception|failure)|(?:error|exception|failure).*runtime/.test(q))return {summary:'Application dependency/module crash signature detected',escalate:{team:'Application/Desktop Support',reason:'Crash log indicates dependency/module failure'}};
  if(id==='camera-teams'&&/0xa00f|camera.*not found|no camera/.test(q))return {summary:'Camera device-not-found signature detected',next:'device_health'};
  if(id==='azure-access'&&/role assignment|authorizationfailed|does not have authorization/.test(q))return {summary:'Azure RBAC authorization failure detected',escalate:{team:'Cloud/IAM Support',reason:'Azure error confirms missing/insufficient RBAC at requested scope'}};
  if(id==='disk-full'&&/log|logs|cache|temp/.test(q))return {summary:'Log/cache growth identified',next:'retention'};
