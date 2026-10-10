@@ -324,7 +324,10 @@ export function interpretGeneric(id,nodeId,input){
  if(id==='azure-access'&&/role assignment|authorizationfailed|does not have authorization/.test(q))return {summary:'Azure RBAC authorization failure detected',escalate:{team:'Cloud/IAM Support',reason:'Azure error confirms missing/insufficient RBAC at requested scope'}};
  if(id==='disk-full'&&/\b(?:temp|temporary|cache)\b/.test(q))return {summary:'Temporary/cache growth identified',next:'cleanup'};
  if(id==='disk-full'&&/\blogs?\b/.test(q))return {summary:'Log growth identified',next:'retention'};
- if(id==='locked-account'&&/mfa|multi-factor|authentication method/.test(q))return {summary:'MFA-related sign-in failure detected',next:'mfa'};
+ if(id==='locked-account'&&/mfa|multi-factor|authentication method/.test(q)){
+  const mfaCleared=/\b(?:mfa|multi-factor|authentication method)\b.{0,24}\b(?:succeeded|successful|passed|completed|not involved|not required)\b|\b(?:no|without)\s+(?:mfa|multi-factor)\b/.test(q);
+  if(!mfaCleared)return {summary:'MFA-related sign-in failure detected',next:'mfa'};
+ }
  if(/access denied|permission denied|403|forbidden/.test(q)){
   if(id==='azure-access')return {summary:'Authorization failure detected',next:'azure_error'};
   if(id==='locked-account')return {summary:'Access/authentication denial detected',next:'signin_logs'};
