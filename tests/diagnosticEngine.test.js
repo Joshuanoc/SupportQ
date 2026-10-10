@@ -224,6 +224,19 @@ test('Slow PC high CPU evidence changes branch',()=>{
   assert.ok(r.boosts?.['High CPU/memory']>0);
 });
 
+test('Slow PC valid high-memory evidence changes branch',()=>{
+ const r=interpretGeneric('slow-pc','resources','Memory 86%');
+ assert.equal(r.next,'disk');
+ assert.ok(r.boosts?.['High CPU/memory']>0);
+});
+
+test('Slow PC impossible memory percentage does not create saturation evidence',()=>{
+ const r=interpretGeneric('slow-pc','resources','Memory 999%');
+ assert.equal(r.next,'disk');
+ assert.equal(r.boosts,undefined);
+ assert.match(r.summary,/no obvious/i);
+});
+
 for(const evidence of ['0xA00F4244 no camera found','No camera detected by Windows']){
  test(`known camera-not-found evidence routes to device health: ${evidence}`,()=>{
   const r=interpretGeneric('camera-teams','teams_error',evidence);
