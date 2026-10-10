@@ -22,11 +22,40 @@ for (const [prompt, id] of routingCases) test(`intake starts ${id}: ${prompt}`, 
   assert.equal(decision.scenario.id, id);
   if (decision.scenario.category.startsWith('SAP')) assert.equal(initialPhase(decision.scenario, {}), 'diagnose');
 });
-for (const prompt of ['My GitHub PR cannot be approved', 'GitLab pull request approval fails', 'The supplier website is down', 'The vendor website cannot load']) {
+for (const prompt of [
+  'My GitHub PR cannot be approved',
+  'GitLab pull request approval fails',
+  'The supplier website is down',
+  'The vendor website cannot load',
+  'Supplier cannot connect to VPN',
+  'Vendor cannot send email',
+  'Project network activity cannot connect to VPN',
+]) {
   test(`IT context does not select SAP: ${prompt}`, () => {
     assert.ok(classifyIssue(prompt).every(x => !x.s.category.startsWith('SAP')));
   });
 }
+for (const [prompt, id] of [
+  ['Supplier cannot connect to VPN', 'vpn-failure'],
+  ['Vendor cannot send email', 'outlook-send'],
+]) {
+  test(`explicit IT symptom wins over shared business nouns: ${prompt}`, () => {
+    const decision = intakeDecision(prompt);
+    assert.equal(decision.type, 'start');
+    assert.equal(decision.scenario.id, id);
+  });
+}
+test('an ambiguous project/network phrase prefers IT without inventing SAP certainty', () => {
+  const matches = classifyIssue('Project network activity cannot connect to VPN');
+  assert.equal(matches[0].s.id, 'vpn-failure');
+  assert.ok(matches.every(x => !x.s.category.startsWith('SAP')));
+  assert.equal(intakeDecision('Project network activity cannot connect to VPN').type, 'choose');
+});
+test('an explicit SAP process still wins when incidental IT wording is present', () => {
+  const decision = intakeDecision('Purchase order email approval link will not open');
+  assert.equal(decision.type, 'start');
+  assert.equal(decision.scenario.id, 'sap-po-release');
+});
 for (const input of ['', '  ', null, undefined, 123, 'SAP', 'SAP broken', 'SAP not working']) {
   test(`missing evidence requests clarification: ${JSON.stringify(input)}`, () => {
     assert.deepEqual(classifyIssue(input), []);
