@@ -119,9 +119,23 @@ test('Admin-required evidence returns justified escalation',()=>{
   assert.ok(r.escalate.reason);
 });
 
-test('Azure authorization error routes to Azure error handling',()=>{
-  const r=interpretGeneric('azure-access','activity_log','403 AuthorizationFailed');
-  assert.ok(r.next==='azure_error'||r.escalate);
+test('specific Azure authorization evidence produces a justified IAM escalation',()=>{
+  const r=interpretGeneric('azure-access','azure_error','403 AuthorizationFailed: client does not have authorization at this scope');
+  assert.equal(r.escalate?.team,'Cloud/IAM Support');
+  assert.match(r.escalate?.reason,/RBAC/i);
+  assert.equal(r.next,undefined);
+});
+
+test('generic Azure 403 stays in diagnosis without inventing an RBAC cause',()=>{
+  const r=interpretGeneric('azure-access','activity_log','403 Forbidden');
+  assert.equal(r.next,'azure_error');
+  assert.equal(r.escalate,undefined);
+});
+
+test('Outlook NDR signature takes precedence over generic failed wording',()=>{
+  const r=interpretGeneric('outlook-send','outlook_error','Delivery failed. NDR 5.1.1 recipient not found.');
+  assert.equal(r.escalate?.team,'Microsoft 365 Support');
+  assert.match(r.summary,/NDR/i);
 });
 
 test('Slow PC high CPU evidence changes branch',()=>{
