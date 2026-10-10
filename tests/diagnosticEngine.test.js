@@ -106,6 +106,20 @@ test('DNS success continues diagnosis instead of claiming resolution',()=>{
   assert.ok(r.boosts?.['Browser/application issue']>0);
 });
 
+test('NXDOMAIN wins over nslookup server metadata',()=>{
+  const r=parseDiagnosticText('dns_test','Server: 10.0.0.1\nAddress: 10.0.0.1#53\n*** server can\'t find intranet.example: NXDOMAIN');
+  assert.equal(r.next,'dns_settings');
+  assert.match(r.summary,/nxdomain/i);
+  assert.ok(r.boosts?.['DNS resolution failure']>0);
+});
+
+test('SERVFAIL wins over dig answer metadata',()=>{
+  const r=parseDiagnosticText('dns_test',';; SERVER: 10.0.0.1#53\n;; ->>HEADER<<- opcode: QUERY, status: SERVFAIL');
+  assert.equal(r.next,'dns_settings');
+  assert.match(r.summary,/error|refusal/i);
+  assert.ok(r.boosts?.['DNS resolution failure']>0);
+});
+
 test('unavailable alternate-network test avoids a disruptive stack reset',()=>{
   const option=wifiFlow.adapter_check.options.find(item=>item.value==='cant_test');
   assert.equal(option.next,'driver_health');
