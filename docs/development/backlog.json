@@ -2,6 +2,29 @@
   "schemaVersion": 1,
   "date": "2026-10-09",
   "scopeNote": "Working breakdown reconstructed from this assignment. No authoritative earlier 10-module/50-story specification was present in audited main or PR20; additional product scope remains Proposed, not implicitly approved. Tested means the stated local/automated scope only; no story is Accepted or Deployed.",
+  "integrationAudit": {
+    "checkedAt": "2026-10-10T09:14:31Z",
+    "baseline": "779aa0d29c397ea643d822ac08ed9c21c79e8eb6",
+    "method": "Git merge-tree audit of the current remote heads in priority order; no production or database access was used.",
+    "cleanInOrder": [
+      "PR23",
+      "PR24",
+      "PR26",
+      "PR32",
+      "PR33",
+      "PR34"
+    ],
+    "requiresAppConflictResolution": [
+      "PR25",
+      "PR27",
+      "PR28",
+      "PR29",
+      "PR30",
+      "PR31"
+    ],
+    "conflictPath": "src/App.jsx",
+    "releaseGate": "Do not merge the conflicting drafts independently after PR23/PR24. Rebase them in reviewed priority order, preserve each story's tests and acceptance criteria, then run the full suite and production build on the combined head before acceptance."
+  },
   "stateFlow": [
     "Proposed",
     "Implemented",
