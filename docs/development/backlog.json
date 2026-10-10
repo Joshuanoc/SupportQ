@@ -390,8 +390,8 @@
         "Every delivered state is operable by keyboard and relevant feedback is announced."
       ],
       "tests": {
-        "positive": "Exercise OneDrive capacity evidence, specific missing DLL/module, faulting-module or runtime-error evidence, temporary/cache growth and application-log growth; assert each reaches its supported remediation or specialist path.",
-        "negative": "Provide invalid-name evidence, neutral runtime-duration wording or an unrelated word containing the substring log; verify diagnosis continues without entering unrelated remediation or inventing a cause.",
+        "positive": "Exercise affirmative OneDrive storage-full/quota-exceeded evidence, specific missing DLL/module, faulting-module or runtime-error evidence, temporary/cache growth and application-log growth; assert each reaches its supported remediation or specialist path.",
+        "negative": "Provide healthy/non-exceeded OneDrive quota evidence, invalid-name evidence, neutral runtime-duration wording or an unrelated word containing the substring log; verify diagnosis continues without entering unrelated remediation or inventing a cause.",
         "security": "Verify disk evidence recommends only approved temporary/cache cleanup or application-log retention, never deletion based on an incidental substring, and that adversarial input causes no unauthorized data change.",
         "accessibility": "Complete endpoint recovery with keyboard and screen reader; verify focus and status announcement."
       },
@@ -399,14 +399,15 @@
         "Inspect and reuse existing implementation for endpoint recovery.",
         "Implement only the verified gap in an isolated reviewable PR.",
         "Automate the named acceptance cases and collect relevant UI/security evidence.",
-        "Partially advanced in PR #33: OneDrive storage-full, out-of-storage and quota evidence reaches capacity remediation instead of looping; invalid-name evidence remains on content diagnosis; application crash escalation now requires a specific missing/faulting DLL/module or runtime-error signature rather than the word runtime alone; temporary/cache evidence reaches approved cleanup, application logs reach retention, and unrelated words such as catalog no longer invent log growth. 147 local tests, production build and feature CI passed."
+        "Partially advanced in PR #33: affirmative OneDrive storage-full, out-of-storage and quota-exceeded evidence reaches capacity remediation instead of looping, while healthy or explicitly non-exceeded quota wording and invalid-name evidence remain on content diagnosis; application crash escalation now requires a specific missing/faulting DLL/module or runtime-error signature rather than the word runtime alone; temporary/cache evidence reaches approved cleanup, application logs reach retention, and unrelated words such as catalog no longer invent log growth. 149 local tests, production build and feature CI passed."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
       "evidence": [
         "https://github.com/Joshuanoc/SupportQ/pull/33",
         "https://github.com/Joshuanoc/SupportQ/actions/runs/38051140088",
         "https://github.com/Joshuanoc/SupportQ/actions/runs/38054788137",
-        "https://github.com/Joshuanoc/SupportQ/actions/runs/38059131252"
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38059131252",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38062984721"
       ]
     },
     {
