@@ -151,6 +151,14 @@ test('OneDrive invalid-name evidence stays on targeted content diagnosis',()=>{
  assert.equal(r.next,'specific_error');
 });
 
+for(const evidence of ['OneDrive quota is healthy; sync failed','Quota is not exceeded; sync failed: invalid file name']){
+ test(`non-capacity OneDrive evidence does not invent a quota failure: ${evidence}`,()=>{
+  const r=interpretGeneric('onedrive-sync','specific_error',evidence);
+  assert.equal(r.next,'specific_error');
+  assert.doesNotMatch(r.summary,/quota blocker/i);
+ });
+}
+
 for(const evidence of ['Faulting module KERNELBASE.dll','Runtime error: missing Visual C++ component','DLL not found: VCRUNTIME140.dll']){
  test(`specific application crash evidence justifies specialist escalation: ${evidence}`,()=>{
   const r=interpretGeneric('app-crash','logs',evidence);
