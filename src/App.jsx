@@ -7,6 +7,7 @@ import{diagnosticPath,resolutionProgress}from'./diagnosticTransitions.js';
 import{getActionGuide}from'./guidance.js';
 import{getNode,initialHypotheses,applyBoosts,parseDiagnosticText,calculatePriority}from'./diagnosticEngine.js';
 import{profileFor,profileHypotheses,interpretGeneric}from'./scenarioEngines.js';
+import{drawerButtons}from'./mobileNavigation.js';
 
 const icons={Wifi:Network,Shield:TestTube2,KeyRound:Wrench,Mail,MonitorCog:Code2,Printer:Wrench,TriangleAlert:TestTube2,CloudOff:Cloud,AppWindow:Code2,VideoOff:Code2,CloudCog:Cloud,HardDrive:Database};
 const pct=n=>`${Math.max(0,Math.min(100,Math.round(n)))}%`;
@@ -68,7 +69,7 @@ function App(){
    if(!mobile)return;
    const previousFocus=document.activeElement,previousOverflow=document.body.style.overflow;
    const drawer=document.getElementById('primary-navigation');
-   const buttons=()=>Array.from(drawer.querySelectorAll('button'));
+   const buttons=()=>drawerButtons(drawer);
    document.body.style.overflow='hidden';buttons()[0]?.focus();
    const close=e=>{
      if(e.key==='Escape')setMobile(false);
@@ -179,6 +180,7 @@ ${result.actions.map(a=>`- ${a}`).join('\n')}`;
    <a className="skipLink" href="#main-content">Skip to content</a>
    {mobile&&<FeedbackButton className="navBackdrop" aria-label="Close navigation" onClick={()=>setMobile(false)}/>}
    <aside id="primary-navigation" role={mobile?"dialog":undefined} aria-modal={mobile?true:undefined} aria-label="Workspace navigation" className={mobile?'sidebar open':'sidebar'}>
+    <FeedbackButton className="mobileNavClose" onClick={()=>setMobile(false)}><X size={18}/>Close navigation</FeedbackButton>
     <div className="brand"><div className="brandMark"><LifeBuoy size={22}/></div><div><strong>SupportQ</strong><span>Your troubleshooting workspace</span></div></div>
     <nav aria-label="Main navigation">
       <FeedbackButton aria-current={view==='dashboard'?'page':undefined} className={view==='dashboard'?'active':''} onClick={()=>{setView('dashboard');setMobile(false)}}>{view==='dashboard'&&<motion.span className="navSelection" layoutId="navigation-selection" transition={{duration:reduceMotion?0:.18}} aria-hidden="true"/>}<LayoutDashboard/>Overview</FeedbackButton>
