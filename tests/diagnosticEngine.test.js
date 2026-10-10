@@ -165,6 +165,26 @@ test('neutral runtime wording does not invent a dependency failure',()=>{
  assert.equal(r.next,'logs');
 });
 
+for(const evidence of ['C:\\Windows\\Temp is 45 GB','Browser cache consumes most free space']){
+ test(`temporary/cache disk evidence reaches approved cleanup: ${evidence}`,()=>{
+  const r=interpretGeneric('disk-full','unusual',evidence);
+  assert.equal(r.next,'cleanup');
+  assert.match(r.summary,/temporary|cache/i);
+ });
+}
+
+test('application log growth reaches retention remediation',()=>{
+ const r=interpretGeneric('disk-full','unusual','Application logs are 45 GB and still growing');
+ assert.equal(r.next,'retention');
+ assert.match(r.summary,/log growth/i);
+});
+
+test('words containing log do not invent a log-retention cause',()=>{
+ const r=interpretGeneric('disk-full','unusual','The offline file catalog is 45 GB');
+ assert.equal(r.next,'unusual');
+ assert.equal(r.escalate,undefined);
+});
+
 test('Slow PC high CPU evidence changes branch',()=>{
   const r=interpretGeneric('slow-pc','resources','CPU 94% Memory 70%');
   assert.equal(r.next,'disk');
