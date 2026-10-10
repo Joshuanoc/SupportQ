@@ -48,7 +48,7 @@ export const wifiFlow = {
     options:[
       {label:'Yes, another connection works',value:'alt_works',next:'wifi_adapter_fix', boosts:{'Local IP/DHCP issue':20,'Gateway/router issue':-10}},
       {label:'No, nothing works',value:'none_work',next:'stack_reset', boosts:{'Local IP/DHCP issue':15,'VPN/proxy interference':10}},
-      {label:'I cannot test that',value:'cant_test',next:'stack_reset'}
+      {label:'I cannot test that',value:'cant_test',next:'driver_health'}
     ]
   },
   wifi_adapter_fix:{
@@ -284,18 +284,20 @@ export function parseDiagnosticText(nodeId, text){
     if(nodeId==='public_ip_test')return {next:'vpn_proxy_check',summary:'Public IP unreachable',boosts:{'Gateway/router issue':20,'VPN/proxy interference':15}};
     if(nodeId==='dns_test')return {next:'dns_fix',summary:'DNS query timed out',boosts:{'DNS resolution failure':45}};
   }
-  if(/reply from .*1\.1\.1\.1|bytes from 1\.1\.1\.1|0% packet loss|0\.0% packet loss/.test(q)){
-    if(nodeId==='public_ip_test')return {next:'dns_test',summary:'Public IP connectivity works',boosts:{'DNS resolution failure':35,'Gateway/router issue':-15,'ISP outage':-10}};
-    if(nodeId==='gateway_test')return {next:'public_ip_test',summary:'Gateway is reachable',boosts:{'Gateway/router issue':-15}};
-  }
-  if(/server:|address:.*53|non-authoritative answer|answer section|name:.*google/.test(q)){
-    if(nodeId==='dns_test') return {resolve:{cause:'DNS is functioning; issue is likely browser, proxy, or application-specific',confidence:78},summary:'DNS lookup succeeded'};
-  }
+  // nslookup/dig print server metadata before the actual DNS result. Match
+  // explicit failures before generic success markers such as "Server:".
   if(/nxdomain|non-existent domain/.test(q)){
     return {next:'dns_settings',summary:'DNS returned NXDOMAIN',boosts:{'DNS resolution failure':25}};
   }
   if(/server failed|servfail|refused/.test(q)){
     return {next:'dns_settings',summary:'DNS server error/refusal',boosts:{'DNS resolution failure':35}};
+  }
+  if(/reply from .*1\.1\.1\.1|bytes from 1\.1\.1\.1|0% packet loss|0\.0% packet loss/.test(q)){
+    if(nodeId==='public_ip_test')return {next:'dns_test',summary:'Public IP connectivity works',boosts:{'DNS resolution failure':35,'Gateway/router issue':-15,'ISP outage':-10}};
+    if(nodeId==='gateway_test')return {next:'public_ip_test',summary:'Gateway is reachable',boosts:{'Gateway/router issue':-15}};
+  }
+  if(/server:|address:.*53|non-authoritative answer|answer section|name:.*google/.test(q)){
+    if(nodeId==='dns_test') return {next:'browser_test',summary:'DNS lookup succeeded; original issue still requires retest',boosts:{'DNS resolution failure':-30,'Browser/application issue':25,'VPN/proxy interference':10}};
   }
   if(/192\.168\.|10\.\d+\.|172\.(1[6-9]|2\d|3[0-1])\./.test(q)){
     if(nodeId==='ip_check')return {next:'gateway_test',summary:'Valid private IP detected',boosts:{'Local IP/DHCP issue':-15}};
