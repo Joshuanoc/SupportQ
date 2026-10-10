@@ -1151,7 +1151,7 @@
       "title": "Keyboard flow",
       "userStory": "As a SupportQ user or operator, I want keyboard flow so that support decisions are reliable and auditable.",
       "status": "Proposed",
-      "verificationScope": "partial local and GitHub CI automation; live keyboard and assistive-technology verification not executed",
+      "verificationScope": "partial local and GitHub CI automation for evidence entry and view focus; complete live keyboard and assistive-technology verification not executed",
       "acceptanceCriteria": [
         "Given a keyboard-only user opens diagnosis, when the supported flow executes, then reach every control with visible focus and logical order in 100% of its named regression fixtures.",
         "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
@@ -1167,12 +1167,15 @@
         "Inspect and reuse existing implementation for keyboard flow.",
         "Implement only the verified gap in an isolated reviewable PR.",
         "Automate the named acceptance cases and collect relevant UI/security evidence.",
-        "Partially advanced in PR #27: both evidence forms expose prompt/help associations, disable blank submission, support Ctrl/Command+Enter and bound evidence to 4,000 characters; 137 local tests, production build and feature CI passed. Full keyboard flow and live screen-reader verification remain outstanding."
+        "Partially advanced in PR #27: both evidence forms expose prompt/help associations, disable blank submission, support Ctrl/Command+Enter and bound evidence to 4,000 characters; 137 local tests, production build and feature CI passed. Full keyboard flow and live screen-reader verification remain outstanding.",
+        "Partially advanced view focus in PR #29: real section and diagnosis changes move focus to the visible page heading without forcing scroll; initial render is unchanged and focus failures are recoverable. 138 local tests, production build and feature CI passed; end-to-end browser focus order remains outstanding."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
       "evidence": [
         "https://github.com/Joshuanoc/SupportQ/pull/27",
-        "https://github.com/Joshuanoc/SupportQ/actions/runs/38012898487"
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38012898487",
+        "https://github.com/Joshuanoc/SupportQ/pull/29",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38019744280"
       ]
     },
     {
@@ -1182,7 +1185,7 @@
       "title": "Accessible feedback",
       "userStory": "As a SupportQ user or operator, I want accessible feedback so that support decisions are reliable and auditable.",
       "status": "Proposed",
-      "verificationScope": "partial local and GitHub CI automation for wording, evidence entry and semantic progress; live status-announcement and assistive-technology verification not executed",
+      "verificationScope": "partial local and GitHub CI automation for wording, evidence entry, semantic progress and view-change focus; live status-announcement and assistive-technology verification not executed",
       "acceptanceCriteria": [
         "Given intake, save or error state changes, when the supported flow executes, then announce meaningful status and errors without relying on color in 100% of its named regression fixtures.",
         "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
@@ -1200,7 +1203,8 @@
         "Automate the named acceptance cases and collect relevant UI/security evidence.",
         "Partially advanced diagnostic introductory wording in PR26: removed engine promises from all three flows; 133 local tests and build passed. Intake/save/error announcements and live accessibility remain outstanding.",
         "Partially advanced evidence entry in PR #27: visible diagnostic prompts programmatically name textareas, help text is described, empty submission is prevented and input length is bounded; 137 local tests, production build and feature CI passed. Intake/save/error live announcements remain outstanding.",
-        "Partially advanced semantic progress in PR #28: all three diagnosis engines expose a bounded 0–100 progressbar with matching visual and announced values; invalid and hostile values are normalized. 137 local tests, production build and feature CI passed; live screen-reader verification remains outstanding."
+        "Partially advanced semantic progress in PR #28: all three diagnosis engines expose a bounded 0–100 progressbar with matching visual and announced values; invalid and hostile values are normalized. 137 local tests, production build and feature CI passed; live screen-reader verification remains outstanding.",
+        "Partially advanced view-change feedback in PR #29: new sections and started diagnoses focus their visible h1 so keyboard and screen-reader users receive the new context. 138 local tests, production build and feature CI passed; broader live announcements remain outstanding."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
       "evidence": [
@@ -1208,7 +1212,9 @@
         "https://github.com/Joshuanoc/SupportQ/pull/27",
         "https://github.com/Joshuanoc/SupportQ/actions/runs/38012898487",
         "https://github.com/Joshuanoc/SupportQ/pull/28",
-        "https://github.com/Joshuanoc/SupportQ/actions/runs/38016126861"
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38016126861",
+        "https://github.com/Joshuanoc/SupportQ/pull/29",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38019744280"
       ]
     },
     {
