@@ -324,7 +324,7 @@
       "title": "Network evidence",
       "userStory": "As a SupportQ user or operator, I want network evidence so that support decisions are reliable and auditable.",
       "status": "Proposed",
-      "verificationScope": "partial local and GitHub CI automation for successful DNS evidence and unavailable alternate-network routing; complete live network-diagnosis flow not executed",
+      "verificationScope": "partial local and GitHub CI automation for successful DNS evidence, explicit DNS failure precedence and unavailable alternate-network routing; complete live network-diagnosis flow not executed",
       "acceptanceCriteria": [
         "Given Wi-Fi or DNS fails, when the supported flow executes, then select the next read-only check based on observed IP, gateway and DNS evidence in 100% of its named regression fixtures.",
         "Invalid or unauthorized input must not change case ownership, verification state or assert a successful operation.",
@@ -332,7 +332,7 @@
       ],
       "tests": {
         "positive": "Exercise Wi-Fi or DNS fails; assert select the next read-only check based on observed IP, gateway and DNS evidence.",
-        "negative": "Omit the evidence required for network evidence; verify clarification or recoverable failure, not a success claim.",
+        "negative": "Provide NXDOMAIN or SERVFAIL output containing normal DNS server metadata; verify the explicit failure routes to DNS remediation and cannot enter the success path.",
         "security": "Try unauthorized or adversarial input during network evidence; verify no secrets disclosure or unauthorized data change.",
         "accessibility": "Complete network evidence with keyboard and screen reader; verify focus and status announcement."
       },
@@ -340,12 +340,13 @@
         "Inspect and reuse existing implementation for network evidence.",
         "Implement only the verified gap in an isolated reviewable PR.",
         "Automate the named acceptance cases and collect relevant UI/security evidence.",
-        "Partially advanced in PR #32: successful DNS evidence now continues to browser/original-problem testing and updates hypotheses instead of asserting resolution; an unavailable alternate-network comparison routes to read-only driver health rather than network-stack reset. 135 local tests, production build and feature CI passed."
+        "Partially advanced in PR #32: successful DNS evidence now continues to browser/original-problem testing and updates hypotheses instead of asserting resolution; NXDOMAIN and SERVFAIL take precedence over generic server metadata; an unavailable alternate-network comparison routes to read-only driver health rather than network-stack reset. 137 local tests, production build and feature CI passed."
       ],
       "definitionOfDone": "Implementation complete; positive, negative, security and accessibility cases pass; relevant UI verified; independent review complete; exact deployment commit and smoke evidence recorded.",
       "evidence": [
         "https://github.com/Joshuanoc/SupportQ/pull/32",
-        "https://github.com/Joshuanoc/SupportQ/actions/runs/38030307692"
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38030307692",
+        "https://github.com/Joshuanoc/SupportQ/actions/runs/38047980645"
       ]
     },
     {
