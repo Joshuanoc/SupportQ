@@ -60,7 +60,7 @@ function App(){
  const[reportedIssue,setReportedIssue]=useState('');
  const[intake,setIntake]=useState('');
  const[suggestions,setSuggestions]=useState([]);
- const[history,setHistory]=useState(()=>{try{return JSON.parse(localStorage.getItem('supportq-history')||'[]')}catch{return[]}});
+ const[history,setHistory]=useState(()=>{try{localStorage.removeItem('supportq-history');const saved=JSON.parse(sessionStorage.getItem('supportq-history')||'[]');return Array.isArray(saved)?saved.slice(0,25):[]}catch{return[]}});
  const[query,setQuery]=useState('');
  const[mobile,setMobile]=useState(false);
 
@@ -79,7 +79,7 @@ function App(){
    return()=>{document.body.style.overflow=previousOverflow;window.removeEventListener('keydown',close);window.removeEventListener('resize',resize);previousFocus?.focus()};
  },[mobile]);
 
- useEffect(()=>localStorage.setItem('supportq-history',JSON.stringify(history.slice(0,25))),[history]);
+ useEffect(()=>{try{sessionStorage.setItem('supportq-history',JSON.stringify(history.slice(0,25)))}catch{}},[history]);
 
  const filtered=useMemo(()=>scenarios.filter(s=>`${s.title} ${s.category} ${s.symptoms.join(' ')}`.toLowerCase().includes(query.toLowerCase())),[query]);
 
