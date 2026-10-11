@@ -18,4 +18,4 @@ jobs:
           GITLEAKS_ENABLE_COMMENTS: 'false'
           GITLEAKS_ENABLE_UPLOAD_ARTIFACT: 'false'
       - name: Scan complete repository history
-        run: gitleaks detect --redact --log-opts="--all" --exit-code=1
+        run: gitleaks detect --redact --verbose --log-opts="--all" --exit-code=1
