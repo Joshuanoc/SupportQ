@@ -1,0 +1,7 @@
+# Reviewed synthetic credentials in the historical incident-export redaction tests.
+# Exact commit/file/rule/line exceptions only: no file, directory or rule is excluded.
+# Values are sequential dummy API/AWS strings and a JWT with a literal fake signature.
+9620dbbd4f825da68db5fe57720e18f58b583505:tests/incidentExport.test.js:generic-api-key:11
+9620dbbd4f825da68db5fe57720e18f58b583505:tests/incidentExport.test.js:aws-access-token:23
+9620dbbd4f825da68db5fe57720e18f58b583505:tests/incidentExport.test.js:aws-access-token:25
+9620dbbd4f825da68db5fe57720e18f58b583505:tests/incidentExport.test.js:jwt:19
