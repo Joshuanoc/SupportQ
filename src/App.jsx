@@ -60,7 +60,7 @@ function App(){
  const[reportedIssue,setReportedIssue]=useState('');
  const[intake,setIntake]=useState('');
  const[suggestions,setSuggestions]=useState([]);
- const[history,setHistory]=useState(()=>{try{localStorage.removeItem('supportq-history');const saved=JSON.parse(sessionStorage.getItem('supportq-history')||'[]');return Array.isArray(saved)?saved.slice(0,25):[]}catch{return[]}});
+ const[history,setHistory]=useState(()=>{try{const saved=JSON.parse(sessionStorage.getItem('supportq-history')||localStorage.getItem('supportq-history')||'[]');const items=Array.isArray(saved)?saved.slice(0,25):[];sessionStorage.setItem('supportq-history',JSON.stringify(items));localStorage.removeItem('supportq-history');return items}catch{return[]}});
  const[query,setQuery]=useState('');
  const[mobile,setMobile]=useState(false);
 
