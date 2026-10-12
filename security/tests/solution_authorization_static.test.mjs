@@ -15,7 +15,10 @@ test('prevents author from self-verifying on insert, update and delete', () => {
 
 test('limits authenticated updates to non-privileged fields', () => {
   assert.match(normalized, /revoke update on table public\.solutions from anon, authenticated/);
-  assert.match(normalized, /grant update\s*\(title, steps, updated_at\) on table public\.solutions to authenticated/);
+  assert.match(normalized, /from pg_catalog\.pg_attribute/);
+  assert.match(normalized, /not a\.attisdropped/);
+  assert.match(normalized, /revoke update \(%i\) on table public\.solutions from anon, authenticated/);
+  assert.match(normalized, /grant update\s*\(title, steps\) on table public\.solutions to authenticated/);
   assert.doesNotMatch(normalized, /grant update\s*\([^)]*(is_verified|created_by|issue_id|id,)/);
 });
 
