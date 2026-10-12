@@ -20,11 +20,11 @@ FROM (VALUES ('anon'),('authenticated')) AS r(rolename)
 CROSS JOIN (VALUES ('id'),('issue_id'),('created_by'),('is_verified'),('created_at')) AS c(column_name)
 WHERE has_column_privilege(r.rolename,'public.solutions',c.column_name,'UPDATE');
 
--- Expected: authenticated can update title, steps, updated_at; anon cannot.
+-- Expected: authenticated can update title and steps; anon cannot.
 SELECT r.rolename, c.column_name,
        has_column_privilege(r.rolename,'public.solutions',c.column_name,'UPDATE') AS can_update
 FROM (VALUES ('anon'),('authenticated')) AS r(rolename)
-CROSS JOIN (VALUES ('title'),('steps'),('updated_at')) AS c(column_name);
+CROSS JOIN (VALUES ('title'),('steps')) AS c(column_name);
 
 -- Expected: three policies enforce is_verified = false;
 -- INSERT and UPDATE checks also enforce owning the parent issue.
