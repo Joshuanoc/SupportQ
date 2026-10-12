@@ -46,11 +46,30 @@ ALTER POLICY solutions_delete_own ON public.solutions
   );
 
 -- Table-level UPDATE must be revoked before a restrictive column grant can work.
--- Revoke existing explicit column grants too; PostgreSQL may have both.
+-- Revoke existing explicit column grants too; PostgreSQL may have both. Derive
+-- the column names from the catalog so this migration cannot fail because an
+-- optional column is absent, and so a newly added column is not accidentally
+-- left browser-writable.
 REVOKE UPDATE ON TABLE public.solutions FROM anon, authenticated;
-REVOKE UPDATE (id, issue_id, created_by, is_verified, created_at, title, steps, updated_at)
-  ON TABLE public.solutions FROM anon, authenticated;
-GRANT UPDATE (title, steps, updated_at) ON TABLE public.solutions TO authenticated;
+DO $revoke_solution_updates$
+DECLARE
+  solution_column name;
+BEGIN
+  FOR solution_column IN
+    SELECT a.attname
+    FROM pg_catalog.pg_attribute a
+    WHERE a.attrelid = 'public.solutions'::regclass
+      AND a.attnum > 0
+      AND NOT a.attisdropped
+  LOOP
+    EXECUTE format(
+      'REVOKE UPDATE (%I) ON TABLE public.solutions FROM anon, authenticated',
+      solution_column
+    );
+  END LOOP;
+END
+$revoke_solution_updates$;
+GRANT UPDATE (title, steps) ON TABLE public.solutions TO authenticated;
 
 COMMIT;
 
