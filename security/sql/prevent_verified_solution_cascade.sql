@@ -8,8 +8,13 @@ BEGIN;
 CREATE OR REPLACE FUNCTION public.reject_issue_delete_with_verified_solutions()
 RETURNS trigger
 LANGUAGE plpgsql
-SECURITY INVOKER
+-- This must see every child row even when the deleting user cannot. Using the
+-- caller's RLS-filtered view could miss a verified solution and allow CASCADE
+-- to delete it. The locked search path and revoked EXECUTE privileges keep the
+-- definer context limited to trigger execution.
+SECURITY DEFINER
 SET search_path = ''
+SET row_security = off
 AS $function$
 BEGIN
   IF EXISTS (
@@ -33,7 +38,7 @@ EXECUTE FUNCTION public.reject_issue_delete_with_verified_solutions();
 
 COMMIT;
 
--- Read-only staging verification (expect one enabled trigger; invoker function):
+-- Read-only staging verification (expect one enabled trigger; definer function):
 SELECT t.tgname, t.tgenabled, pg_get_triggerdef(t.oid) AS definition,
        p.prosecdef AS is_security_definer
 FROM pg_trigger t JOIN pg_proc p ON p.oid=t.tgfoid
