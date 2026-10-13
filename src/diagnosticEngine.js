@@ -289,7 +289,7 @@ export function parseDiagnosticText(nodeId, text){
     if(nodeId==='gateway_test')return {next:'public_ip_test',summary:'Gateway is reachable',boosts:{'Gateway/router issue':-15}};
   }
   if(/server:|address:.*53|non-authoritative answer|answer section|name:.*google/.test(q)){
-    if(nodeId==='dns_test') return {resolve:{cause:'DNS is functioning; issue is likely browser, proxy, or application-specific',confidence:78},summary:'DNS lookup succeeded'};
+    if(nodeId==='dns_test') return {next:'browser_test',summary:'DNS lookup succeeded; the original issue still needs verification'};
   }
   if(/nxdomain|non-existent domain/.test(q)){
     return {next:'dns_settings',summary:'DNS returned NXDOMAIN',boosts:{'DNS resolution failure':25}};
