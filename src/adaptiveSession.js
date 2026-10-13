@@ -106,6 +106,8 @@ function interpretAnswer(node,text) {
 export function backtrack(s) {
   const turns=s.turns.slice(0,-1);
   let next=createSession(s.evidence[0].text,s.scenarioId,s.sessionId);
+  next.confirmedIntakeFacts=s.confirmedIntakeFacts||[];
+  for(const fact of next.confirmedIntakeFacts)next.knownFacts[fact.key]=fact.value;
   for(const turn of turns)next=respond(next,{value:turn.value,text:turn.text});
   return next;
 }

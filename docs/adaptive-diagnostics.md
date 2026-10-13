@@ -1,19 +1,31 @@
-# Adaptive troubleshooting foundation
+# Adaptive diagnostics with AI interpretation and account storage
 
-The new module is enabled for Wi-Fi connectivity, SAP material-document reversal and SAP posting-period incidents. Other scenario engines remain on their existing paths.
+The new diagnostic engine is enabled for Wi-Fi connectivity, SAP material-document reversal and SAP posting-period incidents. Other scenario engines keep their current diagnosis paths; the AI intake router can select from the complete scenario catalogue.
 
-`adaptiveSession.js` keeps explicit user facts, extracted document/transaction identifiers, completed and unavailable checks, an evidence log, and an outcome. The next action depends on current state. Known or unavailable checks are skipped. Backtracking reconstructs state by replaying only retained answers, removing dependent conclusions. The UI asks one question, offers tappable answers and supports free text. Unknown option text is rejected rather than interpreted as a successful check.
+## User flow
 
-Initial input is normalized for a small set of common spelling mistakes. This is deterministic interpretation, **not an LLM**. It does not promise open-domain understanding. No paid AI service has been configured and no model calls are made. The LLM interpretation/retrieval phases in the requested architecture remain future work; model outputs must be validated before entering diagnostic state. An authenticated server session store and reviewed, versioned source retrieval are also required before claiming the full architecture is complete.
+A guest can troubleshoot using choice buttons and deterministic free-text handling. A signed-in user can ask AI to interpret intake or an answer. The UI shows the proposed scenario, quoted observations or answer label, and waits for the user's confirmation before applying them. Model output is never independently verified evidence. Questions, safety boundaries and outcomes remain under the deterministic engine. No SAP or network transaction is executed.
 
-Persistence is browser-tab scoped (`sessionStorage`), with a key for each scenario and report. This supports refresh/re-entry in the same tab, not authenticated cross-device sessions. The UI rebuilds saved state from answers rather than trusting a stored terminal status. No new database or Supabase policy changes are introduced. Reports may contain document references; close the tab to clear this temporary session data. Existing incident history still uses the application's existing local-storage behavior.
+Sign in or create an email/password account through Supabase Auth. Email confirmation is required by the AI endpoint. Save session persists the diagnostic state to the account; Saved sessions resumes it on another device. Save uses a revision check to reject overwriting a newer version. Resume replays the original issue, confirmed intake observations and retained answers rather than trusting stored facts or terminal status. Account changes remount the workspace and clear the previous user's tab cache and local history.
 
-Resolution requires explicit user confirmation of the original issue. It is labelled user-confirmed, never independently verified. No confidence probabilities are invented by this engine. SAP period/access changes and managed network changes stay with authorized staff. An unavailable check chooses an alternate path, and escalation describes the evidence gap.
+## Server and database
+
+`api/interpret.js` runs only on a server supporting Vercel Functions. It verifies the Supabase access token with `getUser`, rejects anonymous/unconfirmed users, checks origin, method, JSON and input bounds, reserves an atomic database quota and calls the AI SDK with structured output. It has a 20-second model timeout, no retries and a 1200-token output cap. A missing model/credential or quota/database failure produces a safe fallback. No model SDK or gateway credential is imported into the frontend.
+
+The migration adds only `diagnostic_sessions`, two private quota objects and narrowly scoped RPC functions. Existing solution/security tables and policies are untouched. The exposed session-saving RPC uses SECURITY INVOKER and owner RLS. Users can read, insert, update or delete only their own non-anonymous sessions; owner reassignment is also blocked by column privileges. The exposed quota RPC is an invoker wrapper around a private definer function with a fixed caller, empty search path and fixed limits. Quota rows have no authenticated read/write grants. Limits are three AI requests per minute and thirty per UTC day per account; failed model attempts consume quota. Configure a gateway budget separately to bound aggregate spend across accounts.
+
+## Configuration and activation
+
+Copy `.env.example` values into the deployment environment, using the project's Supabase URL and **publishable** key. The frontend needs `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`; the server needs `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`. Never use a service-role key in the browser. Set `SUPPORTQ_AI_MODEL` to a currently supported gateway model; the example ID was checked against the live catalogue during implementation. Use Vercel OIDC or a budgeted `AI_GATEWAY_API_KEY` on the server. Client configuration is baked into the Vite build, so rebuild after setting it.
+
+Apply `supabase/migrations/20261013232444_adaptive_diagnostic_sessions.sql` to SupportQ after approval. Then configure Supabase site/redirect URLs for the final host and verify email confirmation, sign-in and sign-out there. GitHub Pages supports the guest frontend, but cannot host `/api/interpret`; AI interpretation requires the Vercel deployment (or equivalent backend).
+
+**Current activation blockers:** automatic review rejected applying the live migration without explicit schema-change approval. Vercel environment access returned 403 for the project's team and no authenticated CLI fallback is installed. No live database schema changes, model requests, production merge or deployment were performed. These are provisioning/verification blockers, not tests of a live AI service.
 
 ## Validation
 
-`npm test` exercises legacy regression coverage and state transitions. `npm run test:e2e` tests SAP routing/resume, unavailable Wi-Fi checks, correction and keyboard interaction on desktop and mobile Chromium. Axe checks the new conversation UI. Pull requests and main pushes run unit tests, a build, and Playwright with an uploaded HTML report.
+`npm test` includes real local PostgreSQL execution through PGlite: schema creation, user isolation for select/update/delete, foreign-owner insert denial, owner reassignment denial, anonymous access denial, revision conflicts, private-counter denial and minute/day AI limits. API tests cover unauthorized, malformed, oversize, cross-origin, unconfigured, rate-limited and provider-failure requests, plus schema and quoted-evidence validation. Persistence tests check replay and forged-state rejection.
 
-## Release boundary
+`npm run test:e2e` runs desktop/mobile guest journeys and a signed-in flow that confirms AI interpretation, saves a session, resumes it in a separate browser context and signs out. Auth, model and cloud endpoints are mocked in these browser tests; they do not verify a production credential or model response. Axe checks the new conversation UI. Required live staging checks remain email confirmation, real sign-in, owner-scoped save/resume and an authenticated gateway request.
 
-Review the dedicated feature PR and staging journeys before merging. This foundation does not fulfill the complete five-phase architecture definition of done. It is ready for review as the first increment. Do not label the entire system deployed or LLM-powered on this basis.
+The full original architecture also calls for reviewed, versioned external knowledge retrieval, broader diagnostic coverage and outcome learning. This PR does not claim those systems exist merely because interpretation and persistence code are implemented.

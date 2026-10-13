@@ -8,6 +8,9 @@ import{getActionGuide}from'./guidance.js';
 import{getNode,initialHypotheses,applyBoosts,parseDiagnosticText,calculatePriority}from'./diagnosticEngine.js';
 import{profileFor,profileHypotheses,interpretGeneric}from'./scenarioEngines.js';
 import AdaptiveDiagnostic from './AdaptiveDiagnostic.jsx';
+import {useAuth,AccountPanel} from './AuthContext.jsx';
+import SavedSessions from './SavedSessions.jsx';
+import {interpretMessage} from './aiClient.js';
 import {supportsAdaptive} from './adaptiveSession.js';
 
 const icons={Wifi:Network,Shield:TestTube2,KeyRound:Wrench,Mail,MonitorCog:Code2,Printer:Wrench,TriangleAlert:TestTube2,CloudOff:Cloud,AppWindow:Code2,VideoOff:Code2,CloudCog:Cloud,HardDrive:Database};
@@ -48,6 +51,10 @@ function inferContext(text){
 }
 
 function App(){
+ const {user,session:authSession}=useAuth();
+ const historyKey=`supportq-history:${user?.id||'guest'}`;
+ const [resumeSession,setResumeSession]=useState(null),[intakeFacts,setIntakeFacts]=useState([]),[aiSuggestion,setAiSuggestion]=useState(null),[aiMessage,setAiMessage]=useState(''),[aiBusy,setAiBusy]=useState(false);
+ const interpretIntake=async()=>{setAiBusy(true);setAiMessage('');try{const parsed=await interpretMessage(authSession,intake);if(!parsed.scenarioId||parsed.needsClarification)throw new Error('Please add the symptom or exact error.');setAiSuggestion({...parsed,text:intake})}catch(e){setAiMessage(e.message)}finally{setAiBusy(false)}};
  const reduceMotion=useReducedMotion();
  const[view,setView]=useState('dashboard');
  const[scenario,setScenario]=useState(null);
@@ -62,7 +69,7 @@ function App(){
  const[reportedIssue,setReportedIssue]=useState('');
  const[intake,setIntake]=useState('');
  const[suggestions,setSuggestions]=useState([]);
- const[history,setHistory]=useState(()=>{try{return JSON.parse(localStorage.getItem('supportq-history')||'[]')}catch{return[]}});
+ const[history,setHistory]=useState(()=>{try{return JSON.parse(localStorage.getItem(historyKey)||'[]')}catch{return[]}});
  const[query,setQuery]=useState('');
  const[mobile,setMobile]=useState(false);
 
@@ -81,11 +88,12 @@ function App(){
    return()=>{document.body.style.overflow=previousOverflow;window.removeEventListener('keydown',close);window.removeEventListener('resize',resize);previousFocus?.focus()};
  },[mobile]);
 
- useEffect(()=>localStorage.setItem('supportq-history',JSON.stringify(history.slice(0,25))),[history]);
+ useEffect(()=>localStorage.setItem(historyKey,JSON.stringify(history.slice(0,25))),[history]);
 
  const filtered=useMemo(()=>scenarios.filter(s=>`${s.title} ${s.category} ${s.symptoms.join(' ')}`.toLowerCase().includes(query.toLowerCase())),[query]);
 
- const start=(s,issue='')=>{
+ const start=(s,issue='',saved=null,facts=[])=>{
+   setResumeSession(saved);setIntakeFacts(facts);setAiSuggestion(null);
    setScenario(s);setStep(0);setAnswers([]);setResult(null);setActionIndex(0);setActionLog([]);const inferred=inferContext(issue||s.title);const hasEnough=Boolean(s.category.startsWith('SAP') || (inferred.os&&inferred.environment&&inferred.scope));setSupportContext(inferred);setPhase(s.severity==='Critical'||hasEnough?'diagnose':'triage');
    setReportedIssue(issue||s.title);
    setHypotheses(s.hypotheses.map(([name,score])=>({name,score})).sort((a,b)=>b.score-a.score));
@@ -193,10 +201,13 @@ ${result.actions.map(a=>`- ${a}`).join('\n')}`;
    <div className="mainArea">
     <header className="topbar"><FeedbackButton className="mobileToggle" onClick={()=>setMobile(v=>!v)} aria-label={mobile?"Close navigation":"Open navigation"} aria-expanded={mobile} aria-controls="primary-navigation">{mobile?<X/>:<Menu/>}</FeedbackButton><div><span className="crumb">SUPPORTQ / {view.toUpperCase()}</span><h1>{view==='diagnose'&&scenario?scenario.title:view==='scenarios'?'Scenario Library':view==='history'?'Incident History':view==='analytics'?'Support Analytics':'Support workspace'}</h1></div><div className="status"><i/>Workspace ready</div></header>
     <main id="main-content" className="content" tabIndex={-1}>
+     <div className="accountTools" style={{display:'flex',gap:12,justifyContent:'flex-end',flexWrap:'wrap',marginBottom:16}}><AccountPanel/><button onClick={()=>setView('saved')}>Saved sessions</button></div>
      <AnimatePresence mode="wait" initial={false}><motion.div key={view} initial={reduceMotion?false:{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={reduceMotion?{opacity:1}:{opacity:0,y:-6}} transition={{duration:reduceMotion?0:.2}}>
+      {view==='dashboard'&&user&&<section className="sidePanel"><p>AI interpretation can help with incomplete descriptions. It sends your message to the configured AI service; confirm its interpretation before diagnosis.</p><button disabled={aiBusy||!intake.trim()} onClick={interpretIntake}>Understand issue with AI</button>{aiMessage&&<p role="alert">{aiMessage}</p>}{aiSuggestion&&<div role="status"><p>Suggested issue: {scenarios.find(s=>s.id===aiSuggestion.scenarioId)?.title}</p>{aiSuggestion.facts.map((f,i)=><p key={i}>{f.key}: {f.value} — “{f.quote}”</p>)}<button onClick={()=>start(scenarios.find(s=>s.id===aiSuggestion.scenarioId),aiSuggestion.text,null,aiSuggestion.facts)}>Use this interpretation</button><button onClick={()=>setAiSuggestion(null)}>Dismiss</button></div>}</section>}
+      {view==='saved'&&<SavedSessions onResume={(s,state,meta)=>start(s,state.evidence[0].text,{state,...meta})}/>}
       {view==='dashboard'&&<Dashboard intake={intake} setIntake={setIntake} submitIntake={submitIntake} suggestions={suggestions} onStart={start} setView={setView}/>}
       {view==='scenarios'&&<ScenarioLibrary query={query} setQuery={setQuery} filtered={filtered} onStart={start}/>}
-      {view==='diagnose'&&scenario&&<Diagnostic scenario={scenario} step={step} answers={answers} result={result} phase={phase} actionIndex={actionIndex} actionLog={actionLog} hypotheses={hypotheses} topCause={topCause} answer={answer} resolutionResponse={resolutionResponse} reset={reset} copyTicket={copyTicket} reduceMotion={reduceMotion} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} beginDiagnosis={beginDiagnosis} onDeepComplete={incident=>setHistory(h=>incident.discardSessionId?h.filter(x=>x.sessionId!==incident.discardSessionId):[{id:Date.now(),...incident},...h.filter(x=>!incident.sessionId||x.sessionId!==incident.sessionId)].slice(0,25))}/>}
+      {view==='diagnose'&&scenario&&<Diagnostic resumeSession={resumeSession} intakeFacts={intakeFacts} scenario={scenario} step={step} answers={answers} result={result} phase={phase} actionIndex={actionIndex} actionLog={actionLog} hypotheses={hypotheses} topCause={topCause} answer={answer} resolutionResponse={resolutionResponse} reset={reset} copyTicket={copyTicket} reduceMotion={reduceMotion} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} beginDiagnosis={beginDiagnosis} onDeepComplete={incident=>setHistory(h=>incident.discardSessionId?h.filter(x=>x.sessionId!==incident.discardSessionId):[{id:Date.now(),...incident},...h.filter(x=>!incident.sessionId||x.sessionId!==incident.sessionId)].slice(0,25))}/>}
       {view==='history'&&<HistoryView history={history} onStart={s=>start(scenarios.find(x=>x.title===s.scenario)||scenarios[0],s.reportedIssue)}/>}
       {view==='analytics'&&<Analytics history={history}/>}
      </motion.div></AnimatePresence>
@@ -229,8 +240,8 @@ function ScenarioLibrary({query,setQuery,filtered,onStart}){
  return <><div className="libraryIntro"><h2>Find your starting point.</h2><p>Browse IT and SAP workflows, or search by symptom, transaction, or error.</p></div><div className="libraryHead"><div className="search"><Search/><input aria-label="Search scenarios" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search symptoms, MIGO, Wi-Fi…"/>{query&&<FeedbackButton aria-label="Clear search" onClick={()=>setQuery('')}><X size={16}/></FeedbackButton>}</div><div className="domainTabs" aria-label="Filter scenario domain">{['All','IT','SAP'].map(value=><FeedbackButton key={value} aria-pressed={domain===value} onClick={()=>setDomain(value)}>{domain===value&&<motion.span className="filterSelection" layoutId="domain-selection" transition={{duration:reduceMotion?0:.16}} aria-hidden="true"/>}<span>{value}</span></FeedbackButton>)}</div></div><p className="resultCount" aria-live="polite">{visible.length} {visible.length===1?'scenario':'scenarios'}</p>{visible.length?<motion.div className="scenarioGrid" initial="hidden" animate="visible" variants={{hidden:{},visible:{transition:{staggerChildren:0}}}}>{visible.map((s,i)=><ScenarioCard key={s.id} index={i} s={s} onStart={onStart}/>)}</motion.div>:<div className="empty"><Search/><h3>No matching scenarios</h3><p>Try a transaction name or a shorter symptom.</p><FeedbackButton className="secondary" onClick={()=>{setQuery('');setDomain('All')}}>Clear filters</FeedbackButton></div>}</>;
 }
 
-function Diagnostic({scenario,step,answers,result,phase,actionIndex,actionLog,hypotheses,topCause,answer,resolutionResponse,reset,copyTicket,reduceMotion,reportedIssue,supportContext,setSupportContext,beginDiagnosis,onDeepComplete}){
- if(supportsAdaptive(scenario.id))return <AdaptiveDiagnostic key={`${scenario.id}:${reportedIssue}`} scenario={scenario} reportedIssue={reportedIssue} onComplete={onDeepComplete}/>;
+function Diagnostic({resumeSession,intakeFacts,scenario,step,answers,result,phase,actionIndex,actionLog,hypotheses,topCause,answer,resolutionResponse,reset,copyTicket,reduceMotion,reportedIssue,supportContext,setSupportContext,beginDiagnosis,onDeepComplete}){
+ if(supportsAdaptive(scenario.id))return <AdaptiveDiagnostic key={`${scenario.id}:${reportedIssue}:${resumeSession?.state.sessionId||'new'}`} resumeSession={resumeSession} intakeFacts={intakeFacts} scenario={scenario} reportedIssue={reportedIssue} onComplete={onDeepComplete}/>;
  if(scenario.id==='wifi-no-internet')return <DeepWifiDiagnostic scenario={scenario} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} reduceMotion={reduceMotion} onComplete={onDeepComplete}/>;
  const deepProfile=profileFor(scenario.id);if(deepProfile)return <DeepScenarioDiagnostic scenario={scenario} profile={deepProfile} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} reduceMotion={reduceMotion} onComplete={onDeepComplete}/>;
  const actionGuide=result&&phase==='resolve'?getActionGuide(result.actions[actionIndex],supportContext.os,scenario.id):null;
