@@ -1,5 +1,15 @@
 # Adaptive diagnostics with AI interpretation and account storage
 
+## Pre-launch security review — 2026-10-14
+
+API validation correction: malformed question values/options now return a safe 400 response instead of throwing before the error handler. Raw JSON is bounded before parsing, and both raw and parsed bodies use a 16,000-byte UTF-8 limit. The platform request-size limit is still needed because the hosting layer receives the body first.
+
+Acceptance criteria: valid authenticated interpretation still succeeds; null/primitive/array question contexts and invalid option entries return 400; oversized whitespace or multibyte bodies return 413; rejected requests reserve zero quota and call the model zero times; errors retain no-store and contain no exception details. Positive, negative and security regressions execute in tests/interpretHandler.test.js. No UI changed; live accessibility of existing error feedback remains a release gate.
+
+Status: implemented and locally tested (162 tests and production build passed). Definition of Done also requires final-head CI, independent review, relevant live UI/security verification and deployment evidence; this change is not Accepted or Deployed.
+
+Checklist accounting: existing PR #35 contains dependency/secret scanning and hosting-header work; do not duplicate it. This branch contains server-only AI credentials, authenticated interpretation, atomic per-account quotas, timeout/output limits and no-store safe errors. These source controls do not establish live configuration or aggregate spend protection. A gateway budget, live HTTPS/header verification, backup restoration evidence and operator-approved privacy/terms pages remain unverified. The separate Selenium trigger last failed for missing SUPPORTQ_AUTOMATION_PAT; repository code cannot supply that secret. Database staging/production changes and hosting management are outside this review's scope.
+
 The new diagnostic engine is enabled for Wi-Fi connectivity, SAP material-document reversal and SAP posting-period incidents. Other scenario engines keep their current diagnosis paths; the AI intake router can select from the complete scenario catalogue.
 
 ## User flow
