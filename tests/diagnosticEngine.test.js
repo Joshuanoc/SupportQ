@@ -119,10 +119,104 @@ test('Admin-required evidence returns justified escalation',()=>{
   assert.ok(r.escalate.reason);
 });
 
-test('Azure authorization error routes to Azure error handling',()=>{
-  const r=interpretGeneric('azure-access','activity_log','403 AuthorizationFailed');
-  assert.ok(r.next==='azure_error'||r.escalate);
+test('specific Azure authorization evidence produces a justified IAM escalation',()=>{
+  const r=interpretGeneric('azure-access','azure_error','403 AuthorizationFailed: client does not have authorization at this scope');
+  assert.equal(r.escalate?.team,'Cloud/IAM Support');
+  assert.match(r.escalate?.reason,/RBAC/i);
+  assert.equal(r.next,undefined);
 });
+
+test('generic Azure 403 stays in diagnosis without inventing an RBAC cause',()=>{
+  const r=interpretGeneric('azure-access','activity_log','403 Forbidden');
+  assert.equal(r.next,'azure_error');
+  assert.equal(r.escalate,undefined);
+});
+
+test('Outlook NDR signature takes precedence over generic failed wording',()=>{
+  const r=interpretGeneric('outlook-send','outlook_error','Delivery failed. NDR 5.1.1 recipient not found.');
+  assert.equal(r.escalate?.team,'Microsoft 365 Support');
+  assert.match(r.summary,/NDR/i);
+});
+
+test('Outlook bounce evidence reaches mail transport support',()=>{
+ const r=interpretGeneric('outlook-send','outlook_error','Message bounced with status 5.1.1');
+ assert.equal(r.escalate?.team,'Microsoft 365 Support');
+});
+
+test('negative NDR evidence does not invent a mail transport escalation',()=>{
+ const r=interpretGeneric('outlook-send','outlook_error','No NDR or bounce was received; Outlook send still failed');
+ assert.equal(r.next,'outlook_error');
+ assert.equal(r.escalate,undefined);
+});
+
+for(const evidence of ['OneDrive storage is full and sync failed','Out of storage: cannot upload','Quota exceeded error code 0x800']){
+ test(`OneDrive storage-limit evidence reaches quota remediation: ${evidence}`,()=>{
+  const r=interpretGeneric('onedrive-sync','specific_error',evidence);
+  assert.equal(r.next,'quota');
+  assert.match(r.summary,/quota blocker/i);
+ });
+}
+
+test('OneDrive invalid-name evidence stays on targeted content diagnosis',()=>{
+ const r=interpretGeneric('onedrive-sync','specific_error','Sync failed: invalid file name');
+ assert.equal(r.next,'specific_error');
+});
+
+for(const evidence of ['OneDrive quota is healthy; sync failed','Quota is not exceeded; sync failed: invalid file name']){
+ test(`non-capacity OneDrive evidence does not invent a quota failure: ${evidence}`,()=>{
+  const r=interpretGeneric('onedrive-sync','specific_error',evidence);
+  assert.equal(r.next,'specific_error');
+  assert.doesNotMatch(r.summary,/quota blocker/i);
+ });
+}
+
+for(const evidence of ['Faulting module KERNELBASE.dll','Runtime error: missing Visual C++ component','DLL not found: VCRUNTIME140.dll']){
+ test(`specific application crash evidence justifies specialist escalation: ${evidence}`,()=>{
+  const r=interpretGeneric('app-crash','logs',evidence);
+  assert.equal(r.escalate?.team,'Application/Desktop Support');
+  assert.match(r.summary,/dependency|module/i);
+ });
+}
+
+test('neutral runtime wording does not invent a dependency failure',()=>{
+ const r=interpretGeneric('app-crash','logs','Application runtime was 25 minutes before the window closed; no error code was shown.');
+ assert.equal(r.escalate,undefined);
+ assert.equal(r.next,'logs');
+});
+
+for(const evidence of ['C:\\Windows\\Temp is 45 GB','Browser cache consumes most free space']){
+ test(`temporary/cache disk evidence reaches approved cleanup: ${evidence}`,()=>{
+  const r=interpretGeneric('disk-full','unusual',evidence);
+  assert.equal(r.next,'cleanup');
+  assert.match(r.summary,/temporary|cache/i);
+ });
+}
+
+test('application log growth reaches retention remediation',()=>{
+ const r=interpretGeneric('disk-full','unusual','Application logs are 45 GB and still growing');
+ assert.equal(r.next,'retention');
+ assert.match(r.summary,/log growth/i);
+});
+
+test('words containing log do not invent a log-retention cause',()=>{
+ const r=interpretGeneric('disk-full','unusual','The offline file catalog is 45 GB');
+ assert.equal(r.next,'unusual');
+ assert.equal(r.escalate,undefined);
+});
+
+test('genuine MFA failure reaches MFA remediation',()=>{
+ const r=interpretGeneric('locked-account','signin_logs','MFA challenge failed after password entry');
+ assert.equal(r.next,'mfa');
+ assert.match(r.summary,/MFA/i);
+});
+
+for(const evidence of ['MFA was successful; sign-in still failed','MFA not involved; password expired']){
+ test(`cleared or unrelated MFA evidence does not loop into MFA remediation: ${evidence}`,()=>{
+  const r=interpretGeneric('locked-account','signin_logs',evidence);
+  assert.equal(r.next,'signin_logs');
+  assert.equal(r.escalate,undefined);
+ });
+}
 
 test('Slow PC high CPU evidence changes branch',()=>{
   const r=interpretGeneric('slow-pc','resources','CPU 94% Memory 70%');
@@ -130,9 +224,30 @@ test('Slow PC high CPU evidence changes branch',()=>{
   assert.ok(r.boosts?.['High CPU/memory']>0);
 });
 
-test('Known camera not-found signature routes to device health',()=>{
-  const r=interpretGeneric('camera-teams','teams_error','0xA00F4244 no camera found');
+test('Slow PC valid high-memory evidence changes branch',()=>{
+ const r=interpretGeneric('slow-pc','resources','Memory 86%');
+ assert.equal(r.next,'disk');
+ assert.ok(r.boosts?.['High CPU/memory']>0);
+});
+
+test('Slow PC impossible memory percentage does not create saturation evidence',()=>{
+ const r=interpretGeneric('slow-pc','resources','Memory 999%');
+ assert.equal(r.next,'disk');
+ assert.equal(r.boosts,undefined);
+ assert.match(r.summary,/no obvious/i);
+});
+
+for(const evidence of ['0xA00F4244 no camera found','No camera detected by Windows']){
+ test(`known camera-not-found evidence routes to device health: ${evidence}`,()=>{
+  const r=interpretGeneric('camera-teams','teams_error',evidence);
   assert.equal(r.next,'device_health');
+ });
+}
+
+test('negated camera-problem wording does not invent missing hardware',()=>{
+ const r=interpretGeneric('camera-teams','teams_error','Camera works in the OS; no camera problem there, but Teams preview is black');
+ assert.equal(r.next,'teams_error');
+ assert.equal(r.escalate,undefined);
 });
 
 test('Generic unknown evidence must not immediately escalate solely because it is unknown',()=>{
