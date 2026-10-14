@@ -1,0 +1,2716 @@
+{
+  "date": "2026-10-10",
+  "scope": "SupportQ prioritized gap regression",
+  "status": "test-specifications-only",
+  "count": 50,
+  "caseCount": 200,
+  "areas": {
+    "routing": 10,
+    "evidence": 10,
+    "persistence": 10,
+    "automation": 10,
+    "deployment": 10
+  },
+  "scenarios": [
+    {
+      "id": "SQ-20261010-001",
+      "area": "routing",
+      "title": "MIGO 102 reversal versus 122 return",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a clean issue intake with no operating system selected",
+      "testCases": [
+        {
+          "id": "SQ-20261010-001-P",
+          "type": "positive",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When MIGO reversal issue with movement 102 and an earlier 122 return",
+            "Then classify SAP reversal and request document chain before a proposed posting",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "classify SAP reversal and request document chain before a proposed posting"
+        },
+        {
+          "id": "SQ-20261010-001-N",
+          "type": "negative",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When MIGO 122 vendor return without reversal request",
+            "Then route to goods movement, not reversal",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "route to goods movement, not reversal"
+        },
+        {
+          "id": "SQ-20261010-001-S",
+          "type": "security",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a script-tag payload is appended to the issue description",
+            "Then markup stays inert, input remains text, and no SAP action is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "markup stays inert, input remains text, and no SAP action is executed"
+        },
+        {
+          "id": "SQ-20261010-001-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a keyboard-only user submits the issue and moves through the first question",
+            "Then the selected route and first question are focusable, labeled, and announced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "the selected route and first question are focusable, labeled, and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-002",
+      "area": "routing",
+      "title": "VA02 delivery block versus SAP GUI startup",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a clean issue intake with no operating system selected",
+      "testCases": [
+        {
+          "id": "SQ-20261010-002-P",
+          "type": "positive",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When VA02 delivery blocked during sales order processing",
+            "Then route SAP SD delivery-block investigation without device triage",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "route SAP SD delivery-block investigation without device triage"
+        },
+        {
+          "id": "SQ-20261010-002-N",
+          "type": "negative",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When SAP GUI does not start on laptop",
+            "Then ask a targeted SAP GUI client question instead of claiming a delivery block",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "ask a targeted SAP GUI client question instead of claiming a delivery block"
+        },
+        {
+          "id": "SQ-20261010-002-S",
+          "type": "security",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a script-tag payload is appended to the issue description",
+            "Then markup stays inert, input remains text, and no SAP action is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "markup stays inert, input remains text, and no SAP action is executed"
+        },
+        {
+          "id": "SQ-20261010-002-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a keyboard-only user submits the issue and moves through the first question",
+            "Then the selected route and first question are focusable, labeled, and announced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "the selected route and first question are focusable, labeled, and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-003",
+      "area": "routing",
+      "title": "ME21N cost-center versus WBS assignment",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a clean issue intake with no operating system selected",
+      "testCases": [
+        {
+          "id": "SQ-20261010-003-P",
+          "type": "positive",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When ME21N purchase order account assignment K rejected for cost center",
+            "Then route SAP purchasing account assignment and ask exact account category",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "route SAP purchasing account assignment and ask exact account category"
+        },
+        {
+          "id": "SQ-20261010-003-N",
+          "type": "negative",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When ME21N PO account assignment P with WBS",
+            "Then differentiate WBS from cost-center evidence",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "differentiate WBS from cost-center evidence"
+        },
+        {
+          "id": "SQ-20261010-003-S",
+          "type": "security",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a script-tag payload is appended to the issue description",
+            "Then markup stays inert, input remains text, and no SAP action is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "markup stays inert, input remains text, and no SAP action is executed"
+        },
+        {
+          "id": "SQ-20261010-003-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a keyboard-only user submits the issue and moves through the first question",
+            "Then the selected route and first question are focusable, labeled, and announced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "the selected route and first question are focusable, labeled, and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-004",
+      "area": "routing",
+      "title": "Fiori missing app tile versus HTTP 404",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a clean issue intake with no operating system selected",
+      "testCases": [
+        {
+          "id": "SQ-20261010-004-P",
+          "type": "positive",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When Fiori purchase requisition tile missing for assigned business role",
+            "Then route SAP Fiori authorization/catalog diagnostic",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "route SAP Fiori authorization/catalog diagnostic"
+        },
+        {
+          "id": "SQ-20261010-004-N",
+          "type": "negative",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When public website returns HTTP 404 without SAP cue",
+            "Then route IT web availability, not SAP Fiori",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "route IT web availability, not SAP Fiori"
+        },
+        {
+          "id": "SQ-20261010-004-S",
+          "type": "security",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a script-tag payload is appended to the issue description",
+            "Then markup stays inert, input remains text, and no SAP action is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "markup stays inert, input remains text, and no SAP action is executed"
+        },
+        {
+          "id": "SQ-20261010-004-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a keyboard-only user submits the issue and moves through the first question",
+            "Then the selected route and first question are focusable, labeled, and announced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "the selected route and first question are focusable, labeled, and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-005",
+      "area": "routing",
+      "title": "SU53 authorization versus Azure SSO",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a clean issue intake with no operating system selected",
+      "testCases": [
+        {
+          "id": "SQ-20261010-005-P",
+          "type": "positive",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When SAP SU53 authorization trace after SSO login fails in Fiori",
+            "Then prioritize SAP authorization trace and role evidence",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "prioritize SAP authorization trace and role evidence"
+        },
+        {
+          "id": "SQ-20261010-005-N",
+          "type": "negative",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When Azure Entra SSO error AADSTS without SAP cue",
+            "Then prioritize IT identity diagnostic",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "prioritize IT identity diagnostic"
+        },
+        {
+          "id": "SQ-20261010-005-S",
+          "type": "security",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a script-tag payload is appended to the issue description",
+            "Then markup stays inert, input remains text, and no SAP action is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "markup stays inert, input remains text, and no SAP action is executed"
+        },
+        {
+          "id": "SQ-20261010-005-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a keyboard-only user submits the issue and moves through the first question",
+            "Then the selected route and first question are focusable, labeled, and announced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "the selected route and first question are focusable, labeled, and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-006",
+      "area": "routing",
+      "title": "IDoc status 51 versus web server 500",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a clean issue intake with no operating system selected",
+      "testCases": [
+        {
+          "id": "SQ-20261010-006-P",
+          "type": "positive",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When SAP IDoc status 51 inbound ORDERS message failed",
+            "Then route IDoc application document error and request status text",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "route IDoc application document error and request status text"
+        },
+        {
+          "id": "SQ-20261010-006-N",
+          "type": "negative",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When web server HTTP 500 for customer portal",
+            "Then do not route IDoc",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "do not route IDoc"
+        },
+        {
+          "id": "SQ-20261010-006-S",
+          "type": "security",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a script-tag payload is appended to the issue description",
+            "Then markup stays inert, input remains text, and no SAP action is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "markup stays inert, input remains text, and no SAP action is executed"
+        },
+        {
+          "id": "SQ-20261010-006-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a keyboard-only user submits the issue and moves through the first question",
+            "Then the selected route and first question are focusable, labeled, and announced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "the selected route and first question are focusable, labeled, and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-007",
+      "area": "routing",
+      "title": "ME51N requisition versus GitHub PR",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a clean issue intake with no operating system selected",
+      "testCases": [
+        {
+          "id": "SQ-20261010-007-P",
+          "type": "positive",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When ME51N purchase requisition release workflow stuck",
+            "Then route SAP purchase requisition approval",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "route SAP purchase requisition approval"
+        },
+        {
+          "id": "SQ-20261010-007-N",
+          "type": "negative",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When GitHub PR checks are stuck",
+            "Then route software delivery/CI rather than SAP purchase requisition",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "route software delivery/CI rather than SAP purchase requisition"
+        },
+        {
+          "id": "SQ-20261010-007-S",
+          "type": "security",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a script-tag payload is appended to the issue description",
+            "Then markup stays inert, input remains text, and no SAP action is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "markup stays inert, input remains text, and no SAP action is executed"
+        },
+        {
+          "id": "SQ-20261010-007-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a keyboard-only user submits the issue and moves through the first question",
+            "Then the selected route and first question are focusable, labeled, and announced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "the selected route and first question are focusable, labeled, and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-008",
+      "area": "routing",
+      "title": "CO11N confirmation reversal versus inventory reversal",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a clean issue intake with no operating system selected",
+      "testCases": [
+        {
+          "id": "SQ-20261010-008-P",
+          "type": "positive",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When CO11N production confirmation cancellation with backflush",
+            "Then route SAP production confirmation and highlight downstream stock checks",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "route SAP production confirmation and highlight downstream stock checks"
+        },
+        {
+          "id": "SQ-20261010-008-N",
+          "type": "negative",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When MIGO material document cancellation only",
+            "Then route material document reversal instead of CO11N",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "route material document reversal instead of CO11N"
+        },
+        {
+          "id": "SQ-20261010-008-S",
+          "type": "security",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a script-tag payload is appended to the issue description",
+            "Then markup stays inert, input remains text, and no SAP action is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "markup stays inert, input remains text, and no SAP action is executed"
+        },
+        {
+          "id": "SQ-20261010-008-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a keyboard-only user submits the issue and moves through the first question",
+            "Then the selected route and first question are focusable, labeled, and announced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "the selected route and first question are focusable, labeled, and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-009",
+      "area": "routing",
+      "title": "MIRO credit memo versus invoice cancellation",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a clean issue intake with no operating system selected",
+      "testCases": [
+        {
+          "id": "SQ-20261010-009-P",
+          "type": "positive",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When MIRO credit memo references invoice 5100000021",
+            "Then identify invoice credit memo as distinct from material reversal",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "identify invoice credit memo as distinct from material reversal"
+        },
+        {
+          "id": "SQ-20261010-009-N",
+          "type": "negative",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When cancel material document 4900000001",
+            "Then select material reversal without treating it as MIRO",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "select material reversal without treating it as MIRO"
+        },
+        {
+          "id": "SQ-20261010-009-S",
+          "type": "security",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a script-tag payload is appended to the issue description",
+            "Then markup stays inert, input remains text, and no SAP action is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "markup stays inert, input remains text, and no SAP action is executed"
+        },
+        {
+          "id": "SQ-20261010-009-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a keyboard-only user submits the issue and moves through the first question",
+            "Then the selected route and first question are focusable, labeled, and announced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "the selected route and first question are focusable, labeled, and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-010",
+      "area": "routing",
+      "title": "SAP batch determination versus CI batch job",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a clean issue intake with no operating system selected",
+      "testCases": [
+        {
+          "id": "SQ-20261010-010-P",
+          "type": "positive",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When SAP batch determination failed for outbound delivery",
+            "Then route SAP batch/stock determination",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "route SAP batch/stock determination"
+        },
+        {
+          "id": "SQ-20261010-010-N",
+          "type": "negative",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When GitHub Actions batch job failed",
+            "Then route CI workflow, not SAP stock",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "route CI workflow, not SAP stock"
+        },
+        {
+          "id": "SQ-20261010-010-S",
+          "type": "security",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a script-tag payload is appended to the issue description",
+            "Then markup stays inert, input remains text, and no SAP action is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "markup stays inert, input remains text, and no SAP action is executed"
+        },
+        {
+          "id": "SQ-20261010-010-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a clean issue intake with no operating system selected",
+            "When a keyboard-only user submits the issue and moves through the first question",
+            "Then the selected route and first question are focusable, labeled, and announced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "the selected route and first question are focusable, labeled, and announced"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-011",
+      "area": "evidence",
+      "title": "Screenshot redaction provenance",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a diagnostic case in progress with no confirmed root cause",
+      "testCases": [
+        {
+          "id": "SQ-20261010-011-P",
+          "type": "positive",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When an SAP screenshot includes employee IDs and vendor bank details",
+            "Then offer redaction guidance and record only safe issue evidence",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "offer redaction guidance and record only safe issue evidence"
+        },
+        {
+          "id": "SQ-20261010-011-N",
+          "type": "negative",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When user pastes unredacted screenshot transcription",
+            "Then do not claim it was redacted or store secrets",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "do not claim it was redacted or store secrets"
+        },
+        {
+          "id": "SQ-20261010-011-S",
+          "type": "security",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When the evidence includes a token-like string and an unauthorized action request",
+            "Then sensitive evidence is not echoed to logs and no privileged write is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "sensitive evidence is not echoed to logs and no privileged write is executed"
+        },
+        {
+          "id": "SQ-20261010-011-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When a screen-reader user reviews evidence uncertainty and escalation guidance",
+            "Then uncertainty and approval warnings have semantic headings and accessible text",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "uncertainty and approval warnings have semantic headings and accessible text"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-012",
+      "area": "evidence",
+      "title": "Log timestamp correlation across timezones",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a diagnostic case in progress with no confirmed root cause",
+      "testCases": [
+        {
+          "id": "SQ-20261010-012-P",
+          "type": "positive",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When SAP app log 10:15 UTC and database log 07:15 Halifax",
+            "Then normalize timestamp provenance before inferring correlation",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "normalize timestamp provenance before inferring correlation"
+        },
+        {
+          "id": "SQ-20261010-012-N",
+          "type": "negative",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When timestamps have no timezone metadata",
+            "Then request timezone rather than asserting the events are simultaneous",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "request timezone rather than asserting the events are simultaneous"
+        },
+        {
+          "id": "SQ-20261010-012-S",
+          "type": "security",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When the evidence includes a token-like string and an unauthorized action request",
+            "Then sensitive evidence is not echoed to logs and no privileged write is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "sensitive evidence is not echoed to logs and no privileged write is executed"
+        },
+        {
+          "id": "SQ-20261010-012-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When a screen-reader user reviews evidence uncertainty and escalation guidance",
+            "Then uncertainty and approval warnings have semantic headings and accessible text",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "uncertainty and approval warnings have semantic headings and accessible text"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-013",
+      "area": "evidence",
+      "title": "SU53 trace session scope",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a diagnostic case in progress with no confirmed root cause",
+      "testCases": [
+        {
+          "id": "SQ-20261010-013-P",
+          "type": "positive",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When SU53 authorization failure is from a different SAP user session",
+            "Then flag trace as non-matching and request current session evidence",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "flag trace as non-matching and request current session evidence"
+        },
+        {
+          "id": "SQ-20261010-013-N",
+          "type": "negative",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When SU53 output lacks user and timestamp",
+            "Then do not assign a root cause based on that trace",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "do not assign a root cause based on that trace"
+        },
+        {
+          "id": "SQ-20261010-013-S",
+          "type": "security",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When the evidence includes a token-like string and an unauthorized action request",
+            "Then sensitive evidence is not echoed to logs and no privileged write is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "sensitive evidence is not echoed to logs and no privileged write is executed"
+        },
+        {
+          "id": "SQ-20261010-013-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When a screen-reader user reviews evidence uncertainty and escalation guidance",
+            "Then uncertainty and approval warnings have semantic headings and accessible text",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "uncertainty and approval warnings have semantic headings and accessible text"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-014",
+      "area": "evidence",
+      "title": "Downstream posting-chain evidence",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a diagnostic case in progress with no confirmed root cause",
+      "testCases": [
+        {
+          "id": "SQ-20261010-014-P",
+          "type": "positive",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When a reversal request has linked goods receipt, invoice and accounting document",
+            "Then require verified document-chain status before any corrective action",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "require verified document-chain status before any corrective action"
+        },
+        {
+          "id": "SQ-20261010-014-N",
+          "type": "negative",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When follow-on documents are unknown",
+            "Then withhold posting instruction and request document flow",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "withhold posting instruction and request document flow"
+        },
+        {
+          "id": "SQ-20261010-014-S",
+          "type": "security",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When the evidence includes a token-like string and an unauthorized action request",
+            "Then sensitive evidence is not echoed to logs and no privileged write is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "sensitive evidence is not echoed to logs and no privileged write is executed"
+        },
+        {
+          "id": "SQ-20261010-014-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When a screen-reader user reviews evidence uncertainty and escalation guidance",
+            "Then uncertainty and approval warnings have semantic headings and accessible text",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "uncertainty and approval warnings have semantic headings and accessible text"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-015",
+      "area": "evidence",
+      "title": "VPN split-tunnel routing evidence",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a diagnostic case in progress with no confirmed root cause",
+      "testCases": [
+        {
+          "id": "SQ-20261010-015-P",
+          "type": "positive",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When VPN connected but only internal hostname fails with DNS split tunnel",
+            "Then separate DNS and route hypotheses and request nonsecret tests",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "separate DNS and route hypotheses and request nonsecret tests"
+        },
+        {
+          "id": "SQ-20261010-015-N",
+          "type": "negative",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When user says only VPN is broken without evidence",
+            "Then avoid definitive network root cause",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "avoid definitive network root cause"
+        },
+        {
+          "id": "SQ-20261010-015-S",
+          "type": "security",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When the evidence includes a token-like string and an unauthorized action request",
+            "Then sensitive evidence is not echoed to logs and no privileged write is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "sensitive evidence is not echoed to logs and no privileged write is executed"
+        },
+        {
+          "id": "SQ-20261010-015-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When a screen-reader user reviews evidence uncertainty and escalation guidance",
+            "Then uncertainty and approval warnings have semantic headings and accessible text",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "uncertainty and approval warnings have semantic headings and accessible text"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-016",
+      "area": "evidence",
+      "title": "SMTP bounce code provenance",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a diagnostic case in progress with no confirmed root cause",
+      "testCases": [
+        {
+          "id": "SQ-20261010-016-P",
+          "type": "positive",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When Outlook sends message and receives SMTP 550 5.7.1 bounce",
+            "Then identify server rejection evidence and capture sanitized code",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "identify server rejection evidence and capture sanitized code"
+        },
+        {
+          "id": "SQ-20261010-016-N",
+          "type": "negative",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When user only says email failed",
+            "Then request error code before asserting blocked recipient",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "request error code before asserting blocked recipient"
+        },
+        {
+          "id": "SQ-20261010-016-S",
+          "type": "security",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When the evidence includes a token-like string and an unauthorized action request",
+            "Then sensitive evidence is not echoed to logs and no privileged write is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "sensitive evidence is not echoed to logs and no privileged write is executed"
+        },
+        {
+          "id": "SQ-20261010-016-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When a screen-reader user reviews evidence uncertainty and escalation guidance",
+            "Then uncertainty and approval warnings have semantic headings and accessible text",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "uncertainty and approval warnings have semantic headings and accessible text"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-017",
+      "area": "evidence",
+      "title": "Resolved state without successful retest",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a diagnostic case in progress with no confirmed root cause",
+      "testCases": [
+        {
+          "id": "SQ-20261010-017-P",
+          "type": "positive",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When user clicked attempted fix but has not retested SAP transaction",
+            "Then keep incident In progress pending explicit retest result",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "keep incident In progress pending explicit retest result"
+        },
+        {
+          "id": "SQ-20261010-017-N",
+          "type": "negative",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When user clicks done without outcome",
+            "Then do not mark Resolved",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "do not mark Resolved"
+        },
+        {
+          "id": "SQ-20261010-017-S",
+          "type": "security",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When the evidence includes a token-like string and an unauthorized action request",
+            "Then sensitive evidence is not echoed to logs and no privileged write is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "sensitive evidence is not echoed to logs and no privileged write is executed"
+        },
+        {
+          "id": "SQ-20261010-017-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When a screen-reader user reviews evidence uncertainty and escalation guidance",
+            "Then uncertainty and approval warnings have semantic headings and accessible text",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "uncertainty and approval warnings have semantic headings and accessible text"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-018",
+      "area": "evidence",
+      "title": "Conflicting diagnostic evidence versions",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a diagnostic case in progress with no confirmed root cause",
+      "testCases": [
+        {
+          "id": "SQ-20261010-018-P",
+          "type": "positive",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When user submits two contradictory posting period screenshots from different clients",
+            "Then show evidence conflict and ask system/client and timestamp",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "show evidence conflict and ask system/client and timestamp"
+        },
+        {
+          "id": "SQ-20261010-018-N",
+          "type": "negative",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When one screenshot is stale",
+            "Then do not silently overwrite newer evidence",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "do not silently overwrite newer evidence"
+        },
+        {
+          "id": "SQ-20261010-018-S",
+          "type": "security",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When the evidence includes a token-like string and an unauthorized action request",
+            "Then sensitive evidence is not echoed to logs and no privileged write is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "sensitive evidence is not echoed to logs and no privileged write is executed"
+        },
+        {
+          "id": "SQ-20261010-018-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When a screen-reader user reviews evidence uncertainty and escalation guidance",
+            "Then uncertainty and approval warnings have semantic headings and accessible text",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "uncertainty and approval warnings have semantic headings and accessible text"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-019",
+      "area": "evidence",
+      "title": "Unverified SAP Note reference",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a diagnostic case in progress with no confirmed root cause",
+      "testCases": [
+        {
+          "id": "SQ-20261010-019-P",
+          "type": "positive",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When assistant suggests SAP Note number without a verified source",
+            "Then label reference unverified and avoid asserting exact note guidance",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "label reference unverified and avoid asserting exact note guidance"
+        },
+        {
+          "id": "SQ-20261010-019-N",
+          "type": "negative",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When note ID is missing",
+            "Then do not invent note number or quote",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "do not invent note number or quote"
+        },
+        {
+          "id": "SQ-20261010-019-S",
+          "type": "security",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When the evidence includes a token-like string and an unauthorized action request",
+            "Then sensitive evidence is not echoed to logs and no privileged write is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "sensitive evidence is not echoed to logs and no privileged write is executed"
+        },
+        {
+          "id": "SQ-20261010-019-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When a screen-reader user reviews evidence uncertainty and escalation guidance",
+            "Then uncertainty and approval warnings have semantic headings and accessible text",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "uncertainty and approval warnings have semantic headings and accessible text"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-020",
+      "area": "evidence",
+      "title": "Privileged stock adjustment approval",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "a diagnostic case in progress with no confirmed root cause",
+      "testCases": [
+        {
+          "id": "SQ-20261010-020-P",
+          "type": "positive",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When a proposed inventory adjustment requires authorization and financial approval",
+            "Then display approval gate and non-destructive checks before any posting",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "display approval gate and non-destructive checks before any posting"
+        },
+        {
+          "id": "SQ-20261010-020-N",
+          "type": "negative",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When user asks to bypass approval",
+            "Then refuse automatic posting and provide escalation",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "refuse automatic posting and provide escalation"
+        },
+        {
+          "id": "SQ-20261010-020-S",
+          "type": "security",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When the evidence includes a token-like string and an unauthorized action request",
+            "Then sensitive evidence is not echoed to logs and no privileged write is executed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "sensitive evidence is not echoed to logs and no privileged write is executed"
+        },
+        {
+          "id": "SQ-20261010-020-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a diagnostic case in progress with no confirmed root cause",
+            "When a screen-reader user reviews evidence uncertainty and escalation guidance",
+            "Then uncertainty and approval warnings have semantic headings and accessible text",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "uncertainty and approval warnings have semantic headings and accessible text"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-021",
+      "area": "persistence",
+      "title": "Unsaved draft browser refresh recovery",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "two synthetic test accounts with private case isolation enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261010-021-P",
+          "type": "positive",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When an incident draft has unsaved fields when the browser refreshes",
+            "Then warn before loss or restore draft with explicit local-only label",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "warn before loss or restore draft with explicit local-only label"
+        },
+        {
+          "id": "SQ-20261010-021-N",
+          "type": "negative",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When browser storage is disabled",
+            "Then show non-persistence warning rather than Saved",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "show non-persistence warning rather than Saved"
+        },
+        {
+          "id": "SQ-20261010-021-S",
+          "type": "security",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a second user attempts to read or alter the first user's data",
+            "Then RLS denies cross-user access, no private data is disclosed, and no privilege is elevated",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "RLS denies cross-user access, no private data is disclosed, and no privilege is elevated"
+        },
+        {
+          "id": "SQ-20261010-021-A",
+          "type": "accessibility",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a keyboard-only user navigates save, error, retry and conflict states",
+            "Then save/error status is announced in a live region and focus remains logical",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "save/error status is announced in a live region and focus remains logical"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-022",
+      "area": "persistence",
+      "title": "Concurrent incident edits from two tabs",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "two synthetic test accounts with private case isolation enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261010-022-P",
+          "type": "positive",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When the same incident is edited in two browser tabs",
+            "Then detect stale version and require conflict resolution",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "detect stale version and require conflict resolution"
+        },
+        {
+          "id": "SQ-20261010-022-N",
+          "type": "negative",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When tab B saves older revision",
+            "Then do not silently overwrite tab A",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "do not silently overwrite tab A"
+        },
+        {
+          "id": "SQ-20261010-022-S",
+          "type": "security",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a second user attempts to read or alter the first user's data",
+            "Then RLS denies cross-user access, no private data is disclosed, and no privilege is elevated",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "RLS denies cross-user access, no private data is disclosed, and no privilege is elevated"
+        },
+        {
+          "id": "SQ-20261010-022-A",
+          "type": "accessibility",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a keyboard-only user navigates save, error, retry and conflict states",
+            "Then save/error status is announced in a live region and focus remains logical",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "save/error status is announced in a live region and focus remains logical"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-023",
+      "area": "persistence",
+      "title": "Retry with idempotency key",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "two synthetic test accounts with private case isolation enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261010-023-P",
+          "type": "positive",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When an incident create request times out after server commit",
+            "Then retry with same idempotency key yields one case",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "retry with same idempotency key yields one case"
+        },
+        {
+          "id": "SQ-20261010-023-N",
+          "type": "negative",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When request repeats after a timeout",
+            "Then avoid duplicate incidents",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "avoid duplicate incidents"
+        },
+        {
+          "id": "SQ-20261010-023-S",
+          "type": "security",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a second user attempts to read or alter the first user's data",
+            "Then RLS denies cross-user access, no private data is disclosed, and no privilege is elevated",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "RLS denies cross-user access, no private data is disclosed, and no privilege is elevated"
+        },
+        {
+          "id": "SQ-20261010-023-A",
+          "type": "accessibility",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a keyboard-only user navigates save, error, retry and conflict states",
+            "Then save/error status is announced in a live region and focus remains logical",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "save/error status is announced in a live region and focus remains logical"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-024",
+      "area": "persistence",
+      "title": "Expired session after logout",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "two synthetic test accounts with private case isolation enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261010-024-P",
+          "type": "positive",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When user A logs out with cached incident detail open",
+            "Then clear private cache and deny subsequent fetch",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "clear private cache and deny subsequent fetch"
+        },
+        {
+          "id": "SQ-20261010-024-N",
+          "type": "negative",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When stale access token is replayed",
+            "Then server denies unauthorized case read",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "server denies unauthorized case read"
+        },
+        {
+          "id": "SQ-20261010-024-S",
+          "type": "security",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a second user attempts to read or alter the first user's data",
+            "Then RLS denies cross-user access, no private data is disclosed, and no privilege is elevated",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "RLS denies cross-user access, no private data is disclosed, and no privilege is elevated"
+        },
+        {
+          "id": "SQ-20261010-024-A",
+          "type": "accessibility",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a keyboard-only user navigates save, error, retry and conflict states",
+            "Then save/error status is announced in a live region and focus remains logical",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "save/error status is announced in a live region and focus remains logical"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-025",
+      "area": "persistence",
+      "title": "Role claim changes mid-session",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "two synthetic test accounts with private case isolation enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261010-025-P",
+          "type": "positive",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When administrator revokes support agent permission",
+            "Then next privileged operation rechecks current authorization",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "next privileged operation rechecks current authorization"
+        },
+        {
+          "id": "SQ-20261010-025-N",
+          "type": "negative",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When client still displays old admin badge",
+            "Then server refuses privileged mutation",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "server refuses privileged mutation"
+        },
+        {
+          "id": "SQ-20261010-025-S",
+          "type": "security",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a second user attempts to read or alter the first user's data",
+            "Then RLS denies cross-user access, no private data is disclosed, and no privilege is elevated",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "RLS denies cross-user access, no private data is disclosed, and no privilege is elevated"
+        },
+        {
+          "id": "SQ-20261010-025-A",
+          "type": "accessibility",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a keyboard-only user navigates save, error, retry and conflict states",
+            "Then save/error status is announced in a live region and focus remains logical",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "save/error status is announced in a live region and focus remains logical"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-026",
+      "area": "persistence",
+      "title": "Paginated incident listing isolation",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "two synthetic test accounts with private case isolation enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261010-026-P",
+          "type": "positive",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When user A has 60 cases and user B has 20",
+            "Then every page returns only A-owned cases with stable ordering",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "every page returns only A-owned cases with stable ordering"
+        },
+        {
+          "id": "SQ-20261010-026-N",
+          "type": "negative",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When page cursor references B-owned record",
+            "Then deny cross-user records without metadata leak",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "deny cross-user records without metadata leak"
+        },
+        {
+          "id": "SQ-20261010-026-S",
+          "type": "security",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a second user attempts to read or alter the first user's data",
+            "Then RLS denies cross-user access, no private data is disclosed, and no privilege is elevated",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "RLS denies cross-user access, no private data is disclosed, and no privilege is elevated"
+        },
+        {
+          "id": "SQ-20261010-026-A",
+          "type": "accessibility",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a keyboard-only user navigates save, error, retry and conflict states",
+            "Then save/error status is announced in a live region and focus remains logical",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "save/error status is announced in a live region and focus remains logical"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-027",
+      "area": "persistence",
+      "title": "Malformed UUID in incident filter",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "two synthetic test accounts with private case isolation enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261010-027-P",
+          "type": "positive",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When incident query includes invalid UUID and SQL-like text",
+            "Then reject invalid identifier without leaking SQL errors",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "reject invalid identifier without leaking SQL errors"
+        },
+        {
+          "id": "SQ-20261010-027-N",
+          "type": "negative",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When input contains quote and UNION text",
+            "Then treat input as data and return sanitized validation error",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "treat input as data and return sanitized validation error"
+        },
+        {
+          "id": "SQ-20261010-027-S",
+          "type": "security",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a second user attempts to read or alter the first user's data",
+            "Then RLS denies cross-user access, no private data is disclosed, and no privilege is elevated",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "RLS denies cross-user access, no private data is disclosed, and no privilege is elevated"
+        },
+        {
+          "id": "SQ-20261010-027-A",
+          "type": "accessibility",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a keyboard-only user navigates save, error, retry and conflict states",
+            "Then save/error status is announced in a live region and focus remains logical",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "save/error status is announced in a live region and focus remains logical"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-028",
+      "area": "persistence",
+      "title": "Account deletion and retention lifecycle",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "two synthetic test accounts with private case isolation enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261010-028-P",
+          "type": "positive",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When user requests deletion of stored incidents",
+            "Then apply documented retention/deletion policy with audit event",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "apply documented retention/deletion policy with audit event"
+        },
+        {
+          "id": "SQ-20261010-028-N",
+          "type": "negative",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When deletion interrupted halfway",
+            "Then show partial failure and never claim complete deletion",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "show partial failure and never claim complete deletion"
+        },
+        {
+          "id": "SQ-20261010-028-S",
+          "type": "security",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a second user attempts to read or alter the first user's data",
+            "Then RLS denies cross-user access, no private data is disclosed, and no privilege is elevated",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "RLS denies cross-user access, no private data is disclosed, and no privilege is elevated"
+        },
+        {
+          "id": "SQ-20261010-028-A",
+          "type": "accessibility",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a keyboard-only user navigates save, error, retry and conflict states",
+            "Then save/error status is announced in a live region and focus remains logical",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "save/error status is announced in a live region and focus remains logical"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-029",
+      "area": "persistence",
+      "title": "Attachment orphan cleanup after failed save",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "two synthetic test accounts with private case isolation enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261010-029-P",
+          "type": "positive",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When upload succeeds but incident create fails",
+            "Then remove or quarantine orphaned private attachment",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "remove or quarantine orphaned private attachment"
+        },
+        {
+          "id": "SQ-20261010-029-N",
+          "type": "negative",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When unauthorized user guesses attachment URL",
+            "Then deny direct access to private object",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "deny direct access to private object"
+        },
+        {
+          "id": "SQ-20261010-029-S",
+          "type": "security",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a second user attempts to read or alter the first user's data",
+            "Then RLS denies cross-user access, no private data is disclosed, and no privilege is elevated",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "RLS denies cross-user access, no private data is disclosed, and no privilege is elevated"
+        },
+        {
+          "id": "SQ-20261010-029-A",
+          "type": "accessibility",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a keyboard-only user navigates save, error, retry and conflict states",
+            "Then save/error status is announced in a live region and focus remains logical",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "save/error status is announced in a live region and focus remains logical"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-030",
+      "area": "persistence",
+      "title": "Incident audit timezone boundary",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "two synthetic test accounts with private case isolation enabled",
+      "testCases": [
+        {
+          "id": "SQ-20261010-030-P",
+          "type": "positive",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When incident created near UTC midnight during DST change",
+            "Then store UTC and display local timezone with offset",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "store UTC and display local timezone with offset"
+        },
+        {
+          "id": "SQ-20261010-030-N",
+          "type": "negative",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When browser timezone changes",
+            "Then retain consistent event ordering and original UTC",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "retain consistent event ordering and original UTC"
+        },
+        {
+          "id": "SQ-20261010-030-S",
+          "type": "security",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a second user attempts to read or alter the first user's data",
+            "Then RLS denies cross-user access, no private data is disclosed, and no privilege is elevated",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "RLS denies cross-user access, no private data is disclosed, and no privilege is elevated"
+        },
+        {
+          "id": "SQ-20261010-030-A",
+          "type": "accessibility",
+          "steps": [
+            "Given two synthetic test accounts with private case isolation enabled",
+            "When a keyboard-only user navigates save, error, retry and conflict states",
+            "Then save/error status is announced in a live region and focus remains logical",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "save/error status is announced in a live region and focus remains logical"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-031",
+      "area": "automation",
+      "title": "Malformed daily fixture schema",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the pull-request regression workflow and fixture validator are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-031-P",
+          "type": "positive",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When daily scenario JSON lacks a required testCases array",
+            "Then fixture validation fails with file and scenario ID",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "fixture validation fails with file and scenario ID"
+        },
+        {
+          "id": "SQ-20261010-031-N",
+          "type": "negative",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When testCases field is null",
+            "Then fail rather than silently skipping",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "fail rather than silently skipping"
+        },
+        {
+          "id": "SQ-20261010-031-S",
+          "type": "security",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a test log includes a synthetic secret or untrusted fixture text",
+            "Then CI treats fixture text as data and redacts sensitive values in logs",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "CI treats fixture text as data and redacts sensitive values in logs"
+        },
+        {
+          "id": "SQ-20261010-031-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a screen-reader user reads the HTML test report and failure summary",
+            "Then failure summary uses semantic headings, named links, and visible focus",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "failure summary uses semantic headings, named links, and visible focus"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-032",
+      "area": "automation",
+      "title": "Normalized punctuation duplicate title",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the pull-request regression workflow and fixture validator are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-032-P",
+          "type": "positive",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When two daily titles differ only in punctuation and case",
+            "Then validator detects normalized duplicate across dates",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "validator detects normalized duplicate across dates"
+        },
+        {
+          "id": "SQ-20261010-032-N",
+          "type": "negative",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When one title uses em dash and extra spaces",
+            "Then do not count as new coverage",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "do not count as new coverage"
+        },
+        {
+          "id": "SQ-20261010-032-S",
+          "type": "security",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a test log includes a synthetic secret or untrusted fixture text",
+            "Then CI treats fixture text as data and redacts sensitive values in logs",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "CI treats fixture text as data and redacts sensitive values in logs"
+        },
+        {
+          "id": "SQ-20261010-032-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a screen-reader user reads the HTML test report and failure summary",
+            "Then failure summary uses semantic headings, named links, and visible focus",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "failure summary uses semantic headings, named links, and visible focus"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-033",
+      "area": "automation",
+      "title": "Missing accessibility coverage category",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the pull-request regression workflow and fixture validator are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-033-P",
+          "type": "positive",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a daily scenario has positive negative security but no accessibility case",
+            "Then CI reports missing category and fails",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "CI reports missing category and fails"
+        },
+        {
+          "id": "SQ-20261010-033-N",
+          "type": "negative",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When test type is misspelled a11y",
+            "Then do not accept unsupported category",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "do not accept unsupported category"
+        },
+        {
+          "id": "SQ-20261010-033-S",
+          "type": "security",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a test log includes a synthetic secret or untrusted fixture text",
+            "Then CI treats fixture text as data and redacts sensitive values in logs",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "CI treats fixture text as data and redacts sensitive values in logs"
+        },
+        {
+          "id": "SQ-20261010-033-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a screen-reader user reads the HTML test report and failure summary",
+            "Then failure summary uses semantic headings, named links, and visible focus",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "failure summary uses semantic headings, named links, and visible focus"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-034",
+      "area": "automation",
+      "title": "Negative assertion accidentally checks happy path",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the pull-request regression workflow and fixture validator are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-034-P",
+          "type": "positive",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When negative test submits invalid authorization but asserts 200",
+            "Then test review flags missing denial assertion",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "test review flags missing denial assertion"
+        },
+        {
+          "id": "SQ-20261010-034-N",
+          "type": "negative",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When test only asserts request completed",
+            "Then require explicit expected denial and no side effect",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "require explicit expected denial and no side effect"
+        },
+        {
+          "id": "SQ-20261010-034-S",
+          "type": "security",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a test log includes a synthetic secret or untrusted fixture text",
+            "Then CI treats fixture text as data and redacts sensitive values in logs",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "CI treats fixture text as data and redacts sensitive values in logs"
+        },
+        {
+          "id": "SQ-20261010-034-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a screen-reader user reads the HTML test report and failure summary",
+            "Then failure summary uses semantic headings, named links, and visible focus",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "failure summary uses semantic headings, named links, and visible focus"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-035",
+      "area": "automation",
+      "title": "Deterministic regression fixture seed",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the pull-request regression workflow and fixture validator are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-035-P",
+          "type": "positive",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When test data generator uses seeded synthetic incident IDs",
+            "Then same seed yields repeatable assertions across reruns",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "same seed yields repeatable assertions across reruns"
+        },
+        {
+          "id": "SQ-20261010-035-N",
+          "type": "negative",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When unseeded run produces different ordering",
+            "Then mark non-determinism as test risk",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "mark non-determinism as test risk"
+        },
+        {
+          "id": "SQ-20261010-035-S",
+          "type": "security",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a test log includes a synthetic secret or untrusted fixture text",
+            "Then CI treats fixture text as data and redacts sensitive values in logs",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "CI treats fixture text as data and redacts sensitive values in logs"
+        },
+        {
+          "id": "SQ-20261010-035-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a screen-reader user reads the HTML test report and failure summary",
+            "Then failure summary uses semantic headings, named links, and visible focus",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "failure summary uses semantic headings, named links, and visible focus"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-036",
+      "area": "automation",
+      "title": "Sensitive test artifact redaction",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the pull-request regression workflow and fixture validator are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-036-P",
+          "type": "positive",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When CI screenshots include a synthetic token string",
+            "Then redact secrets before artifact upload",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "redact secrets before artifact upload"
+        },
+        {
+          "id": "SQ-20261010-036-N",
+          "type": "negative",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When test failure prints Authorization header",
+            "Then mask token and fail security gate",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "mask token and fail security gate"
+        },
+        {
+          "id": "SQ-20261010-036-S",
+          "type": "security",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a test log includes a synthetic secret or untrusted fixture text",
+            "Then CI treats fixture text as data and redacts sensitive values in logs",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "CI treats fixture text as data and redacts sensitive values in logs"
+        },
+        {
+          "id": "SQ-20261010-036-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a screen-reader user reads the HTML test report and failure summary",
+            "Then failure summary uses semantic headings, named links, and visible focus",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "failure summary uses semantic headings, named links, and visible focus"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-037",
+      "area": "automation",
+      "title": "Empty JUnit XML falsely green",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the pull-request regression workflow and fixture validator are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-037-P",
+          "type": "positive",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When test runner exits zero but JUnit report has zero tests",
+            "Then CI fails coverage gate on empty report",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "CI fails coverage gate on empty report"
+        },
+        {
+          "id": "SQ-20261010-037-N",
+          "type": "negative",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When XML report file is absent",
+            "Then do not label suite passed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "do not label suite passed"
+        },
+        {
+          "id": "SQ-20261010-037-S",
+          "type": "security",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a test log includes a synthetic secret or untrusted fixture text",
+            "Then CI treats fixture text as data and redacts sensitive values in logs",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "CI treats fixture text as data and redacts sensitive values in logs"
+        },
+        {
+          "id": "SQ-20261010-037-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a screen-reader user reads the HTML test report and failure summary",
+            "Then failure summary uses semantic headings, named links, and visible focus",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "failure summary uses semantic headings, named links, and visible focus"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-038",
+      "area": "automation",
+      "title": "PR check commit SHA mismatch",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the pull-request regression workflow and fixture validator are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-038-P",
+          "type": "positive",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When CI run is green for previous commit not latest PR head",
+            "Then require passing checks on current head SHA",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "require passing checks on current head SHA"
+        },
+        {
+          "id": "SQ-20261010-038-N",
+          "type": "negative",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When PR receives new commit after green run",
+            "Then invalidate prior green approval",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "invalidate prior green approval"
+        },
+        {
+          "id": "SQ-20261010-038-S",
+          "type": "security",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a test log includes a synthetic secret or untrusted fixture text",
+            "Then CI treats fixture text as data and redacts sensitive values in logs",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "CI treats fixture text as data and redacts sensitive values in logs"
+        },
+        {
+          "id": "SQ-20261010-038-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a screen-reader user reads the HTML test report and failure summary",
+            "Then failure summary uses semantic headings, named links, and visible focus",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "failure summary uses semantic headings, named links, and visible focus"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-039",
+      "area": "automation",
+      "title": "Dependency lockfile drift",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the pull-request regression workflow and fixture validator are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-039-P",
+          "type": "positive",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When package dependency range changes without synchronized lockfile",
+            "Then CI reproducible install detects drift",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "CI reproducible install detects drift"
+        },
+        {
+          "id": "SQ-20261010-039-N",
+          "type": "negative",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When lockfile has unresolved integrity mismatch",
+            "Then block release and require reviewed lockfile",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "block release and require reviewed lockfile"
+        },
+        {
+          "id": "SQ-20261010-039-S",
+          "type": "security",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a test log includes a synthetic secret or untrusted fixture text",
+            "Then CI treats fixture text as data and redacts sensitive values in logs",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "CI treats fixture text as data and redacts sensitive values in logs"
+        },
+        {
+          "id": "SQ-20261010-039-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a screen-reader user reads the HTML test report and failure summary",
+            "Then failure summary uses semantic headings, named links, and visible focus",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "failure summary uses semantic headings, named links, and visible focus"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-040",
+      "area": "automation",
+      "title": "Flaky test quarantine expiry",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "the pull-request regression workflow and fixture validator are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-040-P",
+          "type": "positive",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When flaky UI test is quarantined with expiry date",
+            "Then CI reports expired quarantine as failure",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "CI reports expired quarantine as failure"
+        },
+        {
+          "id": "SQ-20261010-040-N",
+          "type": "negative",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When test is skipped indefinitely",
+            "Then do not count quarantined test as passed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "do not count quarantined test as passed"
+        },
+        {
+          "id": "SQ-20261010-040-S",
+          "type": "security",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a test log includes a synthetic secret or untrusted fixture text",
+            "Then CI treats fixture text as data and redacts sensitive values in logs",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "CI treats fixture text as data and redacts sensitive values in logs"
+        },
+        {
+          "id": "SQ-20261010-040-A",
+          "type": "accessibility",
+          "steps": [
+            "Given the pull-request regression workflow and fixture validator are available",
+            "When a screen-reader user reads the HTML test report and failure summary",
+            "Then failure summary uses semantic headings, named links, and visible focus",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "failure summary uses semantic headings, named links, and visible focus"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-041",
+      "area": "deployment",
+      "title": "Custom domain versus Vercel alias authentication",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a staging deployment and a separate production alias are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-041-P",
+          "type": "positive",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When production custom domain is public but vercel.app alias requires SSO",
+            "Then report each domain protection independently",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "report each domain protection independently"
+        },
+        {
+          "id": "SQ-20261010-041-N",
+          "type": "negative",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When public probe receives login redirect",
+            "Then do not call alias publicly reachable",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "do not call alias publicly reachable"
+        },
+        {
+          "id": "SQ-20261010-041-S",
+          "type": "security",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When an unauthorized visitor sends an altered request",
+            "Then access restrictions and least-privilege checks remain enforced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "access restrictions and least-privilege checks remain enforced"
+        },
+        {
+          "id": "SQ-20261010-041-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When a keyboard-only user encounters loading, outage and retry UI",
+            "Then status and retry controls are accessible and focus remains visible",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "status and retry controls are accessible and focus remains visible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-042",
+      "area": "deployment",
+      "title": "Preview URL search engine exposure",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a staging deployment and a separate production alias are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-042-P",
+          "type": "positive",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When preview URL is indexed by search engine",
+            "Then preview is access-controlled and has noindex headers",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "preview is access-controlled and has noindex headers"
+        },
+        {
+          "id": "SQ-20261010-042-N",
+          "type": "negative",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When anonymous visitor requests preview",
+            "Then deny protected content",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "deny protected content"
+        },
+        {
+          "id": "SQ-20261010-042-S",
+          "type": "security",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When an unauthorized visitor sends an altered request",
+            "Then access restrictions and least-privilege checks remain enforced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "access restrictions and least-privilege checks remain enforced"
+        },
+        {
+          "id": "SQ-20261010-042-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When a keyboard-only user encounters loading, outage and retry UI",
+            "Then status and retry controls are accessible and focus remains visible",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "status and retry controls are accessible and focus remains visible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-043",
+      "area": "deployment",
+      "title": "Content Security Policy blocks JS assets",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a staging deployment and a separate production alias are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-043-P",
+          "type": "positive",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When production HTML loads but CSP rejects main JS bundle",
+            "Then smoke test detects missing interactive app shell",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "smoke test detects missing interactive app shell"
+        },
+        {
+          "id": "SQ-20261010-043-N",
+          "type": "negative",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When HTTP response is 200 with CSP console error",
+            "Then mark production unusable",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "mark production unusable"
+        },
+        {
+          "id": "SQ-20261010-043-S",
+          "type": "security",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When an unauthorized visitor sends an altered request",
+            "Then access restrictions and least-privilege checks remain enforced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "access restrictions and least-privilege checks remain enforced"
+        },
+        {
+          "id": "SQ-20261010-043-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When a keyboard-only user encounters loading, outage and retry UI",
+            "Then status and retry controls are accessible and focus remains visible",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "status and retry controls are accessible and focus remains visible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-044",
+      "area": "deployment",
+      "title": "Service worker stale bundle after deploy",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a staging deployment and a separate production alias are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-044-P",
+          "type": "positive",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When old service worker serves previous app version",
+            "Then version-aware refresh recovers latest compatible bundle",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "version-aware refresh recovers latest compatible bundle"
+        },
+        {
+          "id": "SQ-20261010-044-N",
+          "type": "negative",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When offline browser reopens stale build",
+            "Then do not report newest SHA until confirmed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "do not report newest SHA until confirmed"
+        },
+        {
+          "id": "SQ-20261010-044-S",
+          "type": "security",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When an unauthorized visitor sends an altered request",
+            "Then access restrictions and least-privilege checks remain enforced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "access restrictions and least-privilege checks remain enforced"
+        },
+        {
+          "id": "SQ-20261010-044-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When a keyboard-only user encounters loading, outage and retry UI",
+            "Then status and retry controls are accessible and focus remains visible",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "status and retry controls are accessible and focus remains visible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-045",
+      "area": "deployment",
+      "title": "CDN rate-limit retry handling",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a staging deployment and a separate production alias are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-045-P",
+          "type": "positive",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When synthetic probe receives HTTP 429 with Retry-After",
+            "Then client retries with bounded backoff without infinite loop",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "client retries with bounded backoff without infinite loop"
+        },
+        {
+          "id": "SQ-20261010-045-N",
+          "type": "negative",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When 429 repeats after retry budget",
+            "Then show actionable outage state",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "show actionable outage state"
+        },
+        {
+          "id": "SQ-20261010-045-S",
+          "type": "security",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When an unauthorized visitor sends an altered request",
+            "Then access restrictions and least-privilege checks remain enforced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "access restrictions and least-privilege checks remain enforced"
+        },
+        {
+          "id": "SQ-20261010-045-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When a keyboard-only user encounters loading, outage and retry UI",
+            "Then status and retry controls are accessible and focus remains visible",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "status and retry controls are accessible and focus remains visible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-046",
+      "area": "deployment",
+      "title": "Rollback with incompatible database schema",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a staging deployment and a separate production alias are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-046-P",
+          "type": "positive",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When frontend rollback targets schema changed in later release",
+            "Then compatibility check blocks unsafe rollback",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "compatibility check blocks unsafe rollback"
+        },
+        {
+          "id": "SQ-20261010-046-N",
+          "type": "negative",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When older client cannot read renamed column",
+            "Then avoid destructive emergency migration",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "avoid destructive emergency migration"
+        },
+        {
+          "id": "SQ-20261010-046-S",
+          "type": "security",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When an unauthorized visitor sends an altered request",
+            "Then access restrictions and least-privilege checks remain enforced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "access restrictions and least-privilege checks remain enforced"
+        },
+        {
+          "id": "SQ-20261010-046-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When a keyboard-only user encounters loading, outage and retry UI",
+            "Then status and retry controls are accessible and focus remains visible",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "status and retry controls are accessible and focus remains visible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-047",
+      "area": "deployment",
+      "title": "Supabase region latency and timeout",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a staging deployment and a separate production alias are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-047-P",
+          "type": "positive",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When backend request crosses regions and exceeds configured timeout",
+            "Then show recoverable error and preserve unsaved input",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "show recoverable error and preserve unsaved input"
+        },
+        {
+          "id": "SQ-20261010-047-N",
+          "type": "negative",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When network stalls beyond threshold",
+            "Then do not claim persisted incident",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "do not claim persisted incident"
+        },
+        {
+          "id": "SQ-20261010-047-S",
+          "type": "security",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When an unauthorized visitor sends an altered request",
+            "Then access restrictions and least-privilege checks remain enforced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "access restrictions and least-privilege checks remain enforced"
+        },
+        {
+          "id": "SQ-20261010-047-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When a keyboard-only user encounters loading, outage and retry UI",
+            "Then status and retry controls are accessible and focus remains visible",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "status and retry controls are accessible and focus remains visible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-048",
+      "area": "deployment",
+      "title": "HTTP 200 with blank application root",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a staging deployment and a separate production alias are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-048-P",
+          "type": "positive",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When production returns HTTP 200 but React root is empty",
+            "Then browser smoke fails until visible app landmark exists",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "browser smoke fails until visible app landmark exists"
+        },
+        {
+          "id": "SQ-20261010-048-N",
+          "type": "negative",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When JS fails at startup",
+            "Then mark deployment blocked despite 200",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "mark deployment blocked despite 200"
+        },
+        {
+          "id": "SQ-20261010-048-S",
+          "type": "security",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When an unauthorized visitor sends an altered request",
+            "Then access restrictions and least-privilege checks remain enforced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "access restrictions and least-privilege checks remain enforced"
+        },
+        {
+          "id": "SQ-20261010-048-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When a keyboard-only user encounters loading, outage and retry UI",
+            "Then status and retry controls are accessible and focus remains visible",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "status and retry controls are accessible and focus remains visible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-049",
+      "area": "deployment",
+      "title": "Production sourcemap exposure",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a staging deployment and a separate production alias are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-049-P",
+          "type": "positive",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When public bundle has source maps with internal paths",
+            "Then verify artifact policy and exclude sensitive maps",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "verify artifact policy and exclude sensitive maps"
+        },
+        {
+          "id": "SQ-20261010-049-N",
+          "type": "negative",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When visitor requests restricted map file",
+            "Then no private source or credentials exposed",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "no private source or credentials exposed"
+        },
+        {
+          "id": "SQ-20261010-049-S",
+          "type": "security",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When an unauthorized visitor sends an altered request",
+            "Then access restrictions and least-privilege checks remain enforced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "access restrictions and least-privilege checks remain enforced"
+        },
+        {
+          "id": "SQ-20261010-049-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When a keyboard-only user encounters loading, outage and retry UI",
+            "Then status and retry controls are accessible and focus remains visible",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "status and retry controls are accessible and focus remains visible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261010-050",
+      "area": "deployment",
+      "title": "Credentialed CORS wildcard on edge function",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "a staging deployment and a separate production alias are available",
+      "testCases": [
+        {
+          "id": "SQ-20261010-050-P",
+          "type": "positive",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When cross-origin request includes cookies and Origin header",
+            "Then reject untrusted origin and never combine credentials with wildcard",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this positive case"
+          ],
+          "expected": "reject untrusted origin and never combine credentials with wildcard"
+        },
+        {
+          "id": "SQ-20261010-050-N",
+          "type": "negative",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When malicious Origin requests private case",
+            "Then deny with no CORS authorization",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this negative case"
+          ],
+          "expected": "deny with no CORS authorization"
+        },
+        {
+          "id": "SQ-20261010-050-S",
+          "type": "security",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When an unauthorized visitor sends an altered request",
+            "Then access restrictions and least-privilege checks remain enforced",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this security case"
+          ],
+          "expected": "access restrictions and least-privilege checks remain enforced"
+        },
+        {
+          "id": "SQ-20261010-050-A",
+          "type": "accessibility",
+          "steps": [
+            "Given a staging deployment and a separate production alias are available",
+            "When a keyboard-only user encounters loading, outage and retry UI",
+            "Then status and retry controls are accessible and focus remains visible",
+            "And record the observed route/status, accessible UI evidence, and any side effects for this accessibility case"
+          ],
+          "expected": "status and retry controls are accessible and focus remains visible"
+        }
+      ]
+    }
+  ]
+}

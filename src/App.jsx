@@ -2,7 +2,7 @@ import React,{useMemo,useState,useEffect}from'react';
 import{motion,AnimatePresence,useReducedMotion}from'framer-motion';
 import{ArrowUpRight,Check,ChevronRight,Mail,Code2,Cloud,TestTube2,Wrench,Database,Network,Menu,X,Search,LifeBuoy,LayoutDashboard,Clock3,BarChart3}from'lucide-react';
 import{scenarios,categoryCounts}from'./data.js';
-import{classifyIssue}from'./classifyIssue.js';
+import{intakeDecision,initialPhase}from'./intakeDecision.js';
 import{diagnosticPath,resolutionProgress}from'./diagnosticTransitions.js';
 import{getActionGuide}from'./guidance.js';
 import{getNode,initialHypotheses,applyBoosts,parseDiagnosticText,calculatePriority}from'./diagnosticEngine.js';
@@ -60,6 +60,7 @@ function App(){
  const[reportedIssue,setReportedIssue]=useState('');
  const[intake,setIntake]=useState('');
  const[suggestions,setSuggestions]=useState([]);
+ const[intakeFeedback,setIntakeFeedback]=useState('');
  const[history,setHistory]=useState(()=>{try{return JSON.parse(localStorage.getItem('supportq-history')||'[]')}catch{return[]}});
  const[query,setQuery]=useState('');
  const[mobile,setMobile]=useState(false);
@@ -84,19 +85,19 @@ function App(){
  const filtered=useMemo(()=>scenarios.filter(s=>`${s.title} ${s.category} ${s.symptoms.join(' ')}`.toLowerCase().includes(query.toLowerCase())),[query]);
 
  const start=(s,issue='')=>{
-   setScenario(s);setStep(0);setAnswers([]);setResult(null);setActionIndex(0);setActionLog([]);const inferred=inferContext(issue||s.title);const hasEnough=Boolean(s.category.startsWith('SAP') || (inferred.os&&inferred.environment&&inferred.scope));setSupportContext(inferred);setPhase(s.severity==='Critical'||hasEnough?'diagnose':'triage');
+   setScenario(s);setStep(0);setAnswers([]);setResult(null);setActionIndex(0);setActionLog([]);const inferred=inferContext(issue||s.title);setSupportContext(inferred);setPhase(initialPhase(s,inferred));
    setReportedIssue(issue||s.title);
    setHypotheses(s.hypotheses.map(([name,score])=>({name,score})).sort((a,b)=>b.score-a.score));
-   setSuggestions([]);setView('diagnose');setMobile(false);
+   setSuggestions([]);setIntakeFeedback('');setView('diagnose');setMobile(false);
  };
 
  const submitIntake=()=>{
    const text=intake.trim(); if(!text)return;
    const inferred=inferContext(text);setSupportContext(x=>({...x,...Object.fromEntries(Object.entries(inferred).filter(([,v])=>v))}));
-   const matches=classifyIssue(text);
-   if(matches.length===0){setSuggestions(scenarios.slice(0,4));return;}
-   if(matches.length===1||matches[0].score>=matches[1].score+3){start(matches[0].s,text);return;}
-   setSuggestions(matches.slice(0,3).map(x=>x.s));
+   const decision=intakeDecision(text);
+   setIntakeFeedback(decision.message||'');
+   if(decision.type==='start'){start(decision.scenario,text);return;}
+   setSuggestions(decision.suggestions);
  };
 
  const beginDiagnosis=()=>{if(!scenario?.category.startsWith('SAP')&&(!supportContext.os||!supportContext.environment||!supportContext.scope))return;setPhase('diagnose');};
@@ -192,7 +193,7 @@ ${result.actions.map(a=>`- ${a}`).join('\n')}`;
     <header className="topbar"><FeedbackButton className="mobileToggle" onClick={()=>setMobile(v=>!v)} aria-label={mobile?"Close navigation":"Open navigation"} aria-expanded={mobile} aria-controls="primary-navigation">{mobile?<X/>:<Menu/>}</FeedbackButton><div><span className="crumb">SUPPORTQ / {view.toUpperCase()}</span><h1>{view==='diagnose'&&scenario?scenario.title:view==='scenarios'?'Scenario Library':view==='history'?'Incident History':view==='analytics'?'Support Analytics':'Support workspace'}</h1></div><div className="status"><i/>Workspace ready</div></header>
     <main id="main-content" className="content" tabIndex={-1}>
      <AnimatePresence mode="wait" initial={false}><motion.div key={view} initial={reduceMotion?false:{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={reduceMotion?{opacity:1}:{opacity:0,y:-6}} transition={{duration:reduceMotion?0:.2}}>
-      {view==='dashboard'&&<Dashboard intake={intake} setIntake={setIntake} submitIntake={submitIntake} suggestions={suggestions} onStart={start} setView={setView}/>}
+      {view==='dashboard'&&<Dashboard intake={intake} setIntake={setIntake} submitIntake={submitIntake} suggestions={suggestions} intakeFeedback={intakeFeedback} onStart={start} setView={setView}/>}
       {view==='scenarios'&&<ScenarioLibrary query={query} setQuery={setQuery} filtered={filtered} onStart={start}/>}
       {view==='diagnose'&&scenario&&<Diagnostic scenario={scenario} step={step} answers={answers} result={result} phase={phase} actionIndex={actionIndex} actionLog={actionLog} hypotheses={hypotheses} topCause={topCause} answer={answer} resolutionResponse={resolutionResponse} reset={reset} copyTicket={copyTicket} reduceMotion={reduceMotion} reportedIssue={reportedIssue} supportContext={supportContext} setSupportContext={setSupportContext} beginDiagnosis={beginDiagnosis} onDeepComplete={incident=>setHistory(h=>[{id:Date.now(),...incident},...h].slice(0,25))}/>}
       {view==='history'&&<HistoryView history={history} onStart={s=>start(scenarios.find(x=>x.title===s.scenario)||scenarios[0],s.reportedIssue)}/>}
@@ -203,7 +204,7 @@ ${result.actions.map(a=>`- ${a}`).join('\n')}`;
  </div>
 }
 
-function Dashboard({intake,setIntake,submitIntake,suggestions,onStart,setView}){
+function Dashboard({intake,setIntake,submitIntake,suggestions,intakeFeedback,onStart,setView}){
  const reduceMotion=useReducedMotion();
  const examples=['Wi-Fi connected but no internet','MIRO posting period closed','VPN will not connect'];
  const quickIds=['wifi-no-internet','sap-material-document-reversal','vpn-failure','sap-miro-blocked','locked-account','sap-account-assignment'];
@@ -211,6 +212,7 @@ function Dashboard({intake,setIntake,submitIntake,suggestions,onStart,setView}){
  <section className="heroPanel"><motion.div initial={reduceMotion?false:{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:reduceMotion?0:.28,ease:[.22,1,.36,1]}}><span className="eyebrow"><i/> A CLEARER PATH TO RESOLUTION</span><h2>Less guesswork.<br/><span>Better troubleshooting.</span></h2><p>Describe an IT or SAP issue. Work through focused checks, find the likely cause, and verify your next step.</p>
  <div className="intakeBox"><label htmlFor="issue">What do you need help with?</label><textarea id="issue" aria-describedby="intake-help" value={intake} onChange={e=>setIntake(e.target.value)} onKeyDown={e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter')submitIntake()}} placeholder="Describe the problem, including any error message…"/><div className="intakeFooter"><small id="intake-help">Include the exact error if you have it.</small><motion.button className="primary" disabled={!intake.trim()} whileHover={reduceMotion||!intake.trim()?undefined:{y:-2}} whileTap={reduceMotion||!intake.trim()?undefined:{scale:.97}} onClick={submitIntake}>Start diagnosis <ArrowUpRight/></motion.button></div></div>
  <div className="examplePrompts"><span>Try an example</span>{examples.map(text=><FeedbackButton key={text} onClick={()=>{setIntake(text);document.getElementById('issue')?.focus()}}>{text}<ArrowUpRight size={12}/></FeedbackButton>)}</div>
+ <p role="status" aria-live="polite">{intakeFeedback}</p>
  {suggestions.length>0&&<div className="matchBox" role="status"><span>Which issue is closest?</span><div>{suggestions.map(s=><FeedbackButton key={s.id} onClick={()=>onStart(s,intake)}>{s.title}<ChevronRight/></FeedbackButton>)}</div></div>}
  </motion.div><motion.aside className="workflowCard" initial={reduceMotion?false:{opacity:0,x:20}} animate={{opacity:1,x:0}} transition={{duration:reduceMotion?0:.28,delay:reduceMotion?0:.06}}><div className="workflowHeader"><LifeBuoy size={22}/><span>One step at a time</span></div><h3>From symptom<br/>to a clear next step.</h3><ol>{[['Describe','Tell us what happened.'],['Diagnose','Check the evidence that matters.'],['Verify','Retest the fix or escalate with context.']].map(([title,description],i)=><motion.li key={title} initial={reduceMotion?false:{opacity:0,y:10}} animate={{opacity:1,y:0}} transition={{duration:reduceMotion?0:.35,delay:reduceMotion?0:.1+i*.06}}><b>{String(i+1).padStart(2,'0')}</b><div><strong>{title}</strong><p>{description}</p></div></motion.li>)}</ol><div className="workflowFoot"><span><strong>{scenarios.length}</strong> scenarios</span><span>IT + SAP</span><Check size={16}/></div></motion.aside></section>
  <section aria-labelledby="quick-start-title"><div className="sectionTitle"><div><span>START WITH A KNOWN ISSUE</span><h3 id="quick-start-title">Common support incidents</h3></div><FeedbackButton onClick={()=>setView('scenarios')}>Browse all scenarios <ArrowUpRight/></FeedbackButton></div><motion.div className="scenarioGrid" initial="hidden" whileInView="visible" viewport={{once:true,amount:.1}} variants={{hidden:{},visible:{transition:{staggerChildren:0}}}}>{quickIds.map(id=>scenarios.find(s=>s.id===id)).filter(Boolean).map((s,i)=><ScenarioCard key={s.id} index={i} s={s} onStart={onStart}/>)}</motion.div></section>

@@ -1,0 +1,2516 @@
+{
+  "date": "2026-10-12",
+  "scope": "SupportQ prioritized gap regression; distinct from 2026-10-09 and 2026-10-10",
+  "status": "test-specifications-only",
+  "count": 50,
+  "caseCount": 200,
+  "areas": {
+    "routing": 10,
+    "evidence": 10,
+    "persistence": 10,
+    "automation": 10,
+    "deployment": 10
+  },
+  "scenarios": [
+    {
+      "id": "SQ-20261012-001",
+      "area": "routing",
+      "title": "Movement 344 unblock request versus 343 block posting",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "Clean issue intake; no OS selected",
+      "testCases": [
+        {
+          "id": "SQ-20261012-001-P",
+          "type": "positive",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When SAP MIGO 344 unblock stock for batch B7",
+            "Then route SAP goods movement and distinguish 344 from 343"
+          ],
+          "expected": "route SAP goods movement and distinguish 344 from 343"
+        },
+        {
+          "id": "SQ-20261012-001-N",
+          "type": "negative",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When User says MIGO 343 block unrestricted stock",
+            "Then route block posting, not unblock"
+          ],
+          "expected": "route block posting, not unblock"
+        },
+        {
+          "id": "SQ-20261012-001-S",
+          "type": "security",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Submit issue text with inert <script> payload",
+            "Then Treat input as plain text and never run SAP commands"
+          ],
+          "expected": "Treat input as plain text and never run SAP commands"
+        },
+        {
+          "id": "SQ-20261012-001-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Navigate classification and follow-up with keyboard only",
+            "Then Announce route and focus the first relevant question"
+          ],
+          "expected": "Announce route and focus the first relevant question"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-002",
+      "area": "routing",
+      "title": "Goods receipt 101 mismatch versus reversal 102",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "Clean issue intake; no OS selected",
+      "testCases": [
+        {
+          "id": "SQ-20261012-002-P",
+          "type": "positive",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When MIGO 101 goods receipt quantity differs from PO",
+            "Then route SAP goods receipt quantity evidence"
+          ],
+          "expected": "route SAP goods receipt quantity evidence"
+        },
+        {
+          "id": "SQ-20261012-002-N",
+          "type": "negative",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When User asks to reverse existing 101 with movement 102",
+            "Then route SAP reversal and document chain"
+          ],
+          "expected": "route SAP reversal and document chain"
+        },
+        {
+          "id": "SQ-20261012-002-S",
+          "type": "security",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Submit issue text with inert <script> payload",
+            "Then Treat input as plain text and never run SAP commands"
+          ],
+          "expected": "Treat input as plain text and never run SAP commands"
+        },
+        {
+          "id": "SQ-20261012-002-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Navigate classification and follow-up with keyboard only",
+            "Then Announce route and focus the first relevant question"
+          ],
+          "expected": "Announce route and focus the first relevant question"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-003",
+      "area": "routing",
+      "title": "MB51 material history versus browser search failure",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "Clean issue intake; no OS selected",
+      "testCases": [
+        {
+          "id": "SQ-20261012-003-P",
+          "type": "positive",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When SAP MB51 material document list returns no results",
+            "Then route SAP material document history and filters"
+          ],
+          "expected": "route SAP material document history and filters"
+        },
+        {
+          "id": "SQ-20261012-003-N",
+          "type": "negative",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Web browser search finds no page",
+            "Then route IT/browser diagnosis without SAP"
+          ],
+          "expected": "route IT/browser diagnosis without SAP"
+        },
+        {
+          "id": "SQ-20261012-003-S",
+          "type": "security",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Submit issue text with inert <script> payload",
+            "Then Treat input as plain text and never run SAP commands"
+          ],
+          "expected": "Treat input as plain text and never run SAP commands"
+        },
+        {
+          "id": "SQ-20261012-003-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Navigate classification and follow-up with keyboard only",
+            "Then Announce route and focus the first relevant question"
+          ],
+          "expected": "Announce route and focus the first relevant question"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-004",
+      "area": "routing",
+      "title": "MIRO tax jurisdiction versus ecommerce tax",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "Clean issue intake; no OS selected",
+      "testCases": [
+        {
+          "id": "SQ-20261012-004-P",
+          "type": "positive",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When SAP MIRO tax code missing on supplier invoice",
+            "Then route SAP invoice tax-code checks"
+          ],
+          "expected": "route SAP invoice tax-code checks"
+        },
+        {
+          "id": "SQ-20261012-004-N",
+          "type": "negative",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Shopping website checkout tax calculation fails",
+            "Then do not suggest SAP tax customizing"
+          ],
+          "expected": "do not suggest SAP tax customizing"
+        },
+        {
+          "id": "SQ-20261012-004-S",
+          "type": "security",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Submit issue text with inert <script> payload",
+            "Then Treat input as plain text and never run SAP commands"
+          ],
+          "expected": "Treat input as plain text and never run SAP commands"
+        },
+        {
+          "id": "SQ-20261012-004-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Navigate classification and follow-up with keyboard only",
+            "Then Announce route and focus the first relevant question"
+          ],
+          "expected": "Announce route and focus the first relevant question"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-005",
+      "area": "routing",
+      "title": "ME23N purchase order view versus pull request",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "Clean issue intake; no OS selected",
+      "testCases": [
+        {
+          "id": "SQ-20261012-005-P",
+          "type": "positive",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When SAP ME23N purchase order release indicator missing",
+            "Then route SAP PO approval/release evidence"
+          ],
+          "expected": "route SAP PO approval/release evidence"
+        },
+        {
+          "id": "SQ-20261012-005-N",
+          "type": "negative",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When GitHub pull request review button is disabled",
+            "Then route software collaboration issue, not SAP PO"
+          ],
+          "expected": "route software collaboration issue, not SAP PO"
+        },
+        {
+          "id": "SQ-20261012-005-S",
+          "type": "security",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Submit issue text with inert <script> payload",
+            "Then Treat input as plain text and never run SAP commands"
+          ],
+          "expected": "Treat input as plain text and never run SAP commands"
+        },
+        {
+          "id": "SQ-20261012-005-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Navigate classification and follow-up with keyboard only",
+            "Then Announce route and focus the first relevant question"
+          ],
+          "expected": "Announce route and focus the first relevant question"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-006",
+      "area": "routing",
+      "title": "Fiori OData 403 versus cloud RBAC 403",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "Clean issue intake; no OS selected",
+      "testCases": [
+        {
+          "id": "SQ-20261012-006-P",
+          "type": "positive",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When SAP Fiori OData service returns HTTP 403",
+            "Then route SAP Fiori backend authorization with service evidence"
+          ],
+          "expected": "route SAP Fiori backend authorization with service evidence"
+        },
+        {
+          "id": "SQ-20261012-006-N",
+          "type": "negative",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Azure storage RBAC returns 403 with no SAP context",
+            "Then route cloud access, not SAP"
+          ],
+          "expected": "route cloud access, not SAP"
+        },
+        {
+          "id": "SQ-20261012-006-S",
+          "type": "security",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Submit issue text with inert <script> payload",
+            "Then Treat input as plain text and never run SAP commands"
+          ],
+          "expected": "Treat input as plain text and never run SAP commands"
+        },
+        {
+          "id": "SQ-20261012-006-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Navigate classification and follow-up with keyboard only",
+            "Then Announce route and focus the first relevant question"
+          ],
+          "expected": "Announce route and focus the first relevant question"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-007",
+      "area": "routing",
+      "title": "Network activity WBS SAP context versus corporate VPN",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "Clean issue intake; no OS selected",
+      "testCases": [
+        {
+          "id": "SQ-20261012-007-P",
+          "type": "positive",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When SAP network activity linked to WBS cannot post costs",
+            "Then route SAP PS account assignment without OS questionnaire"
+          ],
+          "expected": "route SAP PS account assignment without OS questionnaire"
+        },
+        {
+          "id": "SQ-20261012-007-N",
+          "type": "negative",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Corporate VPN network activity drops packets",
+            "Then route IT network/VPN, not SAP PS"
+          ],
+          "expected": "route IT network/VPN, not SAP PS"
+        },
+        {
+          "id": "SQ-20261012-007-S",
+          "type": "security",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Submit issue text with inert <script> payload",
+            "Then Treat input as plain text and never run SAP commands"
+          ],
+          "expected": "Treat input as plain text and never run SAP commands"
+        },
+        {
+          "id": "SQ-20261012-007-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Navigate classification and follow-up with keyboard only",
+            "Then Announce route and focus the first relevant question"
+          ],
+          "expected": "Announce route and focus the first relevant question"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-008",
+      "area": "routing",
+      "title": "Vendor invoice blocked despite unrelated VPN note",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "Clean issue intake; no OS selected",
+      "testCases": [
+        {
+          "id": "SQ-20261012-008-P",
+          "type": "positive",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When SAP MIRO vendor invoice blocked; VPN connection works",
+            "Then route SAP invoice block and request message number"
+          ],
+          "expected": "route SAP invoice block and request message number"
+        },
+        {
+          "id": "SQ-20261012-008-N",
+          "type": "negative",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Vendor cannot connect to VPN to send an invoice",
+            "Then route VPN incident and do not assume SAP"
+          ],
+          "expected": "route VPN incident and do not assume SAP"
+        },
+        {
+          "id": "SQ-20261012-008-S",
+          "type": "security",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Submit issue text with inert <script> payload",
+            "Then Treat input as plain text and never run SAP commands"
+          ],
+          "expected": "Treat input as plain text and never run SAP commands"
+        },
+        {
+          "id": "SQ-20261012-008-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Navigate classification and follow-up with keyboard only",
+            "Then Announce route and focus the first relevant question"
+          ],
+          "expected": "Announce route and focus the first relevant question"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-009",
+      "area": "routing",
+      "title": "Cost center assignment error versus posting-period lock",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "Clean issue intake; no OS selected",
+      "testCases": [
+        {
+          "id": "SQ-20261012-009-P",
+          "type": "positive",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When SAP FB01 cost center invalid while posting period open",
+            "Then route SAP FI cost center assignment"
+          ],
+          "expected": "route SAP FI cost center assignment"
+        },
+        {
+          "id": "SQ-20261012-009-N",
+          "type": "negative",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When SAP FB01 period 009 closed for company code",
+            "Then route posting period investigation"
+          ],
+          "expected": "route posting period investigation"
+        },
+        {
+          "id": "SQ-20261012-009-S",
+          "type": "security",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Submit issue text with inert <script> payload",
+            "Then Treat input as plain text and never run SAP commands"
+          ],
+          "expected": "Treat input as plain text and never run SAP commands"
+        },
+        {
+          "id": "SQ-20261012-009-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Navigate classification and follow-up with keyboard only",
+            "Then Announce route and focus the first relevant question"
+          ],
+          "expected": "Announce route and focus the first relevant question"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-010",
+      "area": "routing",
+      "title": "Suspicious MFA prompt versus SAP credential failure",
+      "priority": "P0",
+      "status": "proposed-not-executed",
+      "preconditions": "Clean issue intake; no OS selected",
+      "testCases": [
+        {
+          "id": "SQ-20261012-010-P",
+          "type": "positive",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Unexpected MFA push after clicking suspicious link",
+            "Then route security phishing escalation without requesting OTP"
+          ],
+          "expected": "route security phishing escalation without requesting OTP"
+        },
+        {
+          "id": "SQ-20261012-010-N",
+          "type": "negative",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When SAP Fiori sign-in fails after password reset",
+            "Then route SAP authentication evidence without labeling phishing"
+          ],
+          "expected": "route SAP authentication evidence without labeling phishing"
+        },
+        {
+          "id": "SQ-20261012-010-S",
+          "type": "security",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Submit issue text with inert <script> payload",
+            "Then Treat input as plain text and never run SAP commands"
+          ],
+          "expected": "Treat input as plain text and never run SAP commands"
+        },
+        {
+          "id": "SQ-20261012-010-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Clean issue intake; no OS selected",
+            "When Navigate classification and follow-up with keyboard only",
+            "Then Announce route and focus the first relevant question"
+          ],
+          "expected": "Announce route and focus the first relevant question"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-011",
+      "area": "evidence",
+      "title": "MIGO 343 batch status requires timestamped evidence",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Synthetic incident with no production write permissions",
+      "testCases": [
+        {
+          "id": "SQ-20261012-011-P",
+          "type": "positive",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When MIGO 343 posting failed for batch with quality stock",
+            "Then ask stock type, batch, plant and exact timestamp before proposing movement"
+          ],
+          "expected": "ask stock type, batch, plant and exact timestamp before proposing movement"
+        },
+        {
+          "id": "SQ-20261012-011-N",
+          "type": "negative",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Only screenshot title MIGO is provided",
+            "Then avoid asserting stock availability without evidence"
+          ],
+          "expected": "avoid asserting stock availability without evidence"
+        },
+        {
+          "id": "SQ-20261012-011-S",
+          "type": "security",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Include synthetic token and unauthorized change request",
+            "Then Mask secrets and never execute privileged SAP actions"
+          ],
+          "expected": "Mask secrets and never execute privileged SAP actions"
+        },
+        {
+          "id": "SQ-20261012-011-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Read evidence provenance and error state with screen reader",
+            "Then Expose labeled evidence and an announced uncertainty state"
+          ],
+          "expected": "Expose labeled evidence and an announced uncertainty state"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-012",
+      "area": "evidence",
+      "title": "M7 021 storage-location message provenance",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Synthetic incident with no production write permissions",
+      "testCases": [
+        {
+          "id": "SQ-20261012-012-P",
+          "type": "positive",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When MIGO error M7 021 for storage location 0002",
+            "Then record exact message class number, plant and material"
+          ],
+          "expected": "record exact message class number, plant and material"
+        },
+        {
+          "id": "SQ-20261012-012-N",
+          "type": "negative",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Only paraphrase material cannot post is provided",
+            "Then request message class and number before diagnosis"
+          ],
+          "expected": "request message class and number before diagnosis"
+        },
+        {
+          "id": "SQ-20261012-012-S",
+          "type": "security",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Include synthetic token and unauthorized change request",
+            "Then Mask secrets and never execute privileged SAP actions"
+          ],
+          "expected": "Mask secrets and never execute privileged SAP actions"
+        },
+        {
+          "id": "SQ-20261012-012-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Read evidence provenance and error state with screen reader",
+            "Then Expose labeled evidence and an announced uncertainty state"
+          ],
+          "expected": "Expose labeled evidence and an announced uncertainty state"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-013",
+      "area": "evidence",
+      "title": "MIRO tolerance variance captures invoice context",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Synthetic incident with no production write permissions",
+      "testCases": [
+        {
+          "id": "SQ-20261012-013-P",
+          "type": "positive",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When MIRO invoice price variance exceeds tolerance for PO",
+            "Then capture PO, invoice date, currency and variance before hypothesis"
+          ],
+          "expected": "capture PO, invoice date, currency and variance before hypothesis"
+        },
+        {
+          "id": "SQ-20261012-013-N",
+          "type": "negative",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Invoice amount is redacted with no currency",
+            "Then do not invent a tolerance threshold"
+          ],
+          "expected": "do not invent a tolerance threshold"
+        },
+        {
+          "id": "SQ-20261012-013-S",
+          "type": "security",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Include synthetic token and unauthorized change request",
+            "Then Mask secrets and never execute privileged SAP actions"
+          ],
+          "expected": "Mask secrets and never execute privileged SAP actions"
+        },
+        {
+          "id": "SQ-20261012-013-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Read evidence provenance and error state with screen reader",
+            "Then Expose labeled evidence and an announced uncertainty state"
+          ],
+          "expected": "Expose labeled evidence and an announced uncertainty state"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-014",
+      "area": "evidence",
+      "title": "ST22 dump identifier before root-cause conclusion",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Synthetic incident with no production write permissions",
+      "testCases": [
+        {
+          "id": "SQ-20261012-014-P",
+          "type": "positive",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When SAP ST22 short dump after batch job execution",
+            "Then capture dump type, timestamp and affected job ID"
+          ],
+          "expected": "capture dump type, timestamp and affected job ID"
+        },
+        {
+          "id": "SQ-20261012-014-N",
+          "type": "negative",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Generic HTTP timeout without ST22 evidence",
+            "Then do not attribute the issue to ABAP dump"
+          ],
+          "expected": "do not attribute the issue to ABAP dump"
+        },
+        {
+          "id": "SQ-20261012-014-S",
+          "type": "security",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Include synthetic token and unauthorized change request",
+            "Then Mask secrets and never execute privileged SAP actions"
+          ],
+          "expected": "Mask secrets and never execute privileged SAP actions"
+        },
+        {
+          "id": "SQ-20261012-014-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Read evidence provenance and error state with screen reader",
+            "Then Expose labeled evidence and an announced uncertainty state"
+          ],
+          "expected": "Expose labeled evidence and an announced uncertainty state"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-015",
+      "area": "evidence",
+      "title": "AADSTS identity evidence versus SU53 trace",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Synthetic incident with no production write permissions",
+      "testCases": [
+        {
+          "id": "SQ-20261012-015-P",
+          "type": "positive",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Azure AADSTS50076 sign-in prompt on SSO",
+            "Then request sanitized correlation ID and UTC time"
+          ],
+          "expected": "request sanitized correlation ID and UTC time"
+        },
+        {
+          "id": "SQ-20261012-015-N",
+          "type": "negative",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When SAP SU53 trace says missing authorization object",
+            "Then use SU53 SAP authorization evidence instead of AADSTS"
+          ],
+          "expected": "use SU53 SAP authorization evidence instead of AADSTS"
+        },
+        {
+          "id": "SQ-20261012-015-S",
+          "type": "security",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Include synthetic token and unauthorized change request",
+            "Then Mask secrets and never execute privileged SAP actions"
+          ],
+          "expected": "Mask secrets and never execute privileged SAP actions"
+        },
+        {
+          "id": "SQ-20261012-015-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Read evidence provenance and error state with screen reader",
+            "Then Expose labeled evidence and an announced uncertainty state"
+          ],
+          "expected": "Expose labeled evidence and an announced uncertainty state"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-016",
+      "area": "evidence",
+      "title": "Clipboard incident export excludes secrets",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Synthetic incident with no production write permissions",
+      "testCases": [
+        {
+          "id": "SQ-20261012-016-P",
+          "type": "positive",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When User copies a ticket containing Bearer token example",
+            "Then redact tokens and session IDs before clipboard export"
+          ],
+          "expected": "redact tokens and session IDs before clipboard export"
+        },
+        {
+          "id": "SQ-20261012-016-N",
+          "type": "negative",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Ticket contains harmless SAP document number only",
+            "Then preserve useful nonsecret reference for support"
+          ],
+          "expected": "preserve useful nonsecret reference for support"
+        },
+        {
+          "id": "SQ-20261012-016-S",
+          "type": "security",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Include synthetic token and unauthorized change request",
+            "Then Mask secrets and never execute privileged SAP actions"
+          ],
+          "expected": "Mask secrets and never execute privileged SAP actions"
+        },
+        {
+          "id": "SQ-20261012-016-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Read evidence provenance and error state with screen reader",
+            "Then Expose labeled evidence and an announced uncertainty state"
+          ],
+          "expected": "Expose labeled evidence and an announced uncertainty state"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-017",
+      "area": "evidence",
+      "title": "Unknown diagnostic answer cannot produce certainty",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Synthetic incident with no production write permissions",
+      "testCases": [
+        {
+          "id": "SQ-20261012-017-P",
+          "type": "positive",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When User selects Not sure for required authorization check",
+            "Then escalate with confidence zero and next evidence question"
+          ],
+          "expected": "escalate with confidence zero and next evidence question"
+        },
+        {
+          "id": "SQ-20261012-017-N",
+          "type": "negative",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When User provides confirmed matching SU53 authorization trace",
+            "Then allow evidence-backed hypothesis without claiming proof"
+          ],
+          "expected": "allow evidence-backed hypothesis without claiming proof"
+        },
+        {
+          "id": "SQ-20261012-017-S",
+          "type": "security",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Include synthetic token and unauthorized change request",
+            "Then Mask secrets and never execute privileged SAP actions"
+          ],
+          "expected": "Mask secrets and never execute privileged SAP actions"
+        },
+        {
+          "id": "SQ-20261012-017-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Read evidence provenance and error state with screen reader",
+            "Then Expose labeled evidence and an announced uncertainty state"
+          ],
+          "expected": "Expose labeled evidence and an announced uncertainty state"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-018",
+      "area": "evidence",
+      "title": "Screenshot client mismatch blocks false diagnosis",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Synthetic incident with no production write permissions",
+      "testCases": [
+        {
+          "id": "SQ-20261012-018-P",
+          "type": "positive",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When SAP screenshot from QAS client 200 and error from PRD client 100",
+            "Then flag mismatched system and client before causal inference"
+          ],
+          "expected": "flag mismatched system and client before causal inference"
+        },
+        {
+          "id": "SQ-20261012-018-N",
+          "type": "negative",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Both screenshots identify PRD client 100",
+            "Then allow same-system comparison while preserving uncertainty"
+          ],
+          "expected": "allow same-system comparison while preserving uncertainty"
+        },
+        {
+          "id": "SQ-20261012-018-S",
+          "type": "security",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Include synthetic token and unauthorized change request",
+            "Then Mask secrets and never execute privileged SAP actions"
+          ],
+          "expected": "Mask secrets and never execute privileged SAP actions"
+        },
+        {
+          "id": "SQ-20261012-018-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Read evidence provenance and error state with screen reader",
+            "Then Expose labeled evidence and an announced uncertainty state"
+          ],
+          "expected": "Expose labeled evidence and an announced uncertainty state"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-019",
+      "area": "evidence",
+      "title": "Failed retest blocks resolved incident state",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Synthetic incident with no production write permissions",
+      "testCases": [
+        {
+          "id": "SQ-20261012-019-P",
+          "type": "positive",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When User marks action attempted but original error persists",
+            "Then retain unresolved status and ask for next diagnostic evidence"
+          ],
+          "expected": "retain unresolved status and ask for next diagnostic evidence"
+        },
+        {
+          "id": "SQ-20261012-019-N",
+          "type": "negative",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Error disappears on one unrelated screen only",
+            "Then require retest of original failing workflow"
+          ],
+          "expected": "require retest of original failing workflow"
+        },
+        {
+          "id": "SQ-20261012-019-S",
+          "type": "security",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Include synthetic token and unauthorized change request",
+            "Then Mask secrets and never execute privileged SAP actions"
+          ],
+          "expected": "Mask secrets and never execute privileged SAP actions"
+        },
+        {
+          "id": "SQ-20261012-019-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Read evidence provenance and error state with screen reader",
+            "Then Expose labeled evidence and an announced uncertainty state"
+          ],
+          "expected": "Expose labeled evidence and an announced uncertainty state"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-020",
+      "area": "evidence",
+      "title": "Reversal chain requires dependent posting check",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Synthetic incident with no production write permissions",
+      "testCases": [
+        {
+          "id": "SQ-20261012-020-P",
+          "type": "positive",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Material document reversal requested after MIRO posting",
+            "Then ask downstream invoice and reversal chain before SAP action"
+          ],
+          "expected": "ask downstream invoice and reversal chain before SAP action"
+        },
+        {
+          "id": "SQ-20261012-020-N",
+          "type": "negative",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Document never posted and has no material number",
+            "Then avoid telling user to reverse nonexistent document"
+          ],
+          "expected": "avoid telling user to reverse nonexistent document"
+        },
+        {
+          "id": "SQ-20261012-020-S",
+          "type": "security",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Include synthetic token and unauthorized change request",
+            "Then Mask secrets and never execute privileged SAP actions"
+          ],
+          "expected": "Mask secrets and never execute privileged SAP actions"
+        },
+        {
+          "id": "SQ-20261012-020-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Synthetic incident with no production write permissions",
+            "When Read evidence provenance and error state with screen reader",
+            "Then Expose labeled evidence and an announced uncertainty state"
+          ],
+          "expected": "Expose labeled evidence and an announced uncertainty state"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-021",
+      "area": "persistence",
+      "title": "Corrupted null history value does not crash dashboard",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Two isolated synthetic user sessions in staging",
+      "testCases": [
+        {
+          "id": "SQ-20261012-021-P",
+          "type": "positive",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Local history key contains literal null",
+            "Then load empty history without crashing UI"
+          ],
+          "expected": "load empty history without crashing UI"
+        },
+        {
+          "id": "SQ-20261012-021-N",
+          "type": "negative",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When History contains valid incident array",
+            "Then preserve legitimate history records"
+          ],
+          "expected": "preserve legitimate history records"
+        },
+        {
+          "id": "SQ-20261012-021-S",
+          "type": "security",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Attempt cross-user record access with a second non-admin session",
+            "Then Deny unauthorized access without disclosing record content"
+          ],
+          "expected": "Deny unauthorized access without disclosing record content"
+        },
+        {
+          "id": "SQ-20261012-021-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Trigger save or permission failure with keyboard only",
+            "Then Announce failure and keep retry action keyboard accessible"
+          ],
+          "expected": "Announce failure and keep retry action keyboard accessible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-022",
+      "area": "persistence",
+      "title": "Storage quota exception preserves active diagnosis",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Two isolated synthetic user sessions in staging",
+      "testCases": [
+        {
+          "id": "SQ-20261012-022-P",
+          "type": "positive",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Browser storage write throws QuotaExceededError",
+            "Then keep diagnosis usable and show safe save warning"
+          ],
+          "expected": "keep diagnosis usable and show safe save warning"
+        },
+        {
+          "id": "SQ-20261012-022-N",
+          "type": "negative",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Storage write succeeds",
+            "Then persist exactly one current incident"
+          ],
+          "expected": "persist exactly one current incident"
+        },
+        {
+          "id": "SQ-20261012-022-S",
+          "type": "security",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Attempt cross-user record access with a second non-admin session",
+            "Then Deny unauthorized access without disclosing record content"
+          ],
+          "expected": "Deny unauthorized access without disclosing record content"
+        },
+        {
+          "id": "SQ-20261012-022-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Trigger save or permission failure with keyboard only",
+            "Then Announce failure and keep retry action keyboard accessible"
+          ],
+          "expected": "Announce failure and keep retry action keyboard accessible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-023",
+      "area": "persistence",
+      "title": "Account switch clears previous incident cache",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Two isolated synthetic user sessions in staging",
+      "testCases": [
+        {
+          "id": "SQ-20261012-023-P",
+          "type": "positive",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When User A signs out and user B signs in on same browser",
+            "Then clear A private cached incident content before B loads"
+          ],
+          "expected": "clear A private cached incident content before B loads"
+        },
+        {
+          "id": "SQ-20261012-023-N",
+          "type": "negative",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When User A refreshes without signing out",
+            "Then retain only authorized A history"
+          ],
+          "expected": "retain only authorized A history"
+        },
+        {
+          "id": "SQ-20261012-023-S",
+          "type": "security",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Attempt cross-user record access with a second non-admin session",
+            "Then Deny unauthorized access without disclosing record content"
+          ],
+          "expected": "Deny unauthorized access without disclosing record content"
+        },
+        {
+          "id": "SQ-20261012-023-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Trigger save or permission failure with keyboard only",
+            "Then Announce failure and keep retry action keyboard accessible"
+          ],
+          "expected": "Announce failure and keep retry action keyboard accessible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-024",
+      "area": "persistence",
+      "title": "Expired JWT mid-save prevents ghost success",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Two isolated synthetic user sessions in staging",
+      "testCases": [
+        {
+          "id": "SQ-20261012-024-P",
+          "type": "positive",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When JWT expires during authenticated incident save",
+            "Then display save failure and keep retryable draft"
+          ],
+          "expected": "display save failure and keep retryable draft"
+        },
+        {
+          "id": "SQ-20261012-024-N",
+          "type": "negative",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Valid session and permitted owner save",
+            "Then confirm server persisted record before success"
+          ],
+          "expected": "confirm server persisted record before success"
+        },
+        {
+          "id": "SQ-20261012-024-S",
+          "type": "security",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Attempt cross-user record access with a second non-admin session",
+            "Then Deny unauthorized access without disclosing record content"
+          ],
+          "expected": "Deny unauthorized access without disclosing record content"
+        },
+        {
+          "id": "SQ-20261012-024-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Trigger save or permission failure with keyboard only",
+            "Then Announce failure and keep retry action keyboard accessible"
+          ],
+          "expected": "Announce failure and keep retry action keyboard accessible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-025",
+      "area": "persistence",
+      "title": "Soft-deleted incident excluded from history",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Two isolated synthetic user sessions in staging",
+      "testCases": [
+        {
+          "id": "SQ-20261012-025-P",
+          "type": "positive",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When User archives own incident via approved workflow",
+            "Then hide archived record from normal list without leaking contents"
+          ],
+          "expected": "hide archived record from normal list without leaking contents"
+        },
+        {
+          "id": "SQ-20261012-025-N",
+          "type": "negative",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Another user tries to archive owner incident",
+            "Then deny cross-user archive"
+          ],
+          "expected": "deny cross-user archive"
+        },
+        {
+          "id": "SQ-20261012-025-S",
+          "type": "security",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Attempt cross-user record access with a second non-admin session",
+            "Then Deny unauthorized access without disclosing record content"
+          ],
+          "expected": "Deny unauthorized access without disclosing record content"
+        },
+        {
+          "id": "SQ-20261012-025-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Trigger save or permission failure with keyboard only",
+            "Then Announce failure and keep retry action keyboard accessible"
+          ],
+          "expected": "Announce failure and keep retry action keyboard accessible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-026",
+      "area": "persistence",
+      "title": "Offline reconnect retries with stable request key",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Two isolated synthetic user sessions in staging",
+      "testCases": [
+        {
+          "id": "SQ-20261012-026-P",
+          "type": "positive",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Network drops after incident create request is sent",
+            "Then retry with same idempotency key and avoid duplicate record"
+          ],
+          "expected": "retry with same idempotency key and avoid duplicate record"
+        },
+        {
+          "id": "SQ-20261012-026-N",
+          "type": "negative",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When User intentionally starts a second distinct incident",
+            "Then create new record with new key"
+          ],
+          "expected": "create new record with new key"
+        },
+        {
+          "id": "SQ-20261012-026-S",
+          "type": "security",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Attempt cross-user record access with a second non-admin session",
+            "Then Deny unauthorized access without disclosing record content"
+          ],
+          "expected": "Deny unauthorized access without disclosing record content"
+        },
+        {
+          "id": "SQ-20261012-026-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Trigger save or permission failure with keyboard only",
+            "Then Announce failure and keep retry action keyboard accessible"
+          ],
+          "expected": "Announce failure and keep retry action keyboard accessible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-027",
+      "area": "persistence",
+      "title": "Incident owner identifier immutable on update",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Two isolated synthetic user sessions in staging",
+      "testCases": [
+        {
+          "id": "SQ-20261012-027-P",
+          "type": "positive",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Authenticated user edits incident description",
+            "Then retain original created_by and user_id ownership"
+          ],
+          "expected": "retain original created_by and user_id ownership"
+        },
+        {
+          "id": "SQ-20261012-027-N",
+          "type": "negative",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When User attempts to change user_id to another account",
+            "Then deny ownership reassignment"
+          ],
+          "expected": "deny ownership reassignment"
+        },
+        {
+          "id": "SQ-20261012-027-S",
+          "type": "security",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Attempt cross-user record access with a second non-admin session",
+            "Then Deny unauthorized access without disclosing record content"
+          ],
+          "expected": "Deny unauthorized access without disclosing record content"
+        },
+        {
+          "id": "SQ-20261012-027-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Trigger save or permission failure with keyboard only",
+            "Then Announce failure and keep retry action keyboard accessible"
+          ],
+          "expected": "Announce failure and keep retry action keyboard accessible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-028",
+      "area": "persistence",
+      "title": "New solution cannot self-verify on insertion",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Two isolated synthetic user sessions in staging",
+      "testCases": [
+        {
+          "id": "SQ-20261012-028-P",
+          "type": "positive",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Issue owner submits a solution with is_verified false",
+            "Then save as unverified pending reviewer workflow"
+          ],
+          "expected": "save as unverified pending reviewer workflow"
+        },
+        {
+          "id": "SQ-20261012-028-N",
+          "type": "negative",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Issue owner submits is_verified true in payload",
+            "Then deny or normalize unauthorized verification"
+          ],
+          "expected": "deny or normalize unauthorized verification"
+        },
+        {
+          "id": "SQ-20261012-028-S",
+          "type": "security",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Attempt cross-user record access with a second non-admin session",
+            "Then Deny unauthorized access without disclosing record content"
+          ],
+          "expected": "Deny unauthorized access without disclosing record content"
+        },
+        {
+          "id": "SQ-20261012-028-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Trigger save or permission failure with keyboard only",
+            "Then Announce failure and keep retry action keyboard accessible"
+          ],
+          "expected": "Announce failure and keep retry action keyboard accessible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-029",
+      "area": "persistence",
+      "title": "Verified solution cannot be deleted by author",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Two isolated synthetic user sessions in staging",
+      "testCases": [
+        {
+          "id": "SQ-20261012-029-P",
+          "type": "positive",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Owner requests deletion of verified solution",
+            "Then deny deletion pending reviewer authorization"
+          ],
+          "expected": "deny deletion pending reviewer authorization"
+        },
+        {
+          "id": "SQ-20261012-029-N",
+          "type": "negative",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Owner deletes own unverified draft solution",
+            "Then allow only when policy permits"
+          ],
+          "expected": "allow only when policy permits"
+        },
+        {
+          "id": "SQ-20261012-029-S",
+          "type": "security",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Attempt cross-user record access with a second non-admin session",
+            "Then Deny unauthorized access without disclosing record content"
+          ],
+          "expected": "Deny unauthorized access without disclosing record content"
+        },
+        {
+          "id": "SQ-20261012-029-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Trigger save or permission failure with keyboard only",
+            "Then Announce failure and keep retry action keyboard accessible"
+          ],
+          "expected": "Announce failure and keep retry action keyboard accessible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-030",
+      "area": "persistence",
+      "title": "Incident ordering stable at daylight-saving boundary",
+      "priority": "P1",
+      "status": "proposed-not-executed",
+      "preconditions": "Two isolated synthetic user sessions in staging",
+      "testCases": [
+        {
+          "id": "SQ-20261012-030-P",
+          "type": "positive",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Two incidents saved near DST clock fallback",
+            "Then order by UTC timestamps and stable ID tie breaker"
+          ],
+          "expected": "order by UTC timestamps and stable ID tie breaker"
+        },
+        {
+          "id": "SQ-20261012-030-N",
+          "type": "negative",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Client sends local timestamp without offset",
+            "Then do not silently misorder cross-zone history"
+          ],
+          "expected": "do not silently misorder cross-zone history"
+        },
+        {
+          "id": "SQ-20261012-030-S",
+          "type": "security",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Attempt cross-user record access with a second non-admin session",
+            "Then Deny unauthorized access without disclosing record content"
+          ],
+          "expected": "Deny unauthorized access without disclosing record content"
+        },
+        {
+          "id": "SQ-20261012-030-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Two isolated synthetic user sessions in staging",
+            "When Trigger save or permission failure with keyboard only",
+            "Then Announce failure and keep retry action keyboard accessible"
+          ],
+          "expected": "Announce failure and keep retry action keyboard accessible"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-031",
+      "area": "automation",
+      "title": "New daily fixture is included in regression glob",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "PR validation job at a pinned commit SHA",
+      "testCases": [
+        {
+          "id": "SQ-20261012-031-P",
+          "type": "positive",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When New 2026-10-12 fixture added under daily directory",
+            "Then validator discovers fixture and checks 50 scenarios"
+          ],
+          "expected": "validator discovers fixture and checks 50 scenarios"
+        },
+        {
+          "id": "SQ-20261012-031-N",
+          "type": "negative",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Fixture is malformed JSON",
+            "Then CI fails instead of silently skipping file"
+          ],
+          "expected": "CI fails instead of silently skipping file"
+        },
+        {
+          "id": "SQ-20261012-031-S",
+          "type": "security",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Include synthetic credential in test artifact",
+            "Then Ensure no secret appears in logs or published artifacts"
+          ],
+          "expected": "Ensure no secret appears in logs or published artifacts"
+        },
+        {
+          "id": "SQ-20261012-031-A",
+          "type": "accessibility",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Inspect failure report using keyboard and screen reader",
+            "Then Use descriptive failure IDs, semantic headings and focusable links"
+          ],
+          "expected": "Use descriptive failure IDs, semantic headings and focusable links"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-032",
+      "area": "automation",
+      "title": "Specified cases never counted as executed tests",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "PR validation job at a pinned commit SHA",
+      "testCases": [
+        {
+          "id": "SQ-20261012-032-P",
+          "type": "positive",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Daily fixture declares 200 unexecuted test specifications",
+            "Then coverage report labels them specified, executed zero"
+          ],
+          "expected": "coverage report labels them specified, executed zero"
+        },
+        {
+          "id": "SQ-20261012-032-N",
+          "type": "negative",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Fixture status proposed-not-executed",
+            "Then do not claim 200 automated tests passed"
+          ],
+          "expected": "do not claim 200 automated tests passed"
+        },
+        {
+          "id": "SQ-20261012-032-S",
+          "type": "security",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Include synthetic credential in test artifact",
+            "Then Ensure no secret appears in logs or published artifacts"
+          ],
+          "expected": "Ensure no secret appears in logs or published artifacts"
+        },
+        {
+          "id": "SQ-20261012-032-A",
+          "type": "accessibility",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Inspect failure report using keyboard and screen reader",
+            "Then Use descriptive failure IDs, semantic headings and focusable links"
+          ],
+          "expected": "Use descriptive failure IDs, semantic headings and focusable links"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-033",
+      "area": "automation",
+      "title": "Duplicate title across daily files fails CI",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "PR validation job at a pinned commit SHA",
+      "testCases": [
+        {
+          "id": "SQ-20261012-033-P",
+          "type": "positive",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Same normalized scenario title appears on two dates",
+            "Then CI reports both IDs and duplicate title"
+          ],
+          "expected": "CI reports both IDs and duplicate title"
+        },
+        {
+          "id": "SQ-20261012-033-N",
+          "type": "negative",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Two distinct titles differ only by punctuation",
+            "Then treat normalized titles as duplicate"
+          ],
+          "expected": "treat normalized titles as duplicate"
+        },
+        {
+          "id": "SQ-20261012-033-S",
+          "type": "security",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Include synthetic credential in test artifact",
+            "Then Ensure no secret appears in logs or published artifacts"
+          ],
+          "expected": "Ensure no secret appears in logs or published artifacts"
+        },
+        {
+          "id": "SQ-20261012-033-A",
+          "type": "accessibility",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Inspect failure report using keyboard and screen reader",
+            "Then Use descriptive failure IDs, semantic headings and focusable links"
+          ],
+          "expected": "Use descriptive failure IDs, semantic headings and focusable links"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-034",
+      "area": "automation",
+      "title": "Missing security case fails scenario schema",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "PR validation job at a pinned commit SHA",
+      "testCases": [
+        {
+          "id": "SQ-20261012-034-P",
+          "type": "positive",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When A scenario omits its security test case",
+            "Then CI rejects incomplete four-type coverage"
+          ],
+          "expected": "CI rejects incomplete four-type coverage"
+        },
+        {
+          "id": "SQ-20261012-034-N",
+          "type": "negative",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Scenario has all four required types",
+            "Then CI accepts structural coverage"
+          ],
+          "expected": "CI accepts structural coverage"
+        },
+        {
+          "id": "SQ-20261012-034-S",
+          "type": "security",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Include synthetic credential in test artifact",
+            "Then Ensure no secret appears in logs or published artifacts"
+          ],
+          "expected": "Ensure no secret appears in logs or published artifacts"
+        },
+        {
+          "id": "SQ-20261012-034-A",
+          "type": "accessibility",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Inspect failure report using keyboard and screen reader",
+            "Then Use descriptive failure IDs, semantic headings and focusable links"
+          ],
+          "expected": "Use descriptive failure IDs, semantic headings and focusable links"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-035",
+      "area": "automation",
+      "title": "Stale CI commit cannot approve current PR head",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "PR validation job at a pinned commit SHA",
+      "testCases": [
+        {
+          "id": "SQ-20261012-035-P",
+          "type": "positive",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When PR head changes after previous green workflow",
+            "Then release gate requires check tied to current SHA"
+          ],
+          "expected": "release gate requires check tied to current SHA"
+        },
+        {
+          "id": "SQ-20261012-035-N",
+          "type": "negative",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Previous SHA was green",
+            "Then do not infer new commit passed"
+          ],
+          "expected": "do not infer new commit passed"
+        },
+        {
+          "id": "SQ-20261012-035-S",
+          "type": "security",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Include synthetic credential in test artifact",
+            "Then Ensure no secret appears in logs or published artifacts"
+          ],
+          "expected": "Ensure no secret appears in logs or published artifacts"
+        },
+        {
+          "id": "SQ-20261012-035-A",
+          "type": "accessibility",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Inspect failure report using keyboard and screen reader",
+            "Then Use descriptive failure IDs, semantic headings and focusable links"
+          ],
+          "expected": "Use descriptive failure IDs, semantic headings and focusable links"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-036",
+      "area": "automation",
+      "title": "Production build gate cannot be replaced by unit tests",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "PR validation job at a pinned commit SHA",
+      "testCases": [
+        {
+          "id": "SQ-20261012-036-P",
+          "type": "positive",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Unit tests pass but Vite production build fails",
+            "Then block release and expose build failure"
+          ],
+          "expected": "block release and expose build failure"
+        },
+        {
+          "id": "SQ-20261012-036-N",
+          "type": "negative",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Both unit tests and build pass for same SHA",
+            "Then mark automated gate pass but not deployed"
+          ],
+          "expected": "mark automated gate pass but not deployed"
+        },
+        {
+          "id": "SQ-20261012-036-S",
+          "type": "security",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Include synthetic credential in test artifact",
+            "Then Ensure no secret appears in logs or published artifacts"
+          ],
+          "expected": "Ensure no secret appears in logs or published artifacts"
+        },
+        {
+          "id": "SQ-20261012-036-A",
+          "type": "accessibility",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Inspect failure report using keyboard and screen reader",
+            "Then Use descriptive failure IDs, semantic headings and focusable links"
+          ],
+          "expected": "Use descriptive failure IDs, semantic headings and focusable links"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-037",
+      "area": "automation",
+      "title": "Fixture HTML payload is treated as inert data",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "PR validation job at a pinned commit SHA",
+      "testCases": [
+        {
+          "id": "SQ-20261012-037-P",
+          "type": "positive",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Test case contains synthetic script tag in description",
+            "Then reporter escapes markup and never executes it"
+          ],
+          "expected": "reporter escapes markup and never executes it"
+        },
+        {
+          "id": "SQ-20261012-037-N",
+          "type": "negative",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Normal Unicode text in case description",
+            "Then render text without corrupting it"
+          ],
+          "expected": "render text without corrupting it"
+        },
+        {
+          "id": "SQ-20261012-037-S",
+          "type": "security",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Include synthetic credential in test artifact",
+            "Then Ensure no secret appears in logs or published artifacts"
+          ],
+          "expected": "Ensure no secret appears in logs or published artifacts"
+        },
+        {
+          "id": "SQ-20261012-037-A",
+          "type": "accessibility",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Inspect failure report using keyboard and screen reader",
+            "Then Use descriptive failure IDs, semantic headings and focusable links"
+          ],
+          "expected": "Use descriptive failure IDs, semantic headings and focusable links"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-038",
+      "area": "automation",
+      "title": "Flaky retry cannot mask reproducible failure",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "PR validation job at a pinned commit SHA",
+      "testCases": [
+        {
+          "id": "SQ-20261012-038-P",
+          "type": "positive",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Same routing test fails twice with identical seed",
+            "Then mark reproducible failure and block approval"
+          ],
+          "expected": "mark reproducible failure and block approval"
+        },
+        {
+          "id": "SQ-20261012-038-N",
+          "type": "negative",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When One infrastructure timeout succeeds on retry",
+            "Then record original failure and retry evidence"
+          ],
+          "expected": "record original failure and retry evidence"
+        },
+        {
+          "id": "SQ-20261012-038-S",
+          "type": "security",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Include synthetic credential in test artifact",
+            "Then Ensure no secret appears in logs or published artifacts"
+          ],
+          "expected": "Ensure no secret appears in logs or published artifacts"
+        },
+        {
+          "id": "SQ-20261012-038-A",
+          "type": "accessibility",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Inspect failure report using keyboard and screen reader",
+            "Then Use descriptive failure IDs, semantic headings and focusable links"
+          ],
+          "expected": "Use descriptive failure IDs, semantic headings and focusable links"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-039",
+      "area": "automation",
+      "title": "Duplicate test-case ID across dates is rejected",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "PR validation job at a pinned commit SHA",
+      "testCases": [
+        {
+          "id": "SQ-20261012-039-P",
+          "type": "positive",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Two fixtures share same test case identifier",
+            "Then validator fails with both fixture names"
+          ],
+          "expected": "validator fails with both fixture names"
+        },
+        {
+          "id": "SQ-20261012-039-N",
+          "type": "negative",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When IDs are unique across all fixtures",
+            "Then accept cross-day case accounting"
+          ],
+          "expected": "accept cross-day case accounting"
+        },
+        {
+          "id": "SQ-20261012-039-S",
+          "type": "security",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Include synthetic credential in test artifact",
+            "Then Ensure no secret appears in logs or published artifacts"
+          ],
+          "expected": "Ensure no secret appears in logs or published artifacts"
+        },
+        {
+          "id": "SQ-20261012-039-A",
+          "type": "accessibility",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Inspect failure report using keyboard and screen reader",
+            "Then Use descriptive failure IDs, semantic headings and focusable links"
+          ],
+          "expected": "Use descriptive failure IDs, semantic headings and focusable links"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-040",
+      "area": "automation",
+      "title": "Failed UI smoke blocks acceptance despite green lint",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "PR validation job at a pinned commit SHA",
+      "testCases": [
+        {
+          "id": "SQ-20261012-040-P",
+          "type": "positive",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Browser loads blank React root while lint succeeds",
+            "Then release remains blocked until browser smoke passes"
+          ],
+          "expected": "release remains blocked until browser smoke passes"
+        },
+        {
+          "id": "SQ-20261012-040-N",
+          "type": "negative",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Browser renders visible app and keyboard navigation",
+            "Then record UI evidence without claiming production release"
+          ],
+          "expected": "record UI evidence without claiming production release"
+        },
+        {
+          "id": "SQ-20261012-040-S",
+          "type": "security",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Include synthetic credential in test artifact",
+            "Then Ensure no secret appears in logs or published artifacts"
+          ],
+          "expected": "Ensure no secret appears in logs or published artifacts"
+        },
+        {
+          "id": "SQ-20261012-040-A",
+          "type": "accessibility",
+          "steps": [
+            "Given PR validation job at a pinned commit SHA",
+            "When Inspect failure report using keyboard and screen reader",
+            "Then Use descriptive failure IDs, semantic headings and focusable links"
+          ],
+          "expected": "Use descriptive failure IDs, semantic headings and focusable links"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-041",
+      "area": "deployment",
+      "title": "Custom domain TLS and redirect integrity",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "Staging deployment with test-only data",
+      "testCases": [
+        {
+          "id": "SQ-20261012-041-P",
+          "type": "positive",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Anonymous visitor opens custom HTTPS SupportQ domain",
+            "Then verify valid TLS and canonical redirect without loop"
+          ],
+          "expected": "verify valid TLS and canonical redirect without loop"
+        },
+        {
+          "id": "SQ-20261012-041-N",
+          "type": "negative",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When HTTP endpoint redirects to a broken preview URL",
+            "Then mark public reachability blocked"
+          ],
+          "expected": "mark public reachability blocked"
+        },
+        {
+          "id": "SQ-20261012-041-S",
+          "type": "security",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Probe from an unapproved origin without credentials",
+            "Then Do not disclose private configuration or data"
+          ],
+          "expected": "Do not disclose private configuration or data"
+        },
+        {
+          "id": "SQ-20261012-041-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Visit error/recovery state with keyboard and reduced motion",
+            "Then Expose a labeled retry action and announced status"
+          ],
+          "expected": "Expose a labeled retry action and announced status"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-042",
+      "area": "deployment",
+      "title": "Nested route refresh serves application shell",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "Staging deployment with test-only data",
+      "testCases": [
+        {
+          "id": "SQ-20261012-042-P",
+          "type": "positive",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When User refreshes a valid deep link under SupportQ",
+            "Then server returns app shell and renders correct view"
+          ],
+          "expected": "server returns app shell and renders correct view"
+        },
+        {
+          "id": "SQ-20261012-042-N",
+          "type": "negative",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Unknown deep link returns blank 200 page",
+            "Then show safe not-found state"
+          ],
+          "expected": "show safe not-found state"
+        },
+        {
+          "id": "SQ-20261012-042-S",
+          "type": "security",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Probe from an unapproved origin without credentials",
+            "Then Do not disclose private configuration or data"
+          ],
+          "expected": "Do not disclose private configuration or data"
+        },
+        {
+          "id": "SQ-20261012-042-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Visit error/recovery state with keyboard and reduced motion",
+            "Then Expose a labeled retry action and announced status"
+          ],
+          "expected": "Expose a labeled retry action and announced status"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-043",
+      "area": "deployment",
+      "title": "Old JS chunk cache recovers after rollout",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "Staging deployment with test-only data",
+      "testCases": [
+        {
+          "id": "SQ-20261012-043-P",
+          "type": "positive",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When User holds stale cached HTML referencing removed JS chunk",
+            "Then offer reload recovery and preserve unsaved input"
+          ],
+          "expected": "offer reload recovery and preserve unsaved input"
+        },
+        {
+          "id": "SQ-20261012-043-N",
+          "type": "negative",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Current HTML references valid chunk",
+            "Then render without recovery banner"
+          ],
+          "expected": "render without recovery banner"
+        },
+        {
+          "id": "SQ-20261012-043-S",
+          "type": "security",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Probe from an unapproved origin without credentials",
+            "Then Do not disclose private configuration or data"
+          ],
+          "expected": "Do not disclose private configuration or data"
+        },
+        {
+          "id": "SQ-20261012-043-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Visit error/recovery state with keyboard and reduced motion",
+            "Then Expose a labeled retry action and announced status"
+          ],
+          "expected": "Expose a labeled retry action and announced status"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-044",
+      "area": "deployment",
+      "title": "Preview protection stays isolated from production",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "Staging deployment with test-only data",
+      "testCases": [
+        {
+          "id": "SQ-20261012-044-P",
+          "type": "positive",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Unauthenticated visitor opens restricted preview URL",
+            "Then deny private preview without impacting public production"
+          ],
+          "expected": "deny private preview without impacting public production"
+        },
+        {
+          "id": "SQ-20261012-044-N",
+          "type": "negative",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Anonymous user opens approved public production URL",
+            "Then render only public content"
+          ],
+          "expected": "render only public content"
+        },
+        {
+          "id": "SQ-20261012-044-S",
+          "type": "security",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Probe from an unapproved origin without credentials",
+            "Then Do not disclose private configuration or data"
+          ],
+          "expected": "Do not disclose private configuration or data"
+        },
+        {
+          "id": "SQ-20261012-044-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Visit error/recovery state with keyboard and reduced motion",
+            "Then Expose a labeled retry action and announced status"
+          ],
+          "expected": "Expose a labeled retry action and announced status"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-045",
+      "area": "deployment",
+      "title": "Frontend bundle excludes privileged environment values",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "Staging deployment with test-only data",
+      "testCases": [
+        {
+          "id": "SQ-20261012-045-P",
+          "type": "positive",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Vite production bundle built with Supabase environment",
+            "Then publish only intended public keys and no service secret"
+          ],
+          "expected": "publish only intended public keys and no service secret"
+        },
+        {
+          "id": "SQ-20261012-045-N",
+          "type": "negative",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Build receives server-only secret variable",
+            "Then prevent secret from appearing in client bundle"
+          ],
+          "expected": "prevent secret from appearing in client bundle"
+        },
+        {
+          "id": "SQ-20261012-045-S",
+          "type": "security",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Probe from an unapproved origin without credentials",
+            "Then Do not disclose private configuration or data"
+          ],
+          "expected": "Do not disclose private configuration or data"
+        },
+        {
+          "id": "SQ-20261012-045-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Visit error/recovery state with keyboard and reduced motion",
+            "Then Expose a labeled retry action and announced status"
+          ],
+          "expected": "Expose a labeled retry action and announced status"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-046",
+      "area": "deployment",
+      "title": "API authorization error is not shown as outage",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "Staging deployment with test-only data",
+      "testCases": [
+        {
+          "id": "SQ-20261012-046-P",
+          "type": "positive",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When API returns HTTP 401 to expired session",
+            "Then prompt safe sign-in renewal without retry storm"
+          ],
+          "expected": "prompt safe sign-in renewal without retry storm"
+        },
+        {
+          "id": "SQ-20261012-046-N",
+          "type": "negative",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When API returns 500 while session valid",
+            "Then show service issue and bounded retry"
+          ],
+          "expected": "show service issue and bounded retry"
+        },
+        {
+          "id": "SQ-20261012-046-S",
+          "type": "security",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Probe from an unapproved origin without credentials",
+            "Then Do not disclose private configuration or data"
+          ],
+          "expected": "Do not disclose private configuration or data"
+        },
+        {
+          "id": "SQ-20261012-046-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Visit error/recovery state with keyboard and reduced motion",
+            "Then Expose a labeled retry action and announced status"
+          ],
+          "expected": "Expose a labeled retry action and announced status"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-047",
+      "area": "deployment",
+      "title": "Rate limit response honors retry-after",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "Staging deployment with test-only data",
+      "testCases": [
+        {
+          "id": "SQ-20261012-047-P",
+          "type": "positive",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Public API responds 429 with Retry-After header",
+            "Then pause retries and show accessible countdown"
+          ],
+          "expected": "pause retries and show accessible countdown"
+        },
+        {
+          "id": "SQ-20261012-047-N",
+          "type": "negative",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When API responds 200 after cooldown",
+            "Then resume one request without request burst"
+          ],
+          "expected": "resume one request without request burst"
+        },
+        {
+          "id": "SQ-20261012-047-S",
+          "type": "security",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Probe from an unapproved origin without credentials",
+            "Then Do not disclose private configuration or data"
+          ],
+          "expected": "Do not disclose private configuration or data"
+        },
+        {
+          "id": "SQ-20261012-047-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Visit error/recovery state with keyboard and reduced motion",
+            "Then Expose a labeled retry action and announced status"
+          ],
+          "expected": "Expose a labeled retry action and announced status"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-048",
+      "area": "deployment",
+      "title": "CORS origin restriction differs by environment",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "Staging deployment with test-only data",
+      "testCases": [
+        {
+          "id": "SQ-20261012-048-P",
+          "type": "positive",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Production API receives request from approved production origin",
+            "Then allow configured origin only"
+          ],
+          "expected": "allow configured origin only"
+        },
+        {
+          "id": "SQ-20261012-048-N",
+          "type": "negative",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Unapproved third-party origin sends credentialed request",
+            "Then reject credentialed cross-origin request"
+          ],
+          "expected": "reject credentialed cross-origin request"
+        },
+        {
+          "id": "SQ-20261012-048-S",
+          "type": "security",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Probe from an unapproved origin without credentials",
+            "Then Do not disclose private configuration or data"
+          ],
+          "expected": "Do not disclose private configuration or data"
+        },
+        {
+          "id": "SQ-20261012-048-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Visit error/recovery state with keyboard and reduced motion",
+            "Then Expose a labeled retry action and announced status"
+          ],
+          "expected": "Expose a labeled retry action and announced status"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-049",
+      "area": "deployment",
+      "title": "Migration drift blocks incompatible frontend release",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "Staging deployment with test-only data",
+      "testCases": [
+        {
+          "id": "SQ-20261012-049-P",
+          "type": "positive",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Frontend expects new solution policy while production schema unchanged",
+            "Then block promotion until migration verification"
+          ],
+          "expected": "block promotion until migration verification"
+        },
+        {
+          "id": "SQ-20261012-049-N",
+          "type": "negative",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Staging schema matches expected version",
+            "Then permit staged tests without claiming deployment"
+          ],
+          "expected": "permit staged tests without claiming deployment"
+        },
+        {
+          "id": "SQ-20261012-049-S",
+          "type": "security",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Probe from an unapproved origin without credentials",
+            "Then Do not disclose private configuration or data"
+          ],
+          "expected": "Do not disclose private configuration or data"
+        },
+        {
+          "id": "SQ-20261012-049-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Visit error/recovery state with keyboard and reduced motion",
+            "Then Expose a labeled retry action and announced status"
+          ],
+          "expected": "Expose a labeled retry action and announced status"
+        }
+      ]
+    },
+    {
+      "id": "SQ-20261012-050",
+      "area": "deployment",
+      "title": "Rollback verifies schema and asset compatibility",
+      "priority": "P2",
+      "status": "proposed-not-executed",
+      "preconditions": "Staging deployment with test-only data",
+      "testCases": [
+        {
+          "id": "SQ-20261012-050-P",
+          "type": "positive",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Failed release is rolled back to previous verified SHA",
+            "Then check app and database compatibility before declaring recovery"
+          ],
+          "expected": "check app and database compatibility before declaring recovery"
+        },
+        {
+          "id": "SQ-20261012-050-N",
+          "type": "negative",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Rollback points to stale incompatible assets",
+            "Then keep incident open and record remediation"
+          ],
+          "expected": "keep incident open and record remediation"
+        },
+        {
+          "id": "SQ-20261012-050-S",
+          "type": "security",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Probe from an unapproved origin without credentials",
+            "Then Do not disclose private configuration or data"
+          ],
+          "expected": "Do not disclose private configuration or data"
+        },
+        {
+          "id": "SQ-20261012-050-A",
+          "type": "accessibility",
+          "steps": [
+            "Given Staging deployment with test-only data",
+            "When Visit error/recovery state with keyboard and reduced motion",
+            "Then Expose a labeled retry action and announced status"
+          ],
+          "expected": "Expose a labeled retry action and announced status"
+        }
+      ]
+    }
+  ]
+}
