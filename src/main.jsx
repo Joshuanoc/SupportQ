@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
+import {AuthProvider,useAuth} from './AuthContext.jsx';
 import './styles.css';
 import './enterprise-ui.css';
 
@@ -16,6 +17,7 @@ class AppErrorBoundary extends React.Component{
   }
 }
 
+function AccountWorkspace(){const {user,ready}=useAuth();return ready?<App key={user?.id||'guest'}/>:<p role="status">Loading account…</p>}
 createRoot(document.getElementById('root')).render(
-  <React.StrictMode><AppErrorBoundary><App/></AppErrorBoundary></React.StrictMode>
+  <React.StrictMode><AppErrorBoundary><AuthProvider><AccountWorkspace/></AuthProvider></AppErrorBoundary></React.StrictMode>
 );
