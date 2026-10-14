@@ -15,8 +15,22 @@ const keywordMap={
  'disk-full':['disk full','storage full','low disk','drive full','space']
 };
 
+// Conservative typo correction for high-signal technical terms only.
+// Avoid rewriting arbitrary user text or changing error codes.
+const corrections = new Map([
+ ['tranfer','transfer'],['transfr','transfer'],['postng','posting'],
+ ['eror','error'],['erro','error'],['conected','connected'],
+ ['conneted','connected'],['intrnet','internet'],['wifii','wifi'],
+ ['materail','material'],['documnt','document'],['reversel','reversal'],
+ ['autherization','authorization'],['autorization','authorization'],
+ ['invoce','invoice'],['puchase','purchase'],['assigment','assignment']
+]);
+export function normalizeIssueText(text){
+ return String(text||'').toLowerCase().trim().replace(/\b[a-z]+\b/g,word=>corrections.get(word)||word);
+}
+
 export function classifyIssue(text){
- const q=text.toLowerCase().trim();
+ const q=normalizeIssueText(text);
  const tokens=q.replace(/[^a-z0-9/ -]/g,' ').split(/\s+/).filter(x=>x.length>2);
  const sapIntent=/\bsap\b|\bmigo\b|\bmiro\b|\bme2\w*\b|\bme5\w*\b|\bmmbe\b|\bmbst\b|\bgr\/?ir\b|\bidoc\b|\bst22\b|\bsm37\b|\bfiori\b|material document|purchase order|purchase requisition|goods receipt|invoice receipt|movement type|vendor|supplier|posting period|obyc/i.test(q);
  const sapSynonyms={
