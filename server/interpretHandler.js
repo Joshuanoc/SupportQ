@@ -8,16 +8,22 @@ export function makeInterpretHandler({authenticate,reserve,generate,configured=(
     const origin=req.headers.origin,host=req.headers.host;
     if(origin){try{if(new URL(origin).host!==host)return send(403,'Cross-origin request rejected')}catch{return send(403,'Invalid origin')}}
     if(!/^application\/json(?:\s*;|$)/i.test(String(req.headers['content-type']||'')))return send(415,'JSON required');
-    let body;try {body=typeof req.body==='string'?JSON.parse(req.body):req.body;if(JSON.stringify(body).length>16000)return send(413,'Request too large')}catch{return send(400,'Invalid JSON')}
+    let body;try {
+      if(typeof req.body==='string'&&Buffer.byteLength(req.body,'utf8')>16000)return send(413,'Request too large');
+      body=typeof req.body==='string'?JSON.parse(req.body):req.body;
+      const serialized=JSON.stringify(body);
+      if(!serialized)return send(400,'Invalid JSON');
+      if(Buffer.byteLength(serialized,'utf8')>16000)return send(413,'Request too large');
+    }catch{return send(400,'Invalid JSON')}
     if(!body||typeof body.text!=='string'||!body.text.trim()||body.text.length>4000)return send(400,'Provide a message of 1–4000 characters');
     const token=String(req.headers.authorization||'').match(/^Bearer (\S+)$/)?.[1];
     if(!token)return send(401,'Sign in to use AI interpretation');
     let client;try {client=await authenticate(token);if(!client)return send(401,'Invalid or expired sign-in')}catch{return send(401,'Invalid or expired sign-in')}
     if(!configured())return send(503,'AI interpretation is not configured');
     let question;
-    if(body.question) {
+    if(body.question!==undefined) {
       const q=body.question;
-      if(typeof q.prompt!=='string'||q.prompt.length>1000||!Array.isArray(q.options)||q.options.length>10||q.options.some(o=>typeof o.value!=='string'||typeof o.label!=='string'||o.value.length>80||o.label.length>200))return send(400,'Invalid question context');
+      if(!q||typeof q!=='object'||Array.isArray(q)||typeof q.prompt!=='string'||q.prompt.length>1000||!Array.isArray(q.options)||q.options.length>10||q.options.some(o=>!o||typeof o!=='object'||Array.isArray(o)||typeof o.value!=='string'||typeof o.label!=='string'||o.value.length>80||o.label.length>200))return send(400,'Invalid question context');
       question={prompt:q.prompt,options:q.options};
     }
     try {
