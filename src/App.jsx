@@ -7,10 +7,13 @@ import{diagnosticPath,resolutionProgress}from'./diagnosticTransitions.js';
 import{getActionGuide}from'./guidance.js';
 import{getNode,initialHypotheses,applyBoosts,parseDiagnosticText,calculatePriority}from'./diagnosticEngine.js';
 import{profileFor,profileHypotheses,interpretGeneric}from'./scenarioEngines.js';
+import{completeIncidentLifecycle,startIncidentLifecycle}from'./incidentLifecycle.js';
+import{IncidentLifecycleTimeline}from'./incidentLifecycleView.js';
 
 const icons={Wifi:Network,Shield:TestTube2,KeyRound:Wrench,Mail,MonitorCog:Code2,Printer:Wrench,TriangleAlert:TestTube2,CloudOff:Cloud,AppWindow:Code2,VideoOff:Code2,CloudCog:Cloud,HardDrive:Database};
 const pct=n=>`${Math.max(0,Math.min(100,Math.round(n)))}%`;
 const now=()=>new Date().toLocaleString();
+const lifecycleNow=()=>new Date().toISOString();
 
 // Small transform-only feedback; no continuous loops or additional dependencies.
 function FeedbackButton({children,disabled,className='',...props}){
@@ -63,6 +66,7 @@ function App(){
  const[history,setHistory]=useState(()=>{try{return JSON.parse(localStorage.getItem('supportq-history')||'[]')}catch{return[]}});
  const[query,setQuery]=useState('');
  const[mobile,setMobile]=useState(false);
+ const[lifecycle,setLifecycle]=useState(()=>startIncidentLifecycle(lifecycleNow()).lifecycle);
 
  useEffect(()=>{
    if(!mobile)return;
@@ -88,6 +92,7 @@ function App(){
    setReportedIssue(issue||s.title);
    setHypotheses(s.hypotheses.map(([name,score])=>({name,score})).sort((a,b)=>b.score-a.score));
    setSuggestions([]);setView('diagnose');setMobile(false);
+   setLifecycle(startIncidentLifecycle(lifecycleNow()).lifecycle);
  };
 
  const submitIntake=()=>{
@@ -104,7 +109,10 @@ function App(){
  const updateScores=(boost={})=>setHypotheses(h=>h.map(x=>({...x,score:Math.max(0,Math.min(100,x.score+(boost[x.name]||0)))})).sort((a,b)=>b.score-a.score));
 
  const finalize=(base,status,extra={})=>{
-   const incident={id:Date.now(),...base,status,completedAt:now(),reportedIssue,supportContext,answers,actionLog,...extra};
+   const completed=completeIncidentLifecycle(lifecycle,status,lifecycleNow());
+   if(!completed.ok)return null;
+   setLifecycle(completed.lifecycle);
+   const incident={id:Date.now(),...base,status,completedAt:now(),reportedIssue,supportContext,answers,actionLog,lifecycle:completed.lifecycle,...extra};
    setHistory(h=>[incident,...h].slice(0,25));
    return incident;
  };
@@ -131,15 +139,13 @@ function App(){
    const progress=resolutionProgress(resolved,actionIndex,result.actions.length);
    if(progress.phase==='resolved'){
      setPhase('resolved');
-     const incident={id:Date.now(),...result,status:'Resolved',completedAt:now(),reportedIssue,supportContext,answers,actionLog:nextLog};
-     setHistory(h=>[incident,...h].slice(0,25));
+     finalize(result,'Resolved',{actionLog:nextLog});
      return;
    }
    if(progress.phase==='resolve')setActionIndex(progress.actionIndex);
    else{
      setPhase('escalated');
-     const incident={id:Date.now(),...result,status:'Escalated',escalate:true,completedAt:now(),reportedIssue,supportContext,answers,actionLog:nextLog};
-     setHistory(h=>[incident,...h].slice(0,25));
+     finalize(result,'Escalated',{escalate:true,actionLog:nextLog});
    }
  };
 
@@ -254,6 +260,7 @@ function DeepWifiDiagnostic({scenario,reportedIssue,supportContext,setSupportCon
  const[status,setStatus]=useState('diagnosing');
  const[finalResult,setFinalResult]=useState(null);
  const[showHelp,setShowHelp]=useState(false);
+ const[lifecycle]=useState(()=>startIncidentLifecycle(lifecycleNow()).lifecycle);
  const node=getNode(nodeId);
  const priority=calculatePriority(supportContext,scenario.category);
  const family=(supportContext.os||'').toLowerCase().includes('windows')?'windows':(supportContext.os||'').toLowerCase().includes('mac')?'macos':'windows';
@@ -263,12 +270,14 @@ function DeepWifiDiagnostic({scenario,reportedIssue,supportContext,setSupportCon
 
  const finishResolve=(r,summary='')=>{
    if(summary)record(summary);
-   const out={scenario:scenario.title,category:scenario.category,status:'Resolved',priority:priority.priority,severity:priority.severity,reportedIssue,supportContext,cause:r.cause,confidence:r.confidence,evidence,actionLog:attempts,completedAt:now()};
+   const completed=completeIncidentLifecycle(lifecycle,'Resolved',lifecycleNow());if(!completed.ok)return;
+   const out={scenario:scenario.title,category:scenario.category,status:'Resolved',priority:priority.priority,severity:priority.severity,reportedIssue,supportContext,cause:r.cause,confidence:r.confidence,evidence,actionLog:attempts,completedAt:now(),lifecycle:completed.lifecycle};
    setStatus('resolved');setFinalResult(out);onComplete?.(out);
  };
  const finishEscalate=(r,summary='')=>{
    if(summary)record(summary);
-   const out={scenario:scenario.title,category:scenario.category,status:'Escalated',priority:priority.priority,severity:priority.severity,reportedIssue,supportContext,cause:r.reason,confidence:hypotheses[0]?.score||70,assignment:r.team,evidence,actionLog:attempts,completedAt:now()};
+   const completed=completeIncidentLifecycle(lifecycle,'Escalated',lifecycleNow());if(!completed.ok)return;
+   const out={scenario:scenario.title,category:scenario.category,status:'Escalated',priority:priority.priority,severity:priority.severity,reportedIssue,supportContext,cause:r.reason,confidence:hypotheses[0]?.score||70,assignment:r.team,evidence,actionLog:attempts,completedAt:now(),lifecycle:completed.lifecycle};
    setStatus('escalated');setFinalResult(out);onComplete?.(out);
  };
  const choose=(opt)=>{
@@ -338,6 +347,7 @@ function DeepScenarioDiagnostic({scenario,profile,reportedIssue,supportContext,s
  const[status,setStatus]=useState('diagnosing');
  const[finalResult,setFinalResult]=useState(null);
  const[showHelp,setShowHelp]=useState(false);
+ const[lifecycle]=useState(()=>startIncidentLifecycle(lifecycleNow()).lifecycle);
  const node=profile.nodes[nodeId];
  const priority=calculatePriority(supportContext,scenario.category);
  const family=(supportContext.os||'').toLowerCase().includes('windows')?'windows':(supportContext.os||'').toLowerCase().includes('mac')?'macos':'windows';
@@ -345,8 +355,8 @@ function DeepScenarioDiagnostic({scenario,profile,reportedIssue,supportContext,s
  const record=(summary,raw='')=>setEvidence(e=>[...e,{time:now(),summary,raw}]);
  const boost=(b)=>{if(b)setHypotheses(h=>applyBoosts(h,b))};
  const go=(next,b)=>{boost(b);setInput('');setShowHelp(false);setNodeId(next||profile.start)};
- const finishResolve=(r,summary='')=>{if(summary)record(summary);const out={scenario:scenario.title,category:scenario.category,status:'Resolved',priority:priority.priority,severity:priority.severity,reportedIssue,supportContext,cause:r.cause,confidence:r.confidence,evidence,actionLog:attempts,completedAt:now()};setStatus('resolved');setFinalResult(out);onComplete?.(out)};
- const finishEscalate=(r,summary='')=>{if(summary)record(summary);const out={scenario:scenario.title,category:scenario.category,status:'Escalated',priority:priority.priority,severity:priority.severity,reportedIssue,supportContext,cause:r.reason,confidence:hypotheses[0]?.score||70,assignment:r.team,evidence,actionLog:attempts,completedAt:now()};setStatus('escalated');setFinalResult(out);onComplete?.(out)};
+ const finishResolve=(r,summary='')=>{if(summary)record(summary);const completed=completeIncidentLifecycle(lifecycle,'Resolved',lifecycleNow());if(!completed.ok)return;const out={scenario:scenario.title,category:scenario.category,status:'Resolved',priority:priority.priority,severity:priority.severity,reportedIssue,supportContext,cause:r.cause,confidence:r.confidence,evidence,actionLog:attempts,completedAt:now(),lifecycle:completed.lifecycle};setStatus('resolved');setFinalResult(out);onComplete?.(out)};
+ const finishEscalate=(r,summary='')=>{if(summary)record(summary);const completed=completeIncidentLifecycle(lifecycle,'Escalated',lifecycleNow());if(!completed.ok)return;const out={scenario:scenario.title,category:scenario.category,status:'Escalated',priority:priority.priority,severity:priority.severity,reportedIssue,supportContext,cause:r.reason,confidence:hypotheses[0]?.score||70,assignment:r.team,evidence,actionLog:attempts,completedAt:now(),lifecycle:completed.lifecycle};setStatus('escalated');setFinalResult(out);onComplete?.(out)};
 
  const choose=(opt)=>{record(`${node.prompt} → ${opt.label}`);boost(opt.boosts);if(opt.resolve)return finishResolve(opt.resolve,`Resolution evidence: ${opt.label}`);if(opt.escalate)return finishEscalate(opt.escalate,`Escalation trigger: ${opt.label}`);go(opt.next)};
  const submitText=()=>{if(!input.trim())return;const parsed=interpretGeneric(scenario.id,nodeId,input);record(parsed.summary,input);boost(parsed.boosts);if(parsed.resolve)return finishResolve(parsed.resolve,parsed.summary);if(parsed.escalate)return finishEscalate(parsed.escalate,parsed.summary);go(parsed.next||nodeId)};
@@ -383,7 +393,7 @@ ${attempts.map(x=>'- '+x.action+' → '+x.outcome).join('\n')||'- None'}`;try{aw
  </div></section><aside className="diagnosticSide"><DeepContext supportContext={supportContext} priority={priority} hypotheses={hypotheses} evidence={evidence} attempts={attempts}/></aside></div>
 }
 
-function HistoryView({history,onStart}){if(!history.length)return <div className="empty"><Database/><h3>No completed incidents yet</h3><p>An incident is saved only after it is resolved or escalated.</p></div>;return <div className="historyList">{history.map(h=><article key={h.id}><div><span>{h.category} · {h.status}</span><h3>{h.scenario}</h3><p>{h.reportedIssue||h.cause}</p></div><div className="historyMeta"><b>{h.priority}</b><span>{h.confidence}% RCA confidence</span><span>{h.completedAt}</span><FeedbackButton onClick={()=>onStart(h)}>Re-run</FeedbackButton></div></article>)}</div>}
+function HistoryView({history,onStart}){if(!history.length)return <div className="empty"><Database/><h3>No completed incidents yet</h3><p>An incident is saved only after it is resolved or escalated.</p></div>;return <div className="historyList">{history.map(h=><article key={h.id}><div><span>{h.category} · {h.status}</span><h3>{h.scenario}</h3><p>{h.reportedIssue||h.cause}</p><IncidentLifecycleTimeline lifecycle={h.lifecycle}/></div><div className="historyMeta"><b>{h.priority}</b><span>{h.confidence}% RCA confidence</span><span>{h.completedAt}</span><FeedbackButton onClick={()=>onStart(h)}>Re-run</FeedbackButton></div></article>)}</div>}
 
 function Analytics({history}){const total=history.length,resolved=history.filter(x=>x.status==='Resolved').length,escalated=history.filter(x=>x.status==='Escalated').length,avg=total?Math.round(history.reduce((a,x)=>a+x.confidence,0)/total):0;const cats=history.reduce((a,x)=>(a[x.category]=(a[x.category]||0)+1,a),{});const sorted=Object.entries(cats).sort((a,b)=>b[1]-a[1]);return <><div className="metricGrid"><Metric title="Incidents completed" value={total}/><Metric title="Resolved" value={resolved}/><Metric title="Escalated" value={escalated}/><Metric title="Avg. RCA confidence" value={`${avg}%`}/></div><section className="analyticsPanel"><div><span className="eyebrow">ROOT CAUSE TRENDS</span><h3>Incident categories</h3></div>{sorted.length?sorted.map(([k,v])=><div className="barRow" key={k}><span>{k}</span><i><em style={{width:`${(v/Math.max(...sorted.map(x=>x[1])))*100}%`}}/></i><b>{v}</b></div>):<p className="muted">Resolve or escalate incidents to populate analytics.</p>}</section></>}
 const Metric=({title,value})=><div className="metric"><span>{title}</span><strong>{value}</strong></div>;
