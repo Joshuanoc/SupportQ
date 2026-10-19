@@ -1,4 +1,4 @@
-import React,{useMemo,useState,useEffect}from'react';
+import React,{useMemo,useState,useEffect,useRef}from'react';
 import{motion,AnimatePresence,useReducedMotion}from'framer-motion';
 import{ArrowUpRight,Check,ChevronRight,Mail,Code2,Cloud,TestTube2,Wrench,Database,Network,Menu,X,Search,LifeBuoy,LayoutDashboard,Clock3,BarChart3}from'lucide-react';
 import{scenarios,categoryCounts}from'./data.js';
@@ -7,6 +7,7 @@ import{diagnosticPath,resolutionProgress}from'./diagnosticTransitions.js';
 import{getActionGuide}from'./guidance.js';
 import{getNode,initialHypotheses,applyBoosts,parseDiagnosticText,calculatePriority}from'./diagnosticEngine.js';
 import{profileFor,profileHypotheses,interpretGeneric}from'./scenarioEngines.js';
+import{VIEW_HEADING_ID,headingForView,focusViewHeading}from'./viewFocus.js';
 
 const icons={Wifi:Network,Shield:TestTube2,KeyRound:Wrench,Mail,MonitorCog:Code2,Printer:Wrench,TriangleAlert:TestTube2,CloudOff:Cloud,AppWindow:Code2,VideoOff:Code2,CloudCog:Cloud,HardDrive:Database};
 const pct=n=>`${Math.max(0,Math.min(100,Math.round(n)))}%`;
@@ -63,6 +64,7 @@ function App(){
  const[history,setHistory]=useState(()=>{try{return JSON.parse(localStorage.getItem('supportq-history')||'[]')}catch{return[]}});
  const[query,setQuery]=useState('');
  const[mobile,setMobile]=useState(false);
+ const previousView=useRef(view);
 
  useEffect(()=>{
    if(!mobile)return;
@@ -78,6 +80,12 @@ function App(){
    window.addEventListener('keydown',close);window.addEventListener('resize',resize);
    return()=>{document.body.style.overflow=previousOverflow;window.removeEventListener('keydown',close);window.removeEventListener('resize',resize);previousFocus?.focus()};
  },[mobile]);
+
+ useEffect(()=>{
+   if(previousView.current===view)return;
+   previousView.current=view;
+   focusViewHeading();
+ },[view]);
 
  useEffect(()=>localStorage.setItem('supportq-history',JSON.stringify(history.slice(0,25))),[history]);
 
@@ -189,7 +197,7 @@ ${result.actions.map(a=>`- ${a}`).join('\n')}`;
     <div className="sideNote"><TestTube2 size={17}/><div><b>Resolve, don’t just advise</b><span>Diagnose → action → verify → continue or escalate.</span></div></div>
    </aside>
    <div className="mainArea">
-    <header className="topbar"><FeedbackButton className="mobileToggle" onClick={()=>setMobile(v=>!v)} aria-label={mobile?"Close navigation":"Open navigation"} aria-expanded={mobile} aria-controls="primary-navigation">{mobile?<X/>:<Menu/>}</FeedbackButton><div><span className="crumb">SUPPORTQ / {view.toUpperCase()}</span><h1>{view==='diagnose'&&scenario?scenario.title:view==='scenarios'?'Scenario Library':view==='history'?'Incident History':view==='analytics'?'Support Analytics':'Support workspace'}</h1></div><div className="status"><i/>Workspace ready</div></header>
+    <header className="topbar"><FeedbackButton className="mobileToggle" onClick={()=>setMobile(v=>!v)} aria-label={mobile?"Close navigation":"Open navigation"} aria-expanded={mobile} aria-controls="primary-navigation">{mobile?<X/>:<Menu/>}</FeedbackButton><div><span className="crumb">SUPPORTQ / {view.toUpperCase()}</span><h1 id={VIEW_HEADING_ID} tabIndex={-1}>{headingForView(view,scenario?.title)}</h1></div><div className="status"><i/>Workspace ready</div></header>
     <main id="main-content" className="content" tabIndex={-1}>
      <AnimatePresence mode="wait" initial={false}><motion.div key={view} initial={reduceMotion?false:{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={reduceMotion?{opacity:1}:{opacity:0,y:-6}} transition={{duration:reduceMotion?0:.2}}>
       {view==='dashboard'&&<Dashboard intake={intake} setIntake={setIntake} submitIntake={submitIntake} suggestions={suggestions} onStart={start} setView={setView}/>}
