@@ -152,6 +152,7 @@ textarea::placeholder,input::placeholder { color:#667b85; opacity:1; }
 .filterSelection { position:absolute; inset:0; background:#fff; border-radius:7px; box-shadow:0 1px 4px #192c3610; z-index:-1; pointer-events:none; }
 .intakeBox:focus-within { border-color:#70aaa5; box-shadow:0 0 0 3px #087f7912; }
 .intakeBox { transition:border-color .14s,box-shadow .14s; }
+.evidenceHint { display:block; margin-top:7px; color:var(--muted); font-size:10px; line-height:1.4; }
 @media(hover:hover) and (prefers-reduced-motion:no-preference) {
  .cardFoot svg,.examplePrompts svg,.sectionTitle button svg,.primary svg { transition:transform .14s ease-out; }
  .scenarioCard:hover .cardFoot svg,.examplePrompts button:hover svg,.sectionTitle button:hover svg,.primary:hover:not(:disabled) svg { transform:translateX(3px); }
