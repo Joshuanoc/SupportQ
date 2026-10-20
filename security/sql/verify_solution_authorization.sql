@@ -5,13 +5,13 @@ FROM information_schema.role_table_grants
 WHERE table_schema='public'
   AND table_name IN ('support_issues','solutions','feedback','troubleshooting_history')
   AND grantee IN ('anon','authenticated')
-  AND privilege_type IN ('TRUNCATE','TRIGGER','REFERENCES');
+  AND privilege_type IN ('TRUNCATE','TRIGGER','REFERENCES','MAINTAIN');
 
 -- Expected: 0 rows. Effective checks also detect inherited/PUBLIC grants.
 SELECT t.tablename, r.rolename, p.privilege
 FROM (VALUES ('support_issues'),('solutions'),('feedback'),('troubleshooting_history')) AS t(tablename)
 CROSS JOIN (VALUES ('anon'),('authenticated')) AS r(rolename)
-CROSS JOIN (VALUES ('TRUNCATE'),('TRIGGER'),('REFERENCES')) AS p(privilege)
+CROSS JOIN (VALUES ('TRUNCATE'),('TRIGGER'),('REFERENCES'),('MAINTAIN')) AS p(privilege)
 WHERE has_table_privilege(r.rolename, format('public.%I',t.tablename),p.privilege);
 
 -- Expected: 0 rows. Detect direct or inherited UPDATE access to sensitive columns.
